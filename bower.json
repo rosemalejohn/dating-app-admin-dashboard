@@ -1,0 +1,27 @@
+{
+  "name": "admin-dashboard-project",
+  "description": "Dating App Management Admin Dashboard",
+  "main": "",
+  "authors": [
+    "Rosemale-John II C. Villacorta <rosemalejohn@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "dating",
+    "app",
+    "admin",
+    "dashboard"
+  ],
+  "homepage": "https://github.com/rosemalejohn/dating-app-admin-dashboard",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
