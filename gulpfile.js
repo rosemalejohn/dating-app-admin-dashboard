@@ -33,4 +33,6 @@ elixir(function(mix) {
 	    .sass('pages/profile.scss', 'public/assets/pages/css')
 
 	    .browserify('app.js', null, 'vue');
+
+	 mix.copy('node_modules/sweetalert/dist/sweetalert.css', 'public/css/sweetalert.css');
 });

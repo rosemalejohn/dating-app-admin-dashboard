@@ -33,10 +33,10 @@
     <link href="/assets/css/global.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="/css/themes.css" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
-    <link rel="shortcut icon" href="favicon.ico" />
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
 </head>
 
-<body class="page-md page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo ">
+<body id="body" class="page-md page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo ">
 
     @include('_partials.header')
 
@@ -61,13 +61,16 @@
         @include('_partials.footer')
 
         <website-form-modal title="Website" target="websiteFormModal">
-            <website-form></website-form>
+            <website-form slot="content"></website-form>
+            <div slot="modal-footer" class="modal-footer">
+                <button @click="saveWebsite()" type="submit" class="btn btn-default ladda-button"><span class="ladda-label">Save</span></button>
+            </div>
         </website-form-modal>
 
         <user-form-modal title="User" target="userFormModal">
             <user-form slot="content"></user-form>
             <div slot="modal-footer" class="modal-footer">
-                <button @click="saveUser()" type="button" class="btn btn-default">Save</button>
+                <button @click="saveUser()" type="submit" class="btn btn-default ladda-button" data-style="expand-right"><span class="ladda-label">Save</span></button>
             </div>
         </user-form-modal>
     </div>
@@ -75,7 +78,6 @@
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.js" type="text/javascript"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-hover-dropdown/2.2.1/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js" type="text/javascript"></script>
@@ -89,13 +91,17 @@
 
     <script src="/assets/globals/js/metronic.js" type="text/javascript"></script>
     <script src="/assets/admin/js/layout.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://spin.js.org/spin.min.js"></script>
     <script>
     jQuery(document).ready(function() {
         Metronic.init();
         Layout.init();
     });
     </script>
+
     <script src="/js/app.js" type="text/javascript"></script>
+
+    @yield('scripts')
 </body>
 
 </html>

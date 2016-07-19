@@ -13,11 +13,7 @@ class Website extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'logo', 'url', 'db_url', 'db_name', 'db_user', 'db_pass', 'db_prefix',
+        'name', 'logo', 'url', 'host', 'database', 'username', 'password', 'prefix', 'port',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_websites');
-    }
 }

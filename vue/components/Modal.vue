@@ -34,9 +34,17 @@ export default {
 
 		title: String,
 
-		target: String
+		target: String,
 
-	}
+	},
+
+	events: {
+		'modal:close'(target) {
+			if (target == this.target) {
+				$(target).modal('hide');
+			}
+		}
+	},
 
 }
 </script>

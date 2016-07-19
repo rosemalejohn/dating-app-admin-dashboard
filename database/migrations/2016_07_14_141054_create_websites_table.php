@@ -15,13 +15,14 @@ class CreateWebsitesTable extends Migration
         Schema::create('websites', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('logo')->nullable();
+            $table->longtext('logo')->nullable();
             $table->string('url');
-            $table->string('db_url');
-            $table->string('db_name');
-            $table->string('db_username');
-            $table->string('db_password');
-            $table->string('db_prefix')->nullable();
+            $table->string('host');
+            $table->string('database');
+            $table->string('username');
+            $table->string('password')->nullable();
+            $table->string('port')->nullable();
+            $table->string('prefix')->nullable();
             $table->timestamps();
         });
     }

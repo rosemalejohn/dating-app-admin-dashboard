@@ -74,7 +74,11 @@
                     @if (auth()->user())
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <img alt="" class="img-circle" src="/img/default-photo.png" />
+                            @if (auth()->user()->profile)
+                                <img alt="" class="img-circle" src="{{ auth()->user()->profile->photo }}" />
+                            @else
+                                <img alt="" class="img-circle" src="/img/default-photo.png" />
+                            @endif
                             <span class="username username-hide-on-mobile">{{ auth()->user()->name }}</span>
                             <i class="fa fa-angle-down"></i>
                         </a>

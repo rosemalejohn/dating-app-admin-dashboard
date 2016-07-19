@@ -14,19 +14,10 @@ class DatabaseSeeder extends Seeder
     {
         // Create default database user
         User::create([
-            'name' => 'Rosemale-John',
-            'username' => 'rosemalejohn',
-            'email' => 'rosemalejohn@gmail.com',
-            'password' => bcrypt('rosemalejohn'),
+            'name' => 'Administrator',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('admin'),
             'type' => 'admin',
-        ]);
-
-        User::create([
-            'name' => 'Ricky Mindanao',
-            'username' => 'user',
-            'email' => 'user@gmail.com',
-            'password' => bcrypt('user'),
-            'type' => 'user',
         ]);
     }
 }

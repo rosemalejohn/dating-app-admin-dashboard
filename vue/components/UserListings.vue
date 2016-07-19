@@ -2,7 +2,6 @@
 	<div class="portlet light">
 		<div class="portlet-title">
 			<div class="caption">
-				<i class="fa fa-users font-green-sharp"></i>
 				<span class="caption-subject font-green-sharp bold uppercase">User Listing</span>
 			</div>
 			<div class="actions">
@@ -11,7 +10,7 @@
 					<span class="hidden-480">
 					New User </span>
 				</a>
-				<a @click="deleteUsers()" href="javascript:;" class="btn btn-danger btn-circle">
+				<a @click="deleteUsers()" class="btn btn-danger btn-circle">
 					<i class="fa fa-trash"></i>
 					<span class="hidden-480">
 					Delete </span>
@@ -19,8 +18,14 @@
 			</div>
 		</div>
 		<div class="portlet-body">
+			<div class="col-md-4 input-group pull-right" style="margin-bottom: 10px;">
+				<input v-model="search" type="text" class="form-control" placeholder="Type to search...">
+				<span class="input-group-addon">
+					<i class="fa fa-search"></i>
+				</span>
+			</div>
 			<div class="table-container">
-				<table class="table table-striped table-bordered table-hover" id="datatable_ajax">
+				<table class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr role="row" class="heading">
 							<th width="2%">
@@ -29,17 +34,14 @@
 							<th width="5%">
 
 							</th>
-							<th width="10%">
+							<th width="15%">
 								Name
 							</th>
-							<th width="10%">
+							<th width="15%">
 								Email
 							</th>
-							<th width="10%">
-								Username
-							</th>
 							<th width="20%">
-								Intro message
+								Contact info
 							</th>
 							<th width="10%">
 								Type
@@ -49,16 +51,15 @@
 							</th>
 						</tr>
 						
-						<tr v-for="user in users" role="row" class="filter">
+						<tr v-for="user in users | filterBy search" role="row" class="filter">
 							<td><input v-if="!user.is_mine" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="group-checkable"></td>
 							<td>
-								<img style="width: 100%;" src="/img/default-photo.png" />
+								<img style="width: 100%;" :src="user.profile.photo || '/img/default-photo.png'" />
 							</td>
 							<td>{{ user.name }}</td>
 							<td>{{ user.email }}</td>
-							<td>{{ user.username }}</td>
-							<td></td>
-							<td>
+							<td class="editable">{{ user.contact_info }}</td>
+							<td style="text-align: center;">
 								<span class="label label-sm label-{{ user.is_admin ? 'danger' : 'success' }}">{{ user.type }}</span>
 							</td>
 							<td>
@@ -70,42 +71,72 @@
 			</div>
 		</div>
 	</div>
-	{{ $data | json }}
 </template>
 
+<style lang="sass">
+	.editable {
+		.table-edit {
+			display: none;
+			cursor: pointer;
+		}
+	}
+
+	.editable:hover {
+		.table-edit {
+			display: inline-block;
+		}
+	}
+</style>
+
 <script>
-	import _ from 'lodash'
+	import _ from 'underscore'
+	import swal from 'sweetalert'
+	import User from './../stores/user'
 
 	export default {
 
-		ready() {
-			this.getUsers();
-		},
-
 		data() {
 			return {
-				users: [],
 				checkedUsers: []
 			}
 		},
 
+		props: {
+
+			users: {
+				type: Array,
+				default() {
+					return []
+				}
+			}
+
+		},
+
 		methods: {
-			getUsers() {
-				this.$http.get('users').then(response => {
-					this.users = response.data;
-				});
-			},
 
 			deleteUsers() {
 				var self = this
 				if (this.checkedUsers.length) {
-					this.$http.delete('users', { users: this.checkedUsers }).then(response => {
-						// _.remove(self.users, user => {
-
-						// })
-						toastr.success(response.data);
+					swal({
+						title: "Are you sure?",
+						text: "You will not be able to recover this after deletion.",
+						type: "warning",
+						showCancelButton: true,
+						showLoaderOnConfirm: true
+					}, () => {
+						User.delete({ users: this.checkedUsers }).then(response => {
+							self.users = _.reject(self.users, user => {
+								return _.contains(self.checkedUsers, user.id.toString());
+							})
+							this.checkedUsers = [];
+							toastr.success(response.data);
+						})
 					});
 				}
+			},
+
+			editIntroMessage(user) {
+				console.log(user.id);
 			}
 		},
 

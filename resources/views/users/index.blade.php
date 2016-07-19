@@ -1,11 +1,15 @@
 @extends('layouts.auth')
 
-@section('page_title', 'Users')
+@section('page_title', 'System Users')
 
-@section('page_description', 'Manage users')
+@section('page_description', 'Manage system users')
+
+@section('stylesheets')
+	<link rel="stylesheet" type="text/css" href="/css/sweetalert.css" />
+@stop
 
 @section('content')
 	{!! Breadcrumbs::render('users') !!}
 
-	<user-listings></user-listings>
+	<user-listings :users="{{ $users }}"></user-listings>
 @stop

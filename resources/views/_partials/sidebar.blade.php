@@ -15,6 +15,7 @@
                     <span class="arrow "></span>
                 </a>
             </li>
+            @if (auth()->user() && auth()->user()->is_admin)
             <li>
                 <a href="javascript:;">
                     <i class="icon-wallet"></i>
@@ -23,7 +24,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="/users">
+                        <a href="/external/users">
                             <span class="title">Users</span>
                         </a>
                     </li>
@@ -39,8 +40,15 @@
                     <i class="icon-settings"></i>
                     <span class="title">System Settings</span>
                 </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="/users">
+                            <span class="title">Users</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-
+            @endif
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>
