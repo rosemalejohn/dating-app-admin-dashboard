@@ -6,7 +6,10 @@
 			</div>
 		</div>
 		<div v-for="website in websites" class="col-md-3">
-			<div class="portlet light profile-sidebar-portlet">
+			<div class="portlet light profile-sidebar-portlet website-list">
+				<button type="button" class="close absolute" aria-label="Close" @click="remove(website)">
+					<i class="fa fa-times fa-lg"></i>
+				</button>
 				<!-- SIDEBAR USERPIC -->
 				<div class="profile-userpic">
 					<a href="/websites/{{ website.id }}">
@@ -39,6 +42,21 @@
         </div>
     </edit-website-modal>
 </template>
+
+<style lang="sass">
+	.website-list {
+		position: relative;
+
+		button {
+			top: 10px;
+			right: 10px;
+		}
+	}
+
+	.absolute {
+		position: absolute;
+	}
+</style>
 
 <script>
 	import swal from 'sweetalert'

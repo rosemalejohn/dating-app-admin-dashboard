@@ -44,30 +44,6 @@ LOCK TABLES `configs` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `managed_users`
---
-
-DROP TABLE IF EXISTS `managed_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `managed_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `managed_users`
---
-
-LOCK TABLES `managed_users` WRITE;
-/*!40000 ALTER TABLE `managed_users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `managed_users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `migrations`
 --
 
@@ -86,7 +62,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES ('2014_10_12_000000_create_users_table',1),('2014_10_12_100000_create_password_resets_table',1),('2016_07_14_141054_create_websites_table',1),('2016_07_18_103804_create_configs_table',1),('2016_07_20_120305_create_managed_users_table',2),('2016_07_20_134811_create_website_users_table',2);
+INSERT INTO `migrations` VALUES ('2014_10_12_000000_create_users_table',1),('2014_10_12_100000_create_password_resets_table',1),('2016_07_14_141054_create_websites_table',1),('2016_07_18_103804_create_configs_table',1),('2016_07_20_134811_create_website_users_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,7 +120,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Administrator','admin@admin.com','$2y$10$WEVhHuTp6kEcT5LKGi3olOwygMfE/zNYyaOU3qx1utBwM3CU3revi',NULL,NULL,'admin',NULL,'2016-07-19 16:07:16','2016-07-19 16:07:16');
+INSERT INTO `users` VALUES (1,'Administrator','admin@admin.com','$2y$10$GcpXSzHVX9x1VvA.WhENLu963K4M/YK3uXIbYRvIDfkriC3dm9j4G',NULL,NULL,'admin',NULL,'2016-07-21 11:23:10','2016-07-21 11:23:10');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,8 +138,9 @@ CREATE TABLE `website_users` (
   `fake_message` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `website_users_website_id_userid_unique` (`website_id`,`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,7 +149,6 @@ CREATE TABLE `website_users` (
 
 LOCK TABLES `website_users` WRITE;
 /*!40000 ALTER TABLE `website_users` DISABLE KEYS */;
-INSERT INTO `website_users` VALUES (31,1,3,'Please te be ayawg inamaw.','2016-07-21 03:37:14','2016-07-21 03:37:14');
 /*!40000 ALTER TABLE `website_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +182,7 @@ CREATE TABLE `websites` (
 
 LOCK TABLES `websites` WRITE;
 /*!40000 ALTER TABLE `websites` DISABLE KEYS */;
-INSERT INTO `websites` VALUES (1,'Scorfinder','/uploads/img/G4bSOxj0fSZUjP1D.jpg','http://scorfinder.com','192.168.56.1','scorfinder','rosemalejohn','rosemalejohn','3306','ow_','2016-07-19 16:09:00','2016-07-20 11:23:38');
+INSERT INTO `websites` VALUES (1,'Scorfinder',NULL,'http://scorfinder.com','192.168.56.1','scorfinder','rosemalejohn','rosemalejohn',NULL,'ow_','2016-07-21 11:32:00','2016-07-21 11:32:53');
 /*!40000 ALTER TABLE `websites` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -219,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-21  5:10:07
+-- Dump completed on 2016-07-21 12:13:07

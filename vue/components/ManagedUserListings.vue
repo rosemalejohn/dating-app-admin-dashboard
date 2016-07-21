@@ -73,6 +73,7 @@
 	</div>
 	<new-managed-account-modal title="Add new user to manage" target="newManagedAccount">
 		<managed-user-form slot="content" :website="website"></managed-user-form>
+		<div slot="modal-footer"></div>
 	</new-managed-account-modal>
 </template>
 

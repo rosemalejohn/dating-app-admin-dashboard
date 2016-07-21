@@ -2,6 +2,13 @@
 
 User moderator dashboard for various dating app managed by n8core.
 
+# Installation Requirements
+
+- git
+- bower
+- node.js
+- composer
+
 # Installation
 
 - Clone this repo by running `git clone https://github.com/rosemalejohn/dating-app-admin-dashboard.git`

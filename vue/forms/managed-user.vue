@@ -7,37 +7,39 @@
 			</span>
 		</div>
 	</div>
-	<table style="margin-top: 10px;" v-if="users.length" class="table table-striped table-bordered table-hover">
-		<thead>
-			<tr role="row" class="heading">
-				<th width="10%"></th>
-				<th>
-					Name
-				</th>
-				<th width="15%">
-					Email
-				</th>
-				<th width="30%">
-					Address
-				</th>
-				<th>
-				 	Actions
-				</th>
-			</tr>
-			
-			<tr v-for="user in users" role="row" class="filter">
-				<td>
-					<img style="width: 100%;" :src="user.avatar.url || '/img/default-photo.png'" />
-				</td>
-				<td>{{ user.username }}</td>
-				<td>{{ user.email }}</td>
-				<td>{{ user.profile[0].address }}</td>
-				<td>
-					<a @click="manageUser(user)" href="javascript:;" class="btn btn-xs green filter-cancel">Manage</a>
-				</td>
-			</tr>
-		</thead>
-	</table>
+	<div v-show="users.length" class="scroller" style="max-height: 350px; height: 100%; margin-top: 10px 0;" data-always-visible="1" data-rail-visible1="1">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr role="row" class="heading">
+					<th width="10%"></th>
+					<th>
+						Name
+					</th>
+					<th width="15%">
+						Email
+					</th>
+					<th width="30%">
+						Address
+					</th>
+					<th>
+					 	Actions
+					</th>
+				</tr>
+				
+				<tr v-for="user in users" role="row" class="filter">
+					<td>
+						<img style="width: 100%;" :src="user.avatar.url || '/img/default-photo.png'" />
+					</td>
+					<td>{{ user.username }}</td>
+					<td>{{ user.email }}</td>
+					<td>{{ user.profile[0].address }}</td>
+					<td>
+						<a @click="manageUser(user)" href="javascript:;" class="btn btn-xs green filter-cancel">Manage</a>
+					</td>
+				</tr>
+			</thead>
+		</table>
+	</div>
 	<div v-else class="note note-info note-bordered">
 		<p>No users listed.</p>
 	</div>
@@ -53,7 +55,6 @@
 		</div>
 		<input type="submit" value="Submit" class="btn btn-primary" />
 		<button @click="showFakeMessageField = false" type="button" class="btn btn-default">Close</button>
-		<hr />
 	</form>
 </template>
 
