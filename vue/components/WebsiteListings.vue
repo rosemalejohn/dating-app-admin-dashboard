@@ -26,17 +26,26 @@
 				<!-- END SIDEBAR USER TITLE -->
 				<!-- SIDEBAR BUTTONS -->
 				<div class="profile-userbuttons">
-					<a href="/websites/{{ website.id }}" class="btn btn-circle green-haze btn-sm">Manage</a>
-					<a href="/websites/{{ website.id }}/users" class="btn btn-circle btn-primary btn-sm">Users</a>
+					<a data-target="#editWebsiteModal" data-toggle="modal" @click="edit(website)" href="#" class="btn btn-circle green-haze btn-sm">Manage</a>
+					<a href="/websites/{{ website.id }}/users" class="btn btn-circle btn-primary btn-sm">Profiles</a>
 				</div>
 			</div>
 		</div>
 	</div>
+	<edit-website-modal title="Website" target="editWebsiteModal">
+        <website-form slot="content" method="PUT" :form.sync="website"></website-form>
+        <div slot="modal-footer" class="modal-footer">
+            <button @click="saveWebsite()" type="button" class="btn btn-default">Save</button>
+        </div>
+    </edit-website-modal>
 </template>
 
 <script>
 	import swal from 'sweetalert'
 	import Website from './../stores/website'
+
+	import EditWebsiteModal from './Modal.vue'
+	import WebsiteForm from './../forms/website.vue'
 	
 	export default {
 
@@ -51,7 +60,21 @@
 
 		},
 
+		components: {
+			EditWebsiteModal, WebsiteForm
+		},
+
+		data() {
+			return {
+				website: {}
+			}
+		},
+
 		methods: {
+
+			edit(website) {
+				this.website = website;
+			},
 
 			remove(website) {
 				swal({
@@ -66,7 +89,11 @@
 						this.websites.$remove(website);
 					});
 				});
-			}
+			},
+
+			saveWebsite() {
+				this.$broadcast('form:submit', 'website')
+			},
 		},
 
 		events: {

@@ -13,9 +13,8 @@ class WebsiteController extends Controller
         return view('websites.index', compact('websites'));
     }
 
-    public function show($id)
+    public function show(Website $website)
     {
-        $website = Website::find($id);
 
         return view('websites.manage')->with(compact('website'));
     }
@@ -23,7 +22,7 @@ class WebsiteController extends Controller
     public function users(Website $website)
     {
         connectToTenant($website);
-        $users = User::with('avatar', 'profile')->get();
+        $users = User::with('avatar', 'profile')->paginate(10)->toJson();
 
         return view('websites.users')->with(compact('website', 'users'));
     }

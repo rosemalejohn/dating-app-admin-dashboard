@@ -16,19 +16,14 @@
 				<div class="profile-usermenu">
 					<ul class="nav">
 						<li class="active">
-							<a href="#" data-toggle="tab">
-							<i class="icon-home"></i>
-							Overview </a>
+							<a href="#credentials" data-toggle="tab">
+							<i class="icon-lock"></i>
+							Credentials </a>
 						</li>
 						<li>
 							<a href="/websites/{{ website.id }}/users">
 							<i class="icon-user"></i>
 							Users </a>
-						</li>
-						<li>
-							<a href="#credentials" data-toggle="tab">
-							<i class="icon-lock"></i>
-							Credentials </a>
 						</li>
 						<li>
 							<a data-target="#editWebsiteModal" data-toggle="modal">
@@ -69,7 +64,6 @@
 								<div class="col-md-6 col-sm-6 col-xs-6">
 									<div class="stat-right">
 										<div class="stat-chart">
-											<!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
 											<div id="sparkline_bar2"></div>
 										</div>
 										<div class="stat-number">

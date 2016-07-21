@@ -11,5 +11,7 @@
 @section('content')
 	{!! Breadcrumbs::render('users') !!}
 
-	<external-user-listings :users="{{ $users }}"></external-user-listings>
+	<external-user-listings :paginator="{{ $users }}"></external-user-listings>
+
+
 @stop

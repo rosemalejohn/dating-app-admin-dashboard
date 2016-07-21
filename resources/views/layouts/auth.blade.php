@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Dating App Admin - @yield('page_title')</title>
+    <title>{{ config('app.site_title') }} - @yield('page_title')</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">

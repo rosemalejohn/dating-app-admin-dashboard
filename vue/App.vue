@@ -2,7 +2,7 @@
 	// Pages
 	import WebsiteListings from './components/WebsiteListings.vue'
 	import UserListings from './components/UserListings.vue'
-	import ExternalUserListings from './components/ExternalUserListings.vue'
+	import ManagedUserListings from './components/ManagedUserListings.vue'
 	import UserProfileEdit from './components/UserProfileEdit.vue'
 	import SystemSettings from './components/SystemSettings.vue'
 	import ManageWebsite from './components/ManageWebsite.vue'
@@ -18,7 +18,7 @@
 		components: {
 			WebsiteListings, 
 			UserListings,
-			ExternalUserListings,
+			ManagedUserListings,
 			UserProfileEdit,
 			SystemSettings,
 			ManageWebsite,

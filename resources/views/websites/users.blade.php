@@ -11,5 +11,5 @@
 @section('content')
 	{!! Breadcrumbs::render('websites:users', $website) !!}
 
-	<external-user-listings :users="{{ $users }}"></external-user-listings>
+	<managed-user-listings :website="{{ $website }}"></managed-user-listings>
 @stop

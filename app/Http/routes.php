@@ -19,11 +19,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('users/{user}/edit', 'UserController@edit');
 
-    Route::get('websites/{id}', 'WebsiteController@show');
+    Route::get('websites/{website}', 'WebsiteController@show');
 
     Route::get('profile', 'UserController@profile');
 
     Route::get('external/users', 'UserController@getExternalUsers');
+
+    Route::get('messages', 'MessageController@index');
 
     Route::group(['middleware' => 'admin'], function () {
 
@@ -47,6 +49,17 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::delete('websites/{website}', 'WebsiteController@delete');
 
+            Route::get('websites/{website}/users', 'WebsiteController@users');
+
+            Route::get('websites/{website}/managed-users', 'WebsiteController@managedUsers');
+
+            Route::get('websites/{website}/users/{search}', 'WebsiteController@searchUsers');
+
+            Route::post('websites/{website}/managed-users', 'WebsiteController@storeManagedUsers');
+
+            Route::delete('websites/{website}/unmanage-users', 'WebsiteController@unmanageUsers');
+
+            Route::put('websites/{website}/managed-users/{id}', 'WebsiteController@updateManagedUser');
         });
 
     });

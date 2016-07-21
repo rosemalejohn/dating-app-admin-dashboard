@@ -36,8 +36,10 @@ class UserController extends Controller
     {
         // if ($request->user()->can('edit-user', $user)) {
 
-        $this->validate($request, $this->validator());
-
+        $this->validate($request, [
+            'name' => 'required|max:255|min:1',
+            'email' => 'required',
+        ]);
         $user->update($request->all());
 
         // }

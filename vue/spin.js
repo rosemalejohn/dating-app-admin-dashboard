@@ -3,10 +3,11 @@ export default {
 	state: {
 		spinner: null,
 		opts: {
-			speed: 3, 
-			width: 3, 
+			speed: 2, 
+			width: 2, 
 			className: 'spinner',
-			corners: 5
+			corners: 5,
+			position: 'fixed'
 		}
 	},
 

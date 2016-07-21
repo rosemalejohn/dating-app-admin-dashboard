@@ -31,7 +31,7 @@ class UserPhoto extends Model
 
     public function getUrlAttribute()
     {
-        return 'http://www.scorfinder.com//ow_userfiles/plugins/base/avatars/avatar_big_' . $this->userId . '_' . $this->hash . '.jpg';
+        return config('database.connections.tenant.url') . '/ow_userfiles/plugins/base/avatars/avatar_big_' . $this->userId . '_' . $this->hash . '.jpg';
     }
 
 }

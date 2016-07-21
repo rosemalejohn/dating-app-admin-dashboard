@@ -7,5 +7,6 @@ export default {
 	database: '',
 	username: '',
 	password: '',
-	prefix: ''
+	prefix: '',
+	port: null
 }

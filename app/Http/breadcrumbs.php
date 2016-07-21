@@ -40,3 +40,7 @@ Breadcrumbs::register('settings:system', function ($breadcrumbs) {
     $breadcrumbs->parent('settings');
     $breadcrumbs->push('System settings', '/settings/system');
 });
+
+Breadcrumbs::register('messages', function ($breadcrumbs) {
+    $breadcrumbs->push('Messages', '/messages');
+});

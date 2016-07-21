@@ -26,4 +26,9 @@ class User extends Model
         return $this->hasMany(UserProfile::class, 'userId');
     }
 
+    public function websiteUser()
+    {
+        return $this->hasOne(\App\WebsiteUser::class);
+    }
+
 }

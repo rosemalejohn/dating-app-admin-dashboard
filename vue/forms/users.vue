@@ -139,9 +139,9 @@ export default {
         saving(val) {
             this.$nextTick(() => {
                 if (val) {
-                    Spinner.spin()
-                } else {
                     Spinner.stop()
+                } else {
+                    Spinner.spin()
                 } 
             })
         }

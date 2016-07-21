@@ -10,7 +10,7 @@
 					<span class="hidden-480">
 					New User </span>
 				</a>
-				<a @click="deleteUsers()" class="btn btn-danger btn-circle">
+				<a v-if="checkedUsers.length" @click="deleteUsers()" class="btn btn-danger btn-circle">
 					<i class="fa fa-trash"></i>
 					<span class="hidden-480">
 					Delete </span>
@@ -107,7 +107,8 @@
 				type: Array,
 				default() {
 					return []
-				}
+				},
+				required: false
 			}
 
 		},

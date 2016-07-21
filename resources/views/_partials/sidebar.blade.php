@@ -17,36 +17,24 @@
             </li>
             @if (auth()->user() && auth()->user()->is_admin)
             <li>
-                <a href="javascript:;">
-                    <i class="icon-wallet"></i>
-                    <span class="title">Manage</span>
+                <a href="/websites">
+                    <i class="fa fa-globe"></i>
+                    <span class="title">Manage Websites</span>
                     <span class="arrow "></span>
                 </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/external/users">
-                            <span class="title">Users</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/websites">
-                            <span class="title">Websites</span>
-                        </a>
-                    </li>
-                </ul>
+            </li>
+            <li>
+                <a href="/users">
+                    <i class="fa fa-users"></i>
+                    <span class="title">Users</span>
+                    <span class="arrow "></span>
+                </a>
             </li>
             <li class="start ">
                 <a href="/settings/system">
                     <i class="icon-settings"></i>
                     <span class="title">System Settings</span>
                 </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/users">
-                            <span class="title">Users</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
             @endif
         </ul>

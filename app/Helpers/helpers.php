@@ -18,6 +18,7 @@ if (!function_exists('connectToTenant')) {
     function connectToTenant($website)
     {
         config([
+            'database.connections.tenant.url' => $website->url,
             'database.connections.tenant.host' => $website->host,
             'database.connections.tenant.port' => $website->port,
             'database.connections.tenant.database' => $website->database,
