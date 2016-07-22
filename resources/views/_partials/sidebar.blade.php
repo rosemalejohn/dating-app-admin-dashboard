@@ -9,9 +9,9 @@
                 </a>
             </li>
             <li>
-                <a href="/messages">
+                <a href="/conversations">
                     <i class="icon-envelope-open"></i>
-                    <span class="title">Messages</span>
+                    <span class="title">Conversations</span>
                     <span class="arrow "></span>
                 </a>
             </li>

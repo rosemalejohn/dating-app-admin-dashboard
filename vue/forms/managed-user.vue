@@ -39,6 +39,7 @@
 				</tr>
 			</thead>
 		</table>
+		<button v-show="!isFetching" @click="showMore()" class="btn btn-default">Load more</button>
 	</div>
 	<div v-else class="note note-info note-bordered">
 		<p>No users listed.</p>
@@ -60,6 +61,8 @@
 
 <script>
 	import Spinner from './../spin'
+	import paginator from './../services/paginator'
+
 	export default {
 
 		data() {
@@ -117,6 +120,25 @@
 				}).catch(response => {
 					toastr.error('User cannot be managed.');
 				})
+			},
+
+			showMore() {
+				let self = this
+
+				let url = this.paginator.next_page_url;
+
+				if (url) {
+					this.isFetching = true
+					paginator.next(url).then(response => {
+						self.paginator = response.data;
+						self.paginator.data.forEach(data => {
+							self.users.push(data)
+						})
+						this.isFetching = false
+					})
+				} else {
+					toastr.info('All users are loaded.');
+				}
 			}
 
 		},
@@ -124,6 +146,17 @@
 		events: {
 			'managed-user:created'() {
 				this.$dispatch('managed-user:created');
+			}
+		},
+
+		watch: {
+			isFetching(val) {
+				this.$nextTick(() => {
+					if (val)
+						Spinner.spin();
+					else
+						Spinner.stop();
+				})
 			}
 		}
 

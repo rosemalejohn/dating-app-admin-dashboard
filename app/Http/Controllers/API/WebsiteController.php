@@ -20,8 +20,6 @@ class WebsiteController extends Controller
 
     public function users(Request $request, Website $website)
     {
-        connectToTenant($website);
-
         $users = $website->managed_users()->with(['user' => function ($query) {
             $query->with('avatar', 'profile');
         }])->paginate(5);
@@ -31,8 +29,6 @@ class WebsiteController extends Controller
 
     public function searchUsers(Website $website, $search)
     {
-        connectToTenant($website);
-
         $users = User::with('avatar', 'profile')
             ->where('username', 'like', "%{$search}%")
             ->paginate(10);

@@ -7,12 +7,12 @@
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8" />
-    <title>Dating App Admin - Login</title>
+    <title>{{ config('app.site_title') }} - Login</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta content="A dating app admin dashboard" name="description" />
-    <meta content="Ricky Mindanao" name="author" />
+    <meta content="Rosemale-John" name="author" />
 
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
@@ -32,7 +32,7 @@
     <link href="/css/all.css" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
 
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="http://n8core.com/wp-content/uploads/2015/10/favicon.png" type="image/png">
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -54,7 +54,7 @@
         @yield('content')
     </div>
     <div class="copyright">
-        2016 © Dating App. Admin Dashboard.
+        2016 © Mach1 Online. Admin Dashboard.
     </div>
     <!-- END LOGIN -->
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

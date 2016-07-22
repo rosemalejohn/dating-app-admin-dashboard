@@ -6,6 +6,7 @@
 	import UserProfileEdit from './components/UserProfileEdit.vue'
 	import SystemSettings from './components/SystemSettings.vue'
 	import ManageWebsite from './components/ManageWebsite.vue'
+	import Conversations from './components/Conversations.vue'
 	// Modals
 	import WebsiteFormModal from './components/Modal.vue'
 	import UserFormModal from './components/Modal.vue'
@@ -22,6 +23,7 @@
 			UserProfileEdit,
 			SystemSettings,
 			ManageWebsite,
+			Conversations,
 
 			WebsiteFormModal,
 			UserFormModal,

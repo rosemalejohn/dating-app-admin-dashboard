@@ -21,7 +21,6 @@ class WebsiteController extends Controller
 
     public function users(Website $website)
     {
-        connectToTenant($website);
         $users = User::with('avatar', 'profile')->paginate(10)->toJson();
 
         return view('websites.users')->with(compact('website', 'users'));

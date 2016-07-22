@@ -12,7 +12,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta content="A dating app admin dashboard" name="description" />
-    <meta content="Ricky Mindanao" name="author" />
+    <meta content="Rosemale-John" name="author" />
 
     <meta content="{{ csrf_token() }}" name="csrf-token" />
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -33,7 +33,8 @@
     <link href="/assets/css/global.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="/css/themes.css" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
-    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+
+    <link rel="icon" href="http://n8core.com/wp-content/uploads/2015/10/favicon.png" type="image/png">
 </head>
 
 <body id="body" class="page-md page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo ">

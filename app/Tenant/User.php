@@ -16,6 +16,8 @@ class User extends Model
      */
     protected $table = 'base_user';
 
+    public $timestamps = false;
+
     public function avatar()
     {
         return $this->hasOne(UserPhoto::class, 'userId');
@@ -31,4 +33,18 @@ class User extends Model
         return $this->hasOne(\App\WebsiteUser::class);
     }
 
+    public function online()
+    {
+        return $this->hasOne(OnlineUser::class, 'userId');
+    }
+
+    public function conversation_initiators()
+    {
+        return $this->hasMany(Conversation::class, 'initiatorId');
+    }
+
+    public function conversation_interlocutors()
+    {
+        return $this->hasMany(Conversation::class, 'interlocutorId');
+    }
 }

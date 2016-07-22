@@ -25,15 +25,19 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('external/users', 'UserController@getExternalUsers');
 
-    Route::get('messages', 'MessageController@index');
+    Route::get('conversations', 'ConversationController@index');
 
     Route::group(['middleware' => 'admin'], function () {
 
         Route::get('users', 'UserController@index');
 
-        Route::get('websites', 'WebsiteController@index');
+        Route::group(['middleware' => 'tenant', 'prefix' => 'websites'], function () {
 
-        Route::get('websites/{website}/users', 'WebsiteController@users');
+            Route::get('/', 'WebsiteController@index');
+
+            Route::get('{website}/users', 'WebsiteController@users');
+
+        });
 
         Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
 
@@ -41,25 +45,30 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::delete('users', 'UserController@delete');
 
-            Route::post('websites', 'WebsiteController@store');
+            Route::group(['middleware' => 'tenant', 'prefix' => 'websites'], function () {
 
-            Route::put('websites/{website}', 'WebsiteController@update');
+                Route::post('/', 'WebsiteController@store');
 
-            Route::put('websites/{website}/change-photo', 'WebsiteController@changePhoto');
+                Route::put('{website}', 'WebsiteController@update');
 
-            Route::delete('websites/{website}', 'WebsiteController@delete');
+                Route::put('{website}/change-photo', 'WebsiteController@changePhoto');
 
-            Route::get('websites/{website}/users', 'WebsiteController@users');
+                Route::delete('{website}', 'WebsiteController@delete');
 
-            Route::get('websites/{website}/managed-users', 'WebsiteController@managedUsers');
+                Route::get('{website}/users', 'WebsiteController@users');
 
-            Route::get('websites/{website}/users/{search}', 'WebsiteController@searchUsers');
+                Route::get('{website}/managed-users', 'WebsiteController@managedUsers');
 
-            Route::post('websites/{website}/managed-users', 'WebsiteController@storeManagedUsers');
+                Route::get('{website}/users/{search}', 'WebsiteController@searchUsers');
 
-            Route::delete('websites/{website}/unmanage-users', 'WebsiteController@unmanageUsers');
+                Route::post('{website}/managed-users', 'WebsiteController@storeManagedUsers');
 
-            Route::put('websites/{website}/managed-users/{id}', 'WebsiteController@updateManagedUser');
+                Route::delete('{website}/unmanage-users', 'WebsiteController@unmanageUsers');
+
+                Route::put('{website}/managed-users/{id}', 'WebsiteController@updateManagedUser');
+
+            });
+
         });
 
     });
