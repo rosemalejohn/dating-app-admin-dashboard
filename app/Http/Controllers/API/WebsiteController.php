@@ -42,8 +42,6 @@ class WebsiteController extends Controller
             'fake_message' => $request->fake_message,
         ]);
 
-        dd($managedUser);
-
         return response()->json($managedUser, 200);
     }
 

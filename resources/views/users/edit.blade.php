@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('_layouts.auth')
 
 @section('page_title', $user->name)
 

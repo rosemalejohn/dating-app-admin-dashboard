@@ -2,38 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TenantService;
 use App\Website;
 
 class ConversationController extends Controller
 {
-    public function index()
+    public function index(TenantService $tenant)
     {
+
+        $websites = Website::orderBy('created_at', 'desc')->get();
+
         $conversations = collect();
 
-        $websites = Website::all();
-
         foreach ($websites as $website) {
-            connectToTenant($website);
 
-            // get managed users with conversation only.
+            $tenant->connect($website);
 
             $managed_users = $website->managed_users()->with([
-                'user.conversation_initiators.initiator',
-                'user.conversation_initiators.interlocutor',
-                'user.conversation_initiators.messages.recipient.profile',
-                'user.conversation_initiators.messages.sender.profile',
+                'user.conversation_interlocutors.initiator.avatar',
+                'user.conversation_interlocutors.interlocutor.avatar',
+                'user.conversation_interlocutors.messages' => function ($query) {
+                    $query->unread()->with('sender.avatar', 'recipient.avatar');
+                },
             ])->get();
 
-            foreach ($managed_users as $manage_user) {
-                $conversation = $manage_user->user->conversation_initiators;
-                if (!$conversation->isEmpty()) {
-                    $conversations->push($conversation);
+            foreach ($managed_users as $managed_user) {
+                $convo = $managed_user->user->conversation_interlocutors;
+                if ($convo) {
+                    $conversations->push($convo);
                 }
             }
-
         }
 
-        // dd($conversations);
+        $conversations = $conversations->flatten()->take(50);
 
         return view('conversations.index')->with(compact('conversations'));
     }

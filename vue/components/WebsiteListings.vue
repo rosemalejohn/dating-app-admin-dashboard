@@ -10,14 +10,11 @@
 				<button type="button" class="close absolute" aria-label="Close" @click="remove(website)">
 					<i class="fa fa-times fa-lg"></i>
 				</button>
-				<!-- SIDEBAR USERPIC -->
 				<div class="profile-userpic">
-					<a href="/websites/{{ website.id }}">
+					<a href="/websites/{{ website.id }}/users">
 						<img :src="website.logo || '/img/default-photo.png'" class="img-responsive" alt="">
 					</a>
 				</div>
-				<!-- END SIDEBAR USERPIC -->
-				<!-- SIDEBAR USER TITLE -->
 				<div class="profile-usertitle">
 					<div class="profile-usertitle-name">
 						{{ website.name }}
@@ -26,8 +23,6 @@
 						<a href="{{ website.url }}" target="_blank">{{ website.url }}</a>
 					</div>
 				</div>
-				<!-- END SIDEBAR USER TITLE -->
-				<!-- SIDEBAR BUTTONS -->
 				<div class="profile-userbuttons">
 					<a data-target="#editWebsiteModal" data-toggle="modal" @click="edit(website)" href="#" class="btn btn-circle green-haze btn-sm">Manage</a>
 					<a href="/websites/{{ website.id }}/users" class="btn btn-circle btn-primary btn-sm">Profiles</a>

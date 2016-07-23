@@ -17,6 +17,8 @@ class ProfileService
                 'activityStamp' => $timestamp,
                 'context' => 1,
             ]);
+
+            echo "User {$user->username} logged in!\n";
         } catch (QueryException $e) {
             echo "User {$user->username} is already logged in into the system.\n";
         }

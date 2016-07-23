@@ -11,7 +11,7 @@
             <li>
                 <a href="/conversations">
                     <i class="icon-envelope-open"></i>
-                    <span class="title">Conversations</span>
+                    <span class="title">Chat system</span>
                     <span class="arrow "></span>
                 </a>
             </li>

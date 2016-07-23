@@ -37,6 +37,8 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::get('{website}/users', 'WebsiteController@users');
 
+            Route::get('{website}/conversations', 'ConversationController@index');
+
         });
 
         Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
@@ -78,8 +80,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('users', 'UserController@store');
 
         Route::put('users/{id}', 'UserController@update');
-
-        Route::get('websites', 'WebsiteController@index');
 
     });
 

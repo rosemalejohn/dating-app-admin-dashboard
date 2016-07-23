@@ -39,7 +39,7 @@
 				</tr>
 			</thead>
 		</table>
-		<button v-show="!isFetching" @click="showMore()" class="btn btn-default">Load more</button>
+		<button v-show="!isFetching" @click="showMore()" class="btn btn-default btn-sm">Load more</button>
 	</div>
 	<div v-else class="note note-info note-bordered">
 		<p>No users listed.</p>

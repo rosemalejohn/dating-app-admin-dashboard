@@ -26,6 +26,11 @@
 							Users </a>
 						</li>
 						<li>
+							<a href="/websites/{{ website.id }}/conversations">
+							<i class="icon-envelope-open"></i>
+							Chat system </a>
+						</li>
+						<li>
 							<a data-target="#editWebsiteModal" data-toggle="modal">
 							<i class="fa fa-edit"></i>
 							Edit details </a>

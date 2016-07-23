@@ -2,12 +2,10 @@
 
 namespace App\Tenant;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Tenant\Model;
 
 class UserProfile extends Model
 {
-
-    protected $connection = 'tenant';
 
     /**
      * The table associated with the model.

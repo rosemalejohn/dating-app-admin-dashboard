@@ -2,11 +2,10 @@
 
 namespace App\Tenant;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Tenant\Model;
 
 class Conversation extends Model
 {
-    protected $connection = 'tenant';
 
     protected $table = 'mailbox_conversation';
 
@@ -47,6 +46,16 @@ class Conversation extends Model
     public function messages()
     {
         return $this->hasMany(Message::class, 'conversationId');
+    }
+
+    public function scopeMailbox($query)
+    {
+        return $query->whereSubject('mailbox_chat_conversation');
+    }
+
+    public function last_message()
+    {
+        return $this->hasOne(LastMessage::class, 'conversationId');
     }
 
 }

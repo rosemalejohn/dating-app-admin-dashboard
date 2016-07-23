@@ -2,7 +2,7 @@
     <div class="page-header-inner container">
         <div class="page-logo">
             <a href="index.html">
-                <!-- <img src="../../assets/admin/layout2/img/logo-default.png" alt="logo" class="logo-default" /> -->
+                <img src="http://n8core.com/wp-content/uploads/2015/10/favicon.png" alt="logo" class="logo-default" style="margin-top: 8px;" />
             </a>
             <div class="menu-toggler sidebar-toggler">
             </div>
@@ -27,14 +27,6 @@
             </div>
         </div>
         <div class="page-top">
-            <form class="search-form search-form-expanded" action="/" method="GET">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search..." name="query">
-                    <span class="input-group-btn">
-				        <a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-				    </span>
-                </div>
-            </form>
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
                     @if (auth()->user())

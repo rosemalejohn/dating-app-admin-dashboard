@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\ProfileService;
+use App\Services\TenantService;
 use App\Website;
 use Illuminate\Console\Command;
 
@@ -27,18 +28,22 @@ class LoginFakeProfiles extends Command
      *
      * @return mixed
      */
-    public function handle(ProfileService $profile)
+    public function handle(ProfileService $profile, TenantService $tenant)
     {
         $websites = Website::all();
 
         foreach ($websites as $website) {
-            connectToTenant($website);
+
+            $tenant->connect($website);
 
             $managed_users = $website->managed_users->random()->all();
 
             foreach ($managed_users as $managed_user) {
                 $user = $managed_user->user;
-                $profile->login($user);
+                if ($user) {
+                    $profile->login($user);
+                }
+
             }
         }
 

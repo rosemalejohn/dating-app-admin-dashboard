@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('_layouts.auth')
 
 @section('page_title', 'User moderation')
 
@@ -12,6 +12,4 @@
 	{!! Breadcrumbs::render('users') !!}
 
 	<external-user-listings :paginator="{{ $users }}"></external-user-listings>
-
-
 @stop

@@ -2,11 +2,10 @@
 
 namespace App\Tenant;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Tenant\Model;
 
 class OnlineUser extends Model
 {
-    protected $connection = 'tenant';
 
     protected $table = 'base_user_online';
 

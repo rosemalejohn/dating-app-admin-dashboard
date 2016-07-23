@@ -2,11 +2,10 @@
 
 namespace App\Tenant;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Tenant\Model;
 
 class Message extends Model
 {
-    protected $connection = 'tenant';
 
     protected $table = 'mailbox_message';
 
@@ -35,6 +34,11 @@ class Message extends Model
     public function recipient()
     {
         return $this->belongsTo(User::class, 'recipientId');
+    }
+
+    public function scopeUnread($query)
+    {
+        return $query->where('recipientRead', 0);
     }
 
     public function getIsSenderAttribute()

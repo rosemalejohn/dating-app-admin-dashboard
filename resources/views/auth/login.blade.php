@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('_layouts.guest')
 
 @section('content')
 <!-- BEGIN LOGIN FORM -->

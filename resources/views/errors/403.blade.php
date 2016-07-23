@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('_layouts.auth')
 
 @section('page_title', '403')
 @section('page_description', 'Access forbidden')
