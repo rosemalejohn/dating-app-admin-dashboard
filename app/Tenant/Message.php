@@ -17,13 +17,17 @@ class Message extends Model
         'text',
     ];
 
+    protected $casts = [
+        'recipientRead' => 'boolean',
+    ];
+
     public $timestamps = false;
 
     protected $appends = ['is_sender', 'is_recipient'];
 
     public function conversation()
     {
-        return $this->belongsTo(Conversation::class);
+        return $this->belongsTo(Conversation::class, 'conversationId');
     }
 
     public function sender()
@@ -43,12 +47,12 @@ class Message extends Model
 
     public function getIsSenderAttribute()
     {
-
+        // return $this->sender->id == $this->conversation->initiator->id;
     }
 
     public function getIsRecipientAttribute()
     {
-
+        // return $this->recipient->id == $this->conversation->interlocutor->id;
     }
 
 }

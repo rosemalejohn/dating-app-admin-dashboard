@@ -3,6 +3,7 @@
 namespace App\Tenant;
 
 use App\Tenant\Model;
+use App\Website;
 
 class User extends Model
 {
@@ -26,9 +27,9 @@ class User extends Model
         return $this->hasMany(UserProfile::class, 'userId');
     }
 
-    public function websiteUser()
+    public function website()
     {
-        return $this->hasOne(\App\WebsiteUser::class);
+        return $this->belongsToMany(Website::class, 'website_users', 'userId', 'website_id');
     }
 
     public function online()

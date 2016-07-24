@@ -37,6 +37,21 @@
 				</div>
 				</a>
 			</div>
+			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				<a class="dashboard-stat dashboard-stat-light green-soft" href="/chat">
+				<div class="visual">
+					<i class="fa fa-comments-o"></i>
+				</div>
+				<div class="details">
+					<div class="number">
+						{{ $conversations }}
+					</div>
+					<div class="desc">
+						Chat
+					</div>
+				</div>
+				</a>
+			</div>
 		</div>
 	@endif
 @stop

@@ -44,3 +44,14 @@ Breadcrumbs::register('settings:system', function ($breadcrumbs) {
 Breadcrumbs::register('messages', function ($breadcrumbs) {
     $breadcrumbs->push('Messages', '/messages');
 });
+
+// Chat lobby
+
+Breadcrumbs::register('chat:lobby', function ($breadcrumbs) {
+    $breadcrumbs->push('Chat Lobby', '/chat');
+});
+
+Breadcrumbs::register('chat:conversation', function ($breadcrumbs, $website, $conversation) {
+    $breadcrumbs->parent('chat:lobby');
+    $breadcrumbs->push($conversation->interlocutor->username, "/chat/{$website->id}/{$conversation->id}");
+});

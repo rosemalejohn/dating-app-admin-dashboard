@@ -4,29 +4,28 @@
         <ul class="page-sidebar-menu page-sidebar-menu-hover-submenu page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
             <li class="start ">
                 <a href="/">
-                    <i class="icon-home"></i>
+                    <i class="fa fa-tachometer"></i>
                     <span class="title">Dashboard</span>
                 </a>
             </li>
             <li>
                 <a href="/chat">
-                    <i class="fa fa-comments-o"></i>
-                    <span class="title">Chat lobby</span>
+                    <i class="fa fa-users"></i>
+                    <span class="title">Lobby</span>
                     <span class="arrow "></span>
                 </a>
             </li>
-            @if (auth()->user() && auth()->user()->is_admin)
             <li>
                 <a href="/websites">
                     <i class="fa fa-globe"></i>
-                    <span class="title">Manage Websites</span>
+                    <span class="title">Active</span>
                     <span class="arrow "></span>
                 </a>
             </li>
             <li>
                 <a href="/users">
-                    <i class="fa fa-users"></i>
-                    <span class="title">Users</span>
+                    <i class="fa fa-usd"></i>
+                    <span class="title">Income</span>
                     <span class="arrow "></span>
                 </a>
             </li>
@@ -36,7 +35,6 @@
                     <span class="title">System Settings</span>
                 </a>
             </li>
-            @endif
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>

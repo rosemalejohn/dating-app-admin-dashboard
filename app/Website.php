@@ -16,10 +16,10 @@ class Website extends Model
         'name', 'logo', 'url', 'host', 'database', 'username', 'password', 'prefix', 'port',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(Tenant\User::class, 'user_websites');
-    }
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'website_users', 'website_id', 'userId');
+    // }
 
     public function managed_users()
     {

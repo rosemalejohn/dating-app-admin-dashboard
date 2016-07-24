@@ -20,6 +20,8 @@ class TenantService
             'database.connections.tenant.prefix' => $website->prefix,
         ]);
 
+        DB::purge('tenant');
+
         return true;
     }
 

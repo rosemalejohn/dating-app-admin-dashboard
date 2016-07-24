@@ -1,31 +1,13 @@
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
     <div class="page-header-inner container">
         <div class="page-logo">
-            <a href="/">
-                <img src="/img/logo.png" alt="logo" class="logo-default" style="margin-top: 8px; width: 135px;" />
-            </a>
+            <a href="/chat"></a>
             <div class="menu-toggler sidebar-toggler">
             </div>
         </div>
 
         <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
         </a>
-
-        <div class="page-actions">
-            <div class="btn-group">
-                <button type="button" class="btn btn-circle red-pink dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i>&nbsp;<span class="hidden-sm hidden-xs">New&nbsp;</span>&nbsp;<i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a data-toggle="modal" data-target="#websiteFormModal" href="javascript:;"><i class="fa fa-globe"></i> New website </a>
-                    </li>
-                    <li>
-                        <a data-toggle="modal" data-target="#userFormModal" href="javascript:;"><i class="icon-user"></i> New user </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
         <div class="page-top">
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">

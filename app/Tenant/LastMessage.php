@@ -13,6 +13,11 @@ class LastMessage extends Model
 
     public $timestamps = false;
 
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class, 'conversationId');
+    }
+
     public function initiator()
     {
         return $this->belongsTo(Message::class, 'initiatorMessageId');

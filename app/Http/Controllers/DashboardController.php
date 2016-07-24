@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MessageService;
+
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(MessageService $msgService)
     {
-        return view('dashboard.index');
+        $conversations = count($msgService->getConversations());
+
+        return view('dashboard.index')->with(compact('conversations'));
     }
 }

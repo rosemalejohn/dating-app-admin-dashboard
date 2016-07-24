@@ -25,8 +25,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('external/users', 'UserController@getExternalUsers');
 
-    Route::get('conversations', 'ConversationController@index');
-
     Route::group(['middleware' => 'admin'], function () {
 
         Route::get('users', 'UserController@index');
@@ -37,8 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::get('{website}/users', 'WebsiteController@users');
 
-            Route::get('{website}/conversations', 'ConversationController@index');
-
         });
 
         Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
@@ -46,6 +42,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('users', 'UserController@index');
 
             Route::delete('users', 'UserController@delete');
+
+            Route::group(['prefix' => 'chat'], function () {
+
+                Route::post('{website}/{conversation}', 'ChatController@send');
+
+                Route::post('{website}/{conversation}/notes', 'ChatController@saveNotes');
+
+            });
 
             Route::group(['middleware' => 'tenant', 'prefix' => 'websites'], function () {
 
@@ -80,6 +84,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('users', 'UserController@store');
 
         Route::put('users/{id}', 'UserController@update');
+
+    });
+
+    Route::group(['prefix' => 'chat'], function () {
+
+        Route::get('/', 'ChatController@lobby');
+
+        Route::get('{website}/{conversation}', 'ChatController@conversation');
 
     });
 

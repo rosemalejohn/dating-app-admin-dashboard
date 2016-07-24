@@ -6,13 +6,20 @@
 	import UserProfileEdit from './components/UserProfileEdit.vue'
 	import SystemSettings from './components/SystemSettings.vue'
 	import ManageWebsite from './components/ManageWebsite.vue'
-	import Conversations from './components/Conversations.vue'
+	
+	// Chat
+	import ChatLobby from './components/chat/Lobby.vue'
+	import Conversation from './components/chat/Conversation.vue'
+
 	// Modals
 	import WebsiteFormModal from './components/Modal.vue'
 	import UserFormModal from './components/Modal.vue'
 	// Forms
 	import WebsiteForm from './forms/website.vue'
 	import UserForm from './forms/users.vue'
+
+	import Vue from 'vue'
+	import moment from 'moment'
 
 	export default {
 		
@@ -23,7 +30,9 @@
 			UserProfileEdit,
 			SystemSettings,
 			ManageWebsite,
-			Conversations,
+			Conversation,
+
+			ChatLobby,
 
 			WebsiteFormModal,
 			UserFormModal,
@@ -52,4 +61,17 @@
 			}
 		}
 	}
+
+	Vue.filter('date', function(value, type = null, format = null) {
+
+	    if (type === 'relative') {
+	        return moment(value).fromNow();
+	    } else if (type == 'unix') {
+	    	return moment.unix(value).fromNow();
+	    }
+
+	    return moment(value).format(format || "MM/DD/YYYY");
+
+	});
+
 </script>

@@ -27,7 +27,6 @@ class Conversation extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'read' => 'boolean',
         'deleted' => 'boolean',
         'viewed' => 'boolean',
         'notificationSent' => 'boolean',
