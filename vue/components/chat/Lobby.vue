@@ -19,7 +19,7 @@
 						
 						<tr v-for="conversation in conversations | filterBy search" role="row" class="filter">
 							<td>
-								{{ conversation.interlocutor.website[0].name }}
+								<img width="100%" :src="conversation.interlocutor.website[0].logo || '/img/default-photo.png'" />
 							</td>
 							<td>{{ conversation.initiator.username}}</td>
 							<td class="editable">{{ conversation.interlocutor.username }}</td>

@@ -3,31 +3,12 @@
 		<div class="portlet-body form">
 			<form @submit.prevent="saveSettings()" role="form">
 				<div class="form-body">
-					<div class="form-group">
-						<label>Auto login for entire site</label>
+					<div v-for="config in configs" class="form-group">
+						<label>{{ config.name }}</label>
 						<div class="input-group">
 							<div class="icheck-list">
 								<label>
-								<input v-model="form.auto_login_entire_site" type="checkbox" class="icheck"> Yes </label>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label>Auto login for fake accounts only</label>
-						<div class="input-group">
-							<div class="icheck-list">
-								<label>
-								<input v-model="form.auto_login_fake_accounts" type="checkbox" class="icheck"> Yes </label>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label>Trigger intro message to new male members</label>
-						<div class="input-group">
-							<div class="icheck-list">
-								<label>
-								<input v-model="form.trigger_intro_message" type="checkbox" class="icheck"> Yes </label>
+								<input v-model="config.value" type="checkbox" class="icheck"> Yes </label>
 							</div>
 						</div>
 					</div>
@@ -52,6 +33,17 @@
 					auto_login_entire_site: false,
 					auto_login_fake_accounts: false,
 					trigger_intro_message: false
+				}
+			}
+
+		},
+
+		props: {
+
+			configs: {
+				type: Array,
+				default() {
+					return []
 				}
 			}
 

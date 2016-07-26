@@ -20,7 +20,7 @@ class UserProfile extends Model
      *
      * @var array
      */
-    protected $appends = ['address', 'real_name', 'about_me'];
+    protected $appends = ['address', 'real_name', 'about_me', 'sex', 'looking_for'];
 
     public $timestamps = false;
 
@@ -51,9 +51,15 @@ class UserProfile extends Model
         return $about ? $about->textValue : null;
     }
 
-    public function getSexAttibute()
+    public function getSexAttribute()
     {
-        $sex = UserProfile::where('userId', $this->id)->where('questionName', 'aboutme')->first();
+        $sex = UserProfile::where('userId', $this->id)->where('questionName', 'sex')->first();
+        return 'male';
+    }
+
+    public function getLookingForAttribute()
+    {
+        return '';
     }
 
 }

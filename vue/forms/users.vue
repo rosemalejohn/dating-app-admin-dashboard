@@ -59,6 +59,16 @@
             </div>
 
             <div class="form-group">
+                <label>Pay rate</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-usd"></i>
+                    </span>
+                    <input v-model="form.pay_rate" type="number" class="form-control" placeholder="Pay rate">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Managed websites</label>
                 <div class="input-group">
                     <div v-for="website in websites" class="icheck-list">
@@ -69,7 +79,6 @@
                     </div>
                 </div>
             </div>
-            {{ form | json }}
         </div>
     </form>
 </template>

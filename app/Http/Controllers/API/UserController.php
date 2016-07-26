@@ -23,6 +23,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'contact_info' => $request->contact_info,
             'type' => $request->type,
+            'pay_rate' => $request->pay_rate,
         ];
 
         $this->validate($request, $this->validator());

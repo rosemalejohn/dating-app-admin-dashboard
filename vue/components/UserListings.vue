@@ -54,7 +54,7 @@
 						<tr v-for="user in users | filterBy search" role="row" class="filter">
 							<td><input v-if="!user.is_mine" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="group-checkable"></td>
 							<td>
-								<img style="width: 100%;" :src="user.profile.photo || '/img/default-photo.png'" />
+								<img style="width: 100%;" :src="user.photo || '/img/default-photo.png'" />
 							</td>
 							<td>{{ user.name }}</td>
 							<td>{{ user.email }}</td>

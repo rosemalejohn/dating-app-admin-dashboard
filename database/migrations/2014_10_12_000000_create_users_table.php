@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->text('contact_info')->nullable();
             $table->longtext('photo')->nullable();
             $table->enum('type', ['user', 'admin'])->default('user');
+            $table->double('pay_rate')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

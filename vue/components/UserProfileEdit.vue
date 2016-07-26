@@ -47,6 +47,13 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-md-3 control-label">Pay rate</label>
+						<div class="col-md-6">
+							<input v-model="user.pay_rate" type="number" class="form-control" placeholder="Enter pay rate">
+						</div>
+					</div>
+
+					<div class="form-group">
 		                <label class="col-md-3 control-label">Managed websites</label>
 		                <div class="col-md-6">
 		                    <div v-for="website in websites" class="icheck-list">

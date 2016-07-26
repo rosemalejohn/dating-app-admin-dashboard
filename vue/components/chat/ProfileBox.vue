@@ -8,7 +8,7 @@
 				City: <a href="javascipt:;">{{ profile.profile.address }}</a>
 			</div>
 			<div class="margin-top-10 profile-desc-link">
-				Looking for: <a href="#">Male</a>
+				Looking for: <a href="#">{{ profile.sex }}</a>
 			</div>
 			<div class="margin-top-10 profile-desc-link">
 				Description: <a href="#">{{ profile.about_me }}</a>
