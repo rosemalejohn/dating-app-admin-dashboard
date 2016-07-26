@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::whereId($id)->with('managed_websites')->first();
 
         if ($request->user()->can('edit-user', $user)) {
             return view('users.edit')->with(compact('user'));

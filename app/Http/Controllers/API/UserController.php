@@ -29,17 +29,24 @@ class UserController extends Controller
 
         $user = User::create($data);
 
+        $user->managed_websites()->sync($request->websites);
+
         return response()->json($user);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user)
     {
         // if ($request->user()->can('edit-user', $user)) {
+
+        $user = User::findOrFail($user);
 
         $this->validate($request, [
             'name' => 'required|max:255|min:1',
             'email' => 'required',
         ]);
+
+        $user->managed_websites()->sync($request->websites);
+
         $user->update($request->all());
 
         // }

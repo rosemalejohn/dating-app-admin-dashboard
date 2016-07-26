@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\LoginFakeProfiles::class,
+        Commands\SendMessage::class,
     ];
 
     /**
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('login:fake-profiles')
+            ->daily();
+        $schedule->command('message:send')
             ->daily();
     }
 }

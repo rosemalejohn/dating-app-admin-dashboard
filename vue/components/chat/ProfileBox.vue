@@ -3,15 +3,15 @@
 		<img :src="profile.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
 		<div class="details">
 			<h4 class="profile-desc-title">{{ profile.username }}</h4>
-			<span class="profile-desc-text"> Lorem ipsum dolor sit amet diam nonummy nibh dolore. </span>
 			
-			<div v-if="profile.profile.address != ''" class="margin-top-20 profile-desc-link">
-				<i class="fa fa-map-marker"></i>
-				<a href="javascipt:;">{{ profile.profile.address }}</a>
+			<div v-if="profile.profile.address != ''" class="margin-top-10 profile-desc-link">
+				City: <a href="javascipt:;">{{ profile.profile.address }}</a>
 			</div>
-			<div class="margin-top-20 profile-desc-link">
-				<i class="fa fa-search"></i>
-				<a href="#">Male</a>
+			<div class="margin-top-10 profile-desc-link">
+				Looking for: <a href="#">Male</a>
+			</div>
+			<div class="margin-top-10 profile-desc-link">
+				Description: <a href="#">{{ profile.about_me }}</a>
 			</div>
 		</div>
 	</div>

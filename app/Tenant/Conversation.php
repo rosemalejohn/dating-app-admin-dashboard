@@ -2,6 +2,7 @@
 
 namespace App\Tenant;
 
+use App\Note;
 use App\Tenant\Model;
 
 class Conversation extends Model
@@ -55,6 +56,11 @@ class Conversation extends Model
     public function last_message()
     {
         return $this->hasOne(LastMessage::class, 'conversationId');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class, 'conversation_id');
     }
 
 }

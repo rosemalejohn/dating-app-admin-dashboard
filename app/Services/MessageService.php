@@ -20,26 +20,31 @@ class MessageService
         $conversations = collect();
 
         foreach ($websites as $website) {
-            $this->tenant->connect($website);
+            if (auth()->user()->can('view', $website)) {
 
-            $collections = $website->managed_users()->with([
-                'user.conversation_interlocutors' => function ($query) {
-                    $query->where('read', 0)->orWhere('read', 1);
-                },
-                'user.conversation_interlocutors.initiator',
-                'user.conversation_interlocutors.interlocutor.website',
-                'user.conversation_interlocutors.messages'])->get();
+                $this->tenant->connect($website);
 
-            $filtered = $collections->filter(function ($collection) {
-                return $collection->user->conversation_interlocutors;
-            });
+                $collections = $website->managed_users()->with([
+                    'user.conversation_interlocutors' => function ($query) {
+                        $query->where('read', 0)
+                            ->orWhere('read', 1)
+                            ->has('initiator')
+                            ->has('interlocutor')
+                            ->with('interlocutor.website', 'initiator', 'messages');
+                    },
+                ])->get();
 
-            foreach ($filtered as $filter) {
-                $conversations->push($filter->user->conversation_interlocutors);
+                $filtered = $collections->filter(function ($collection) {
+                    return $collection->user->conversation_interlocutors;
+                });
+
+                foreach ($filtered as $filter) {
+                    $conversations->push($filter->user->conversation_interlocutors);
+                }
             }
         }
 
-        $conversations = $conversations->flatten();
+        $conversations = $conversations->flatten()->sortBy('createStamp')->values();
         return $conversations;
     }
 

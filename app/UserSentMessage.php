@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserSentMessage extends Model
 {
 
+    protected $fillable = ['user_id', 'website_id', 'message_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

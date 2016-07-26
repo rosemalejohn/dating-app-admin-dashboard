@@ -20,7 +20,7 @@ class UserProfile extends Model
      *
      * @var array
      */
-    protected $appends = ['address'];
+    protected $appends = ['address', 'real_name', 'about_me'];
 
     public $timestamps = false;
 
@@ -35,6 +35,25 @@ class UserProfile extends Model
         if ($address) {
             return $address->textValue;
         }
+    }
+
+    public function getRealNameAttribute()
+    {
+        $name = UserProfile::where('userId', $this->id)->where('questionName', 'realname')->first();
+        if ($name) {
+            return $name->textValue;
+        }
+    }
+
+    public function getAboutMeAttribute()
+    {
+        $about = UserProfile::where('userId', $this->id)->where('questionName', 'aboutme')->first();
+        return $about ? $about->textValue : null;
+    }
+
+    public function getSexAttibute()
+    {
+        $sex = UserProfile::where('userId', $this->id)->where('questionName', 'aboutme')->first();
     }
 
 }

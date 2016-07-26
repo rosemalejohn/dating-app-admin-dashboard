@@ -50,10 +50,6 @@
 
             <div class="page-content-wrapper">
                 <div class="page-content">
-                    <h3 class="page-title">
-                        @yield('page_title') <small>@yield('page_description')</small>
-                    </h3>
-
                     @yield('content')
                 </div>
             </div>

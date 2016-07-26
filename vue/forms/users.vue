@@ -58,6 +58,18 @@
                 <textarea v-model="form.contact_info" class="form-control"></textarea>
             </div>
 
+            <div class="form-group">
+                <label>Managed websites</label>
+                <div class="input-group">
+                    <div v-for="website in websites" class="icheck-list">
+                        <label>
+                        <input v-model="form.websites" v-bind:value="website.id" type="checkbox" class="icheck" />
+                        {{ website.name }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {{ form | json }}
         </div>
     </form>
 </template>
@@ -88,7 +100,9 @@ export default {
             type: Object,
             twoWay: true,
             default() {
-                return UserModel
+                return {
+                    websites: []
+                }
             },
             required: false
         }

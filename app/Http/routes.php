@@ -13,78 +13,71 @@
 
 Route::auth();
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'tenant']], function () {
+
+    // Consumable APIs / For vuejs
 
     Route::get('/', 'DashboardController@index');
 
-    Route::get('users/{user}/edit', 'UserController@edit');
-
-    Route::get('websites/{website}', 'WebsiteController@show');
-
     Route::get('profile', 'UserController@profile');
 
-    Route::get('external/users', 'UserController@getExternalUsers');
+    Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
 
-    Route::group(['middleware' => 'admin'], function () {
+        Route::group(['prefix' => 'users'], function () {
 
-        Route::get('users', 'UserController@index');
+            Route::post('/', 'UserController@store');
 
-        Route::group(['middleware' => 'tenant', 'prefix' => 'websites'], function () {
+            Route::put('{id}', 'UserController@update');
 
-            Route::get('/', 'WebsiteController@index');
-
-            Route::get('{website}/users', 'WebsiteController@users');
+            Route::delete('/', 'UserController@delete');
 
         });
 
-        Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
+        Route::delete('notes/{note}', 'NoteController@delete');
 
-            Route::get('users', 'UserController@index');
+        Route::put('notes/{note}', 'NoteController@update');
 
-            Route::delete('users', 'UserController@delete');
+        Route::group(['prefix' => 'chat'], function () {
 
-            Route::group(['prefix' => 'chat'], function () {
+            Route::post('{website}/{conversation}', 'ChatController@send');
 
-                Route::post('{website}/{conversation}', 'ChatController@send');
+            Route::post('{website}/{conversation}/notes', 'ChatController@storeNotes');
 
-                Route::post('{website}/{conversation}/notes', 'ChatController@saveNotes');
+        });
 
-            });
+        Route::group(['prefix' => 'websites'], function () {
 
-            Route::group(['middleware' => 'tenant', 'prefix' => 'websites'], function () {
+            Route::get('/', 'WebsiteController@index');
 
-                Route::post('/', 'WebsiteController@store');
+            Route::post('/', 'WebsiteController@store');
 
-                Route::put('{website}', 'WebsiteController@update');
+            Route::put('{website}', 'WebsiteController@update');
 
-                Route::put('{website}/change-photo', 'WebsiteController@changePhoto');
+            Route::put('{website}/change-photo', 'WebsiteController@changePhoto');
 
-                Route::delete('{website}', 'WebsiteController@delete');
+            Route::delete('{website}', 'WebsiteController@delete');
 
-                Route::get('{website}/users', 'WebsiteController@users');
+            Route::get('{website}/users', 'WebsiteController@users');
 
-                Route::get('{website}/managed-users', 'WebsiteController@managedUsers');
+            Route::get('{website}/managed-users', 'WebsiteController@managedUsers');
 
-                Route::get('{website}/users/{search}', 'WebsiteController@searchUsers');
+            Route::get('{website}/users/{search}', 'WebsiteController@searchUsers');
 
-                Route::post('{website}/managed-users', 'WebsiteController@storeManagedUsers');
+            Route::post('{website}/managed-users', 'WebsiteController@storeManagedUsers');
 
-                Route::delete('{website}/unmanage-users', 'WebsiteController@unmanageUsers');
+            Route::delete('{website}/unmanage-users', 'WebsiteController@unmanageUsers');
 
-                Route::put('{website}/managed-users/{id}', 'WebsiteController@updateManagedUser');
-
-            });
+            Route::put('{website}/managed-users/{id}', 'WebsiteController@updateManagedUser');
 
         });
 
     });
 
-    Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
+    Route::group(['prefix' => 'users'], function () {
 
-        Route::post('users', 'UserController@store');
+        Route::get('/', 'UserController@index');
 
-        Route::put('users/{id}', 'UserController@update');
-
+        Route::get('{user}/edit', 'UserController@edit');
     });
 
     Route::group(['prefix' => 'chat'], function () {
@@ -94,5 +87,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('{website}/{conversation}', 'ChatController@conversation');
 
     });
+
+    Route::group(['prefix' => 'websites'], function () {
+
+        Route::get('/', 'WebsiteController@index');
+
+        Route::get('{website}', 'WebsiteController@show');
+
+        Route::get('{website}/users', 'WebsiteController@users');
+
+    });
+
+    Route::get('settings/system', 'SettingsController@system');
 
 });

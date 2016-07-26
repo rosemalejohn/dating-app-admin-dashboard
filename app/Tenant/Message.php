@@ -9,14 +9,6 @@ class Message extends Model
 
     protected $table = 'mailbox_message';
 
-    protected $fillable = [
-        'conversationId',
-        'timeStamp',
-        'senderId',
-        'recipientId',
-        'text',
-    ];
-
     protected $casts = [
         'recipientRead' => 'boolean',
     ];
@@ -47,12 +39,16 @@ class Message extends Model
 
     public function getIsSenderAttribute()
     {
-        // return $this->sender->id == $this->conversation->initiator->id;
+        if ($this->sender && $this->conversation->initiator) {
+            return $this->sender->id == $this->conversation->initiator->id;
+        }
     }
 
     public function getIsRecipientAttribute()
     {
-        // return $this->recipient->id == $this->conversation->interlocutor->id;
+        if ($this->sender && $this->conversation->interlocutor) {
+            return $this->recipient->id == $this->conversation->interlocutor->id;
+        }
     }
 
 }

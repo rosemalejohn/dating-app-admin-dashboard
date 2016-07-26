@@ -1,88 +1,89 @@
 <template>
-	<div class="portlet light ">
+	<div class="portlet">
 		<div class="portlet-title">
-			<div class="caption">
-				<i class="icon-share font-blue-steel hide"></i>
-				<span class="caption-subject font-blue-steel bold">Profile notes</span>
-			</div>
+			<div class="caption">Profile notes</div>
 		</div>
 		<div class="portlet-body">
-			<div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible="0">
-				<ul class="feeds">
-					<li>
-						<div class="col1">
-							<div class="cont">
-								<div class="cont-col1">
-									<div class="label label-sm label-warning">
-										<i class="fa fa-bell-o"></i>
-									</div>
-								</div>
-								<div class="cont-col2">
-									<div class="desc">
-										 Web server hardware needs to be upgraded. <span class="label label-sm label-default ">
-										Overdue </span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col2">
-							<div class="date">
-								 2 hours
-							</div>
-						</div>
-					</li>
-					<li>
-						<a href="javascript:;">
-						<div class="col1">
-							<div class="cont">
-								<div class="cont-col1">
-									<div class="label label-sm label-info">
-										<i class="fa fa-briefcase"></i>
-									</div>
-								</div>
-								<div class="cont-col2">
-									<div class="desc">
-										 IPO Report for year 2013 has been released.
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col2">
-							<div class="date">
-								 20 mins
-							</div>
-						</div>
-						</a>
-					</li>
-				</ul>
-			</div>
-			<div class="scroller-footer">
-				<textarea class="form-control" placeholder="Add notes..."></textarea>
-			</div>
+			<ul class="list-group">
+				<li v-for="note in notes | filterBy filter in 'type'" class="list-group-item">
+					<i @click="remove(note)" class="fa fa-remove hand-cursor"></i>
+					<i @click="edit(note)" class="fa fa-edit hand-cursor"></i>&nbsp;
+					{{ note.note }}
+				</li>
+			</ul>
 		</div>
+		<form @submit.prevent="submit()">
+			<textarea v-model="noteText" class="form-control" placeholder="Add notes..."></textarea>
+			<br />
+			<button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus"></i>&nbsp;Add note</button>
+		</form>
 	</div>
 </template>
 
 <style lang="sass">
-	
+	.hand-cursor {
+		cursor: pointer;
+	}
 </style>
 
 <script>
+	import Note from './../../stores/note'
+	import swal from 'sweetalert'
+
 	export default {
 
 		props: {
+
 			notes: {
 				type: Array,
 				default() {
 					return []
-				}
+				},
+				twoWay: true
+			},
+
+			filter: {
+				type: String,
+				default: ''
+			}
+		},
+
+		data() {
+			return {
+				noteText: ''
 			}
 		},
 
 		methods: {
-			submit(task) {
+			submit() {
+				Note.add(this.$parent.website, this.$parent.conversation, {
+					note: this.noteText,
+					type: this.filter
+				}).then(response => {
+					toastr.success('Note added!');
+					this.notes.push(response.data);
+					this.noteText = ''
+				}).catch(error => {
+					toastr.error('We cannot add the note.');
+				})
+			},
 
-			}
+			remove(note) {
+				swal({
+					title: "Are you sure?",
+					text: "You will not be able to recover this after deletion.",
+					type: "warning",
+					showCancelButton: true,
+					showLoaderOnConfirm: true
+				}, () => {
+					Note.remove(note).then(response => {
+						toastr.success(response.data);
+						this.notes.$remove(note);
+					}).catch(error => {
+						toastr.error('Note cannot be deleted.')
+					})
+				});
+			},
 		}
 	}
 </script>

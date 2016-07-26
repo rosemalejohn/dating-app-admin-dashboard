@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\TenantService;
+use App\Website;
 use Closure;
 use Route;
 
@@ -26,7 +27,10 @@ class TenantMiddleware
     {
         $website = Route::current()->getParameter('website');
 
-        if ($website) {
+        if (is_string($website)) {
+            $website = Website::find((int) $website);
+            $this->tenant->connect($website);
+        } elseif ($website) {
             $this->tenant->connect($website);
         }
         return $next($request);

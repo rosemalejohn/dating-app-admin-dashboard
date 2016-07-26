@@ -24,8 +24,8 @@
 		                <label class="col-md-3 control-label">Account type</label>
 		                <div class="col-md-6">
 			                <select v-model="user.type" class="form-control">
-			                    <option value="user" selected="">User</option>
-			                    <option value="admin">Admin</option> 
+			                    <option value="user" {{ user.type == 'user' ? 'selected' : '' }}>User</option>
+			                    <option value="admin" {{ user.type == 'admin' ? 'selected' : '' }}>Admin</option> 
 			                </select>
 		                </div>
 		            </div>
@@ -45,6 +45,18 @@
 							<textarea v-model="user.contact_info" class="form-control" rows="3"></textarea>
 						</div>
 					</div>
+
+					<div class="form-group">
+		                <label class="col-md-3 control-label">Managed websites</label>
+		                <div class="col-md-6">
+		                    <div v-for="website in websites" class="icheck-list">
+		                        <label>
+			                        <input :checked="checkWebsites(website)" v-model="checkedWebsites" :value="website.id" type="checkbox" class="icheck" />
+			                        {{ website.name }}
+		                        </label>
+		                    </div>
+		                </div>
+		            </div>
 				</div>
 				<div class="form-actions">
 					<div class="row">
@@ -72,6 +84,7 @@
 	import PhotoUpload from './PhotoUpload.vue'
 
 	import Spinner from './../spin'
+	import _ from 'underscore'
 
 	export default {
 
@@ -85,7 +98,9 @@
 			return {
 				websites: [],
 
-				saving: false
+				saving: false,
+
+				checkedWebsites: []
 			}
 		},
 
@@ -110,6 +125,7 @@
 
 			submit() {
 				this.saving = true
+				this.user.websites = this.checkedWebsites;
 				User.update(this.user).then(response => {
 					toastr.success('User updated!');
 					this.saving = false;
@@ -117,6 +133,16 @@
 					toastr.error('User not updated!');
 					this.saving = false;
 				})
+			},
+
+			checkWebsites(website) {
+				var filtered = _.filter(this.user.managed_websites, (val) => {
+					return val.id == website.id
+				})
+
+				if (filtered.length) {
+					return true
+				}
 			}
 
 		},

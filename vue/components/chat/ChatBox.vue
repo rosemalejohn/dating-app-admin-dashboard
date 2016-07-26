@@ -15,16 +15,16 @@
 			</div>
 		</div>
 		<div class="portlet-body">
-			<div class="scroller" style="height: 353px;" data-always-visible="1" data-rail-visible1="1">
+			<div class="chat-box-scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="1">
 				<ul v-if="messages" class="chats">
-					<li v-for="message in messages | filterBy searchMessage 
-					| orderBy 'id' -1" class="{{ message.is_sender ? 'out' : 'in' }}">
-						<img class="avatar" :src="message.sender.avatar.url || '/img/default-photo.png'"/>
+					<li v-for="message in messages | filterBy searchMessage" class="{{ message.is_sender ? 'out' : 'in' }}">
+						<img class="avatar" :src="message.is_sender ? initiator.avatar.url : interlocutor.avatar.url"/>
 						<div class="message">
 							<span class="arrow">
 							</span>
 							<a href="javascript:;" class="name">
-							{{ message.sender.username }} </a>
+								{{ message.sender ? message.sender.username : '' }}
+							</a>
 							<span class="datetime">
 							at {{ message.timeStamp | date 'unix' }}</span>
 							<span class="body">{{ message.text }}</span>
@@ -52,6 +52,9 @@
 </template>
 
 <script>
+	import moment from 'moment'
+	import Vue from 'vue'
+
 	export default {
 
 		props: {
@@ -66,8 +69,16 @@
 		data() {
 			return {
 				searchMessage: '',
-				textContent: ''
+				textContent: '',
+				initiator: this.$parent.conversation.initiator,
+				interlocutor: this.$parent.conversation.interlocutor
 			}
+		},
+
+		ready() {
+			$('.chat-box-scroller').slimScroll({
+			    start: 'bottom',
+			});
 		},
 
 		methods: {
@@ -77,17 +88,17 @@
 					text: this.textContent,
 					sender: this.$parent.conversation.interlocutor,
 					recipient: this.$parent.conversation.initiator,
-					timeStamp: new Date().getTime()
+					timeStamp: moment().unix()
 				}
 				this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(response => {
+					console.log(JSON.stringify(response.data));
 					this.messages.push(message);
 					this.textContent = ''
-				}).catch(response => {
+					toastr.success('Message sent!');
+				}).catch(response => { 
 					this.messages.push(message);
 					toastr.error('Message not sent!');
 				})
-
-				
 			}
 
 		}

@@ -40,4 +40,9 @@ class User extends Authenticatable
     {
         return $this->id == auth()->user()->id;
     }
+
+    public function managed_websites()
+    {
+        return $this->belongsToMany(Website::class, 'user_managed_websites')->withTimestamps();
+    }
 }

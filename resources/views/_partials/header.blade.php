@@ -10,7 +10,7 @@
 
         <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
         </a>
-
+        @if (auth()->user()->is_admin)
         <div class="page-actions">
             <div class="btn-group">
                 <button type="button" class="btn btn-circle red-pink dropdown-toggle" data-toggle="dropdown">
@@ -26,6 +26,7 @@
                 </ul>
             </div>
         </div>
+        @endif
         <div class="page-top">
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
@@ -41,14 +42,6 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
-                            <li>
-                                <a href="/profile">
-                                    <i class="icon-user"></i> My Profile </a>
-                            </li>
-                            <li><a href="/settings"><i class="icon-settings"></i> Settings</a></li>
-
-                            <li class="divider">
-                            </li>
                             <li>
                                 <a href="/logout">
                                     <i class="icon-key"></i> Log Out </a>

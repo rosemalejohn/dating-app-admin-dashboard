@@ -3,27 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Services\MessageService;
-use App\Services\TenantService;
 use App\Tenant\Conversation;
 use App\Website;
 
 class ChatController extends Controller
 {
 
-    public $tenant;
-
-    public function __construct(TenantService $tenant)
-    {
-        $this->middleware('tenant', ['only' => 'conversation']);
-
-        $this->tenant = $tenant;
-    }
-
     public function lobby(MessageService $msgService)
     {
-
         $conversations = $msgService->getConversations();
-
         return view('chat.lobby')->with(compact('conversations'));
     }
 
@@ -35,7 +23,8 @@ class ChatController extends Controller
             'initiator.avatar',
             'interlocutor.avatar',
             'initiator.profile',
-            'interlocutor.profile')->first();
+            'interlocutor.profile',
+            'notes')->first();
         return view('chat.conversation')->with(compact('website', 'conversation'));
     }
 }

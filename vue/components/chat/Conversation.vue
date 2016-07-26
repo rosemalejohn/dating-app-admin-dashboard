@@ -2,14 +2,14 @@
 	<div class="row">
 		<div class="col-md-3">
 			<profile-box :profile="conversation.interlocutor"></profile-box>
-			<notes></notes>
+			<notes :notes.sync="conversation.notes" filter="interlocutor"></notes>
 		</div>
 		<div class="col-md-6">
 			<chat-box :messages="conversation.messages"></chat-box>
 		</div>
 		<div class="col-md-3">
 			<profile-box :profile="conversation.initiator"></profile-box>
-			<notes></notes>
+			<notes :notes.sync="conversation.notes" filter="initiator"></notes>
 		</div>
 	</div>
 </template>
