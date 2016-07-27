@@ -52,6 +52,26 @@
 				</div>
 				</a>
 			</div>
+			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				<a class="dashboard-stat dashboard-stat-light purple-soft" href="/chat">
+				<div class="visual">
+					<i class="fa fa-usd"></i>
+				</div>
+				<div class="details">
+					<div class="number">
+						120 USD
+					</div>
+					<div class="desc">
+						Net earnings
+					</div>
+				</div>
+				</a>
+			</div>
 		</div>
+		<message-graph :websites="{{ $websites }}"></message-graph>
 	@endif
+@stop
+
+@section('scripts')
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 @stop

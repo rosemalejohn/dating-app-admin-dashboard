@@ -15,8 +15,6 @@ Route::auth();
 
 Route::group(['middleware' => ['auth', 'tenant']], function () {
 
-    // Consumable APIs / For vuejs
-
     Route::get('/', 'DashboardController@index');
 
     Route::get('profile', 'UserController@profile');

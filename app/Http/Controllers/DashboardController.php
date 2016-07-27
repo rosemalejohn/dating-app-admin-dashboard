@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\MessageService;
+use App\Website;
 
 class DashboardController extends Controller
 {
@@ -10,6 +11,8 @@ class DashboardController extends Controller
     {
         $conversations = count($msgService->getConversations());
 
-        return view('dashboard.index')->with(compact('conversations'));
+        $websites = Website::all();
+
+        return view('dashboard.index')->with(compact('conversations', 'websites'));
     }
 }

@@ -10,8 +10,9 @@
 
         <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
         </a>
-        @if (auth()->user()->is_admin)
+
         <div class="page-actions">
+            @if (auth()->user()->is_admin)
             <div class="btn-group">
                 <button type="button" class="btn btn-circle red-pink dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>&nbsp;<span class="hidden-sm hidden-xs">New&nbsp;</span>&nbsp;<i class="fa fa-angle-down"></i>
@@ -25,8 +26,16 @@
                     </li>
                 </ul>
             </div>
+            @endif
+            &nbsp;
+            <div class="navbar-stats">
+                <span>Current month income: <strong>$12.00</strong></span>
+            </div>
+            <div class="navbar-stats">
+                <span>Last month income: <strong>$0.00</strong></span>
+            </div>
         </div>
-        @endif
+
         <div class="page-top">
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">

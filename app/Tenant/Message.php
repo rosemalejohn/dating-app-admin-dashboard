@@ -39,7 +39,8 @@ class Message extends Model
 
     public function scopeInitiatorMessages($query)
     {
-        return $query->where('senderId', $this->conversation->initiatorId);
+        $conversation = $query->getModel()->with('conversation')->first();
+        return $query->where('senderId', $conversation->initiator->id);
     }
 
     public function getIsSenderAttribute()
@@ -53,6 +54,14 @@ class Message extends Model
     {
         if ($this->sender && $this->conversation->interlocutor) {
             return $this->recipient->id == $this->conversation->interlocutor->id;
+        }
+    }
+
+    public function getIsLastAttribute()
+    {
+        $last = $this->conversation->messages->last();
+        if ($last && ($last->id == $this->id)) {
+            return true;
         }
     }
 

@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Website::class, 'user_managed_websites')->withTimestamps();
     }
+
+    public function sent_messages()
+    {
+        return $this->hasMany(UserSentMessage::class);
+    }
 }

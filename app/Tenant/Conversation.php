@@ -33,8 +33,6 @@ class Conversation extends Model
         'notificationSent' => 'boolean',
     ];
 
-    // protected $appends = ['messages_count'];
-
     public function initiator()
     {
         return $this->belongsTo(User::class, 'initiatorId');
@@ -48,11 +46,6 @@ class Conversation extends Model
     public function messages()
     {
         return $this->hasMany(Message::class, 'conversationId');
-    }
-
-    public function scopeMailbox($query)
-    {
-        return $query->whereSubject('mailbox_chat_conversation');
     }
 
     public function last_message()

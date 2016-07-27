@@ -48,4 +48,14 @@ class MessageService
         return $conversations;
     }
 
+    public function getMessagePerDay(Website $website)
+    {
+
+    }
+
+    public function countMessagesPerDay($date)
+    {
+
+    }
+
 }

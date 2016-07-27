@@ -96,9 +96,11 @@
     });
     </script>
 
+    @yield('scripts')
+
     <script src="/js/app.js" type="text/javascript"></script>
 
-    @yield('scripts')
+
 </body>
 
 </html>

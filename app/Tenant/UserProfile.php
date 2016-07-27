@@ -59,7 +59,7 @@ class UserProfile extends Model
 
     public function getLookingForAttribute()
     {
-        return '';
+        return 'Male';
     }
 
 }

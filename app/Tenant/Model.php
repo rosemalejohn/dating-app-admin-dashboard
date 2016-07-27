@@ -8,10 +8,4 @@ class Model extends BaseModel
 {
 
     protected $connection = 'tenant';
-
-    public function __construct()
-    {
-        // $this->setConnection('tenant');
-    }
-
 }

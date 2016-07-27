@@ -9,9 +9,14 @@ use App\Website;
 class ChatController extends Controller
 {
 
-    public function lobby(MessageService $msgService)
+    public function __construct(MessageService $msgService)
     {
-        $conversations = $msgService->getConversations();
+        $this->msgService = $msgService;
+    }
+
+    public function lobby()
+    {
+        $conversations = $this->msgService->getConversations();
         return view('chat.lobby')->with(compact('conversations'));
     }
 

@@ -21,6 +21,9 @@
 	import Vue from 'vue'
 	import moment from 'moment'
 
+	// Dashboard 
+	import MessageGraph from './components/dashboard/MessageGraph.vue'
+
 	export default {
 		
 		components: {
@@ -38,7 +41,9 @@
 			UserFormModal,
 
 			WebsiteForm,
-			UserForm
+			UserForm,
+
+			MessageGraph
 		},
 
 		methods: {
@@ -64,7 +69,7 @@
 
 	Vue.filter('date', function(value, type = null, format = null) {
 
-	    if (type === 'relative') {
+	    if (type == 'relative') {
 	        return moment(value).fromNow();
 	    } else if (type == 'unix') {
 	    	return moment.unix(value).fromNow();

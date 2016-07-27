@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         // Create default database user
         User::create([
             'name' => 'Administrator',
-            'email' => 'admin@admin.com',
+            'email' => 'admin@n8core.com',
             'password' => bcrypt('admin'),
             'type' => 'admin',
         ]);
