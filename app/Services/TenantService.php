@@ -7,6 +7,20 @@ use DB;
 class TenantService
 {
 
+    public function testConnection(Website $website)
+    {
+        $this->connect($website);
+
+        try {
+            $pdo = DB::connection('tenant')->getPdo();
+            return true;
+        } catch (\PDOException $ex) {
+            return false;
+        } catch (\ErrorException $ex) {
+            return false;
+        }
+    }
+
     public function connect(Website $website)
     {
         DB::purge('tenant');

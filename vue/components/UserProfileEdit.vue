@@ -53,7 +53,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div v-if="user.type == 'user'" class="form-group">
 		                <label class="col-md-3 control-label">Managed websites</label>
 		                <div class="col-md-6">
 		                    <div v-for="website in websites" class="icheck-list">
@@ -132,7 +132,11 @@
 
 			submit() {
 				this.saving = true
-				this.user.websites = this.checkedWebsites;
+				if (!this.user == 'admin') {
+					this.user.websites = this.checkedWebsites;
+				} else {
+					this.user.websites = [];
+				}
 				User.update(this.user).then(response => {
 					toastr.success('User updated!');
 					this.saving = false;

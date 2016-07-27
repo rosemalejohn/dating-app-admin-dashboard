@@ -1,5 +1,5 @@
 <template>
-	<img onclick="document.getElementById('photo').click()" class="thumbnail img-holder" :src="photo" />
+	<img onclick="document.getElementById('photo').click()" class="thumbnail img-holder" :src="photo || '/img/default-photo.png'" />
     <input @change="selectPhoto" class="hide" id="photo" type="file" />
 </template>
 

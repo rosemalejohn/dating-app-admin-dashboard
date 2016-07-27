@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Services\TenantService;
 use App\Tenant\User;
 use App\Website;
 use App\WebsiteUser;
@@ -45,12 +46,25 @@ class WebsiteController extends Controller
         return response()->json($managedUser, 200);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, TenantService $tenant)
     {
         $this->validate($request, $this->validator($request->all()));
 
-        $website = Website::create($this->getWebsite($request));
-        return response()->json($website, 201);
+        $website = new Website;
+        $website->database = $request->database;
+        $website->host = $request->host;
+        $website->name = $request->name;
+        $website->password = $request->password;
+        $website->port = $request->port;
+        $website->prefix = $request->prefix;
+        $website->url = $request->url;
+        $website->username = $request->username;
+
+        if ($tenant->testConnection($website)) {
+            $website->save();
+            return response()->json($website, 201);
+        }
+        return response()->json('We cannot connect to the database, please check the connection again.', 500);
     }
 
     public function update(Request $request, Website $website)

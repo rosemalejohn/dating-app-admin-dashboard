@@ -15,13 +15,16 @@ class WebsiteController extends Controller
 
     public function show(Website $website)
     {
-
         return view('websites.manage')->with(compact('website'));
     }
 
     public function users(Website $website)
     {
-        $users = User::with('avatar', 'profile')->paginate(10)->toJson();
+        try {
+            $users = User::with('avatar', 'profile')->paginate(10)->toJson();
+        } catch (\QueryException $ex) {
+            abort(404);
+        }
 
         return view('websites.users')->with(compact('website', 'users'));
     }

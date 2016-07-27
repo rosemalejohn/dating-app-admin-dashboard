@@ -23,7 +23,7 @@ class WebsitePolicy
     public function view(User $user, Website $website)
     {
         $result = $user->managed_websites()->where('website_id', $website->id)->first();
-        if ($result) {
+        if ($result or auth()->user()->is_admin) {
             return true;
         }
     }

@@ -37,6 +37,11 @@ class Message extends Model
         return $query->where('recipientRead', 0);
     }
 
+    public function scopeInitiatorMessages($query)
+    {
+        return $query->where('senderId', $this->conversation->initiatorId);
+    }
+
     public function getIsSenderAttribute()
     {
         if ($this->sender && $this->conversation->initiator) {

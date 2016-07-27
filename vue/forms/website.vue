@@ -1,7 +1,7 @@
 <template>
     <form role="form" enctype="multipart/form-data">
         <div class="form-body">
-            <div v-if="method == 'POST'" class="form-group">
+            <div class="form-group">
                 <label>Photo</label>
                 <div class="row">
                     <div class="col-md-4">
@@ -159,6 +159,9 @@ export default {
                     this.saving = false;
                 }).catch(response => {
                     this.saving = false;
+                    if (response.status == 500) {
+                        toastr.error(response.data);
+                    }
                     this.errors = response.data
                 })
             }

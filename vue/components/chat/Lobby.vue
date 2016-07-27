@@ -8,11 +8,14 @@
 							<th width="5%">
 								Site
 							</th> 
-							<th width="40%">
+							<th width="35%">
 								Member
 							</th>
-							<th width="40%">
+							<th width="35%">
 								Moderated Profile
+							</th>
+							<th width="20%">
+								Message count
 							</th>
 							<th width="10%"></th>
 						</tr>
@@ -23,6 +26,7 @@
 							</td>
 							<td>{{ conversation.initiator.username}}</td>
 							<td class="editable">{{ conversation.interlocutor.username }}</td>
+							<td>{{ conversation.initiator_messages_count }}</td>
 							<td>
 								<!-- chat/{website}/{conversation} -->
 								<a href="/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}" class="btn btn-xs green filter-cancel"><i class="fa fa-comments-o"></i>&nbsp;Take chat</a>
