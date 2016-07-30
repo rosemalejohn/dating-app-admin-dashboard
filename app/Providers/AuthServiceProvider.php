@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies($gate);
 
         $gate->define('edit-user', function ($user, $model) {
-            if ($user->is_admin or $user->id == $model->id) {
+            if ($user->is_super or $user->is_admin or $user->id == $model->id) {
                 return true;
             }
         });

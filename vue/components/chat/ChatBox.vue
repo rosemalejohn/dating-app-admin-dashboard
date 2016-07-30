@@ -49,6 +49,16 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="pull-left">
+				<button onclick="window.history.back();" class="btn btn-danger btn-block">Cancel</button>
+			</div>
+			<div class="pull-right">
+				<button @click="sendAndNext()" class="btn btn-success btn-block">Send and next</button>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -99,8 +109,18 @@
 					this.messages.push(message);
 					toastr.error('Message not sent!');
 				})
+			},
+
+			sendAndNext() {
+				this.send();
 			}
 
+		},
+
+		events: {
+			'chat:send'() {
+				this.send();
+			}
 		}
 	}
 </script>

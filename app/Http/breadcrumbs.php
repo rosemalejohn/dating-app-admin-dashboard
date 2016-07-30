@@ -18,6 +18,11 @@ Breadcrumbs::register('users:edit', function ($breadcrumbs, $user) {
     $breadcrumbs->push('Edit', '/users/' . $user->id . '/edit');
 });
 
+Breadcrumbs::register('users:account', function ($breadcrumbs, $user) {
+    $breadcrumbs->parent('users:show', $user);
+    $breadcrumbs->push('Account', '/users/' . $user->id . '/account');
+});
+
 Breadcrumbs::register('websites', function ($breadcrumbs) {
     $breadcrumbs->push('Manage websites', '/websites');
 });

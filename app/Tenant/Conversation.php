@@ -58,4 +58,12 @@ class Conversation extends Model
         return $this->hasMany(Note::class, 'conversation_id');
     }
 
+    public function getInitiatorMessagesCountAttribute()
+    {
+        $conversation = Conversation::whereId($this->id)->with(['messages', function ($query) {
+            $query->where('senderId', $this->initiatorId);
+        }])->first();
+        return $conversation;
+    }
+
 }

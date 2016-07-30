@@ -21069,8 +21069,24 @@ var _MessageGraph = require('./components/dashboard/MessageGraph.vue');
 
 var _MessageGraph2 = _interopRequireDefault(_MessageGraph);
 
+var _Account = require('./components/user/Account.vue');
+
+var _Account2 = _interopRequireDefault(_Account);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Dashboard 
+
+// Forms
+
+
+// Modals
+
+
+// Chat
+
+
+// Pages
 exports.default = {
 
 	components: {
@@ -21090,7 +21106,8 @@ exports.default = {
 		WebsiteForm: _website2.default,
 		UserForm: _users2.default,
 
-		MessageGraph: _MessageGraph2.default
+		MessageGraph: _MessageGraph2.default,
+		Account: _Account2.default
 	},
 
 	methods: {
@@ -21112,18 +21129,6 @@ exports.default = {
 	}
 };
 
-// Dashboard 
-
-// Forms
-
-
-// Modals
-
-
-// Chat
-
-
-// Pages
 
 _vue2.default.filter('date', function (value) {
 	var type = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
@@ -21149,7 +21154,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-024a1533", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./components/ManageWebsite.vue":30,"./components/ManagedUserListings.vue":31,"./components/Modal.vue":32,"./components/SystemSettings.vue":34,"./components/UserListings.vue":35,"./components/UserProfileEdit.vue":36,"./components/WebsiteListings.vue":37,"./components/chat/Conversation.vue":39,"./components/chat/Lobby.vue":40,"./components/dashboard/MessageGraph.vue":43,"./forms/users.vue":45,"./forms/website.vue":46,"moment":4,"vue":26,"vue-hot-reload-api":16}],29:[function(require,module,exports){
+},{"./components/ManageWebsite.vue":30,"./components/ManagedUserListings.vue":31,"./components/Modal.vue":32,"./components/SystemSettings.vue":34,"./components/UserListings.vue":35,"./components/UserProfileEdit.vue":36,"./components/WebsiteListings.vue":37,"./components/chat/Conversation.vue":39,"./components/chat/Lobby.vue":40,"./components/dashboard/MessageGraph.vue":43,"./components/user/Account.vue":44,"./forms/users.vue":46,"./forms/website.vue":47,"moment":4,"vue":26,"vue-hot-reload-api":16}],29:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -21253,7 +21258,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1370eece", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":33,"./../forms/website.vue":46,"./Modal.vue":32,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],31:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":33,"./../forms/website.vue":47,"./Modal.vue":32,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],31:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -21432,7 +21437,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43b6831e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/managed-user.vue":44,"./../services/paginator":48,"./../spin":49,"./../stores/website_user":53,"./Modal.vue":32,"sweetalert":14,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],32:[function(require,module,exports){
+},{"./../forms/managed-user.vue":45,"./../services/paginator":49,"./../spin":50,"./../stores/website_user":55,"./Modal.vue":32,"sweetalert":14,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21685,7 +21690,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45d17132", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/user":51,"sweetalert":14,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],36:[function(require,module,exports){
+},{"./../stores/user":53,"sweetalert":14,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],36:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.image-picker {\n  cursor: pointer;\n  width: 50%; }\n")
 'use strict';
@@ -21714,6 +21719,10 @@ var _underscore = require('underscore');
 
 var _underscore2 = _interopRequireDefault(_underscore);
 
+var _currency = require('./../stores/currency');
+
+var _currency2 = _interopRequireDefault(_currency);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -21730,7 +21739,9 @@ exports.default = {
 
 			saving: false,
 
-			checkedWebsites: []
+			checkedWebsites: [],
+
+			currencies: []
 		};
 	},
 	ready: function ready() {
@@ -21739,6 +21750,7 @@ exports.default = {
 		_website2.default.all().then(function (response) {
 			_this.websites = response.data;
 		});
+		this.currencies = _currency2.default.getCurrencies();
 	},
 
 
@@ -21758,7 +21770,7 @@ exports.default = {
 			var _this2 = this;
 
 			this.saving = true;
-			if (!this.user == 'admin') {
+			if (this.user.type == 'moderator') {
 				this.user.websites = this.checkedWebsites;
 			} else {
 				this.user.websites = [];
@@ -21802,7 +21814,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet box green \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\tUpdate details\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body form\">\n\t\t<form @submit.prevent=\"submit()\" class=\"form-horizontal\" role=\"form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Name</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input v-model=\"user.name\" type=\"text\" class=\"form-control\" placeholder=\"Enter text\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Email</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input v-model=\"user.email\" type=\"text\" class=\"form-control\" placeholder=\"Enter text\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t                <label class=\"col-md-3 control-label\">Account type</label>\n\t                <div class=\"col-md-6\">\n\t\t                <select v-model=\"user.type\" class=\"form-control\">\n\t\t                    <option value=\"user\" {{=\"\" user.type=\"=\" 'user'=\"\" ?=\"\" 'selected'=\"\" :=\"\" ''=\"\" }}=\"\">User</option>\n\t\t                    <option value=\"admin\" {{=\"\" user.type=\"=\" 'admin'=\"\" ?=\"\" 'selected'=\"\" :=\"\" ''=\"\" }}=\"\">Admin</option> \n\t\t                </select>\n\t                </div>\n\t            </div>\n\t\t\t\t<hr>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Photo</label>\n\t\t\t\t\t<div class=\"col-md-3\">\n\t\t\t\t\t\t<photo-upload :photo.sync=\"user.photo\"></photo-upload>\n\t\t\t\t\t\t<p class=\"help-block\">\n\t\t\t\t\t\t\tphotos allowed (.jpeg, .jpg, .png)\n\t\t\t\t\t\t</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Contact information</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<textarea v-model=\"user.contact_info\" class=\"form-control\" rows=\"3\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Pay rate</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input v-model=\"user.pay_rate\" type=\"number\" class=\"form-control\" placeholder=\"Enter pay rate\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div v-if=\"user.type == 'user'\" class=\"form-group\">\n\t                <label class=\"col-md-3 control-label\">Managed websites</label>\n\t                <div class=\"col-md-6\">\n\t                    <div v-for=\"website in websites\" class=\"icheck-list\">\n\t                        <label>\n\t\t                        <input :checked=\"checkWebsites(website)\" v-model=\"checkedWebsites\" :value=\"website.id\" type=\"checkbox\" class=\"icheck\">\n\t\t                        {{ website.name }}\n\t                        </label>\n\t                    </div>\n\t                </div>\n\t            </div>\n\t\t\t</div>\n\t\t\t<div class=\"form-actions\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-md-offset-3 col-md-9\">\n\t\t\t\t\t\t<button type=\"submit\" class=\"btn green\">Submit</button>\n\t\t\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</form>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet box green \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\tUpdate details\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"btn-group\">\n\t\t\t\t<a href=\"/users/{{ user.id }}/account\" class=\"btn btn-danger\">Account settings</a>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body form\">\n\t\t<form @submit.prevent=\"submit()\" class=\"form-horizontal\" role=\"form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Name</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input v-model=\"user.name\" type=\"text\" class=\"form-control\" placeholder=\"Enter text\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Email</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input v-model=\"user.email\" type=\"text\" class=\"form-control\" placeholder=\"Enter text\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t                <label class=\"col-md-3 control-label\">Account type</label>\n\t                <div class=\"col-md-6\">\n\t\t                <select v-model=\"user.type\" class=\"form-control\">\n\t\t                    <option value=\"moderator\" {{=\"\" user.type=\"=\" 'moderator'=\"\" ?=\"\" 'selected'=\"\" :=\"\" ''=\"\" }}=\"\">Moderator</option>\n\t\t                    <option value=\"admin\" {{=\"\" user.type=\"=\" 'admin'=\"\" ?=\"\" 'selected'=\"\" :=\"\" ''=\"\" }}=\"\">Admin</option>\n\t\t                </select>\n\t                </div>\n\t            </div>\n\t\t\t\t<hr>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Photo</label>\n\t\t\t\t\t<div class=\"col-md-3\">\n\t\t\t\t\t\t<photo-upload :photo.sync=\"user.photo\"></photo-upload>\n\t\t\t\t\t\t<p class=\"help-block\">\n\t\t\t\t\t\t\tphotos allowed (.jpeg, .jpg, .png)\n\t\t\t\t\t\t</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Contact information</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<textarea v-model=\"user.contact_info\" class=\"form-control\" rows=\"3\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t                <label class=\"col-md-3 control-label\">Currency</label>\n\t                <div class=\"col-md-6\">\n\t\t                <select v-model=\"user.currency\" class=\"form-control\">\n\t\t                    <option {{=\"\" user.currency=\"=\" currency.code=\"\" ?=\"\" 'selected'=\"\" :=\"\" ''=\"\" }}=\"\" v-for=\"currency in currencies\" :value=\"currency.code\">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option>\n\t\t                </select>\n\t                </div>\n\t            </div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Pay rate</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input v-model=\"user.pay_rate\" type=\"number\" class=\"form-control\" placeholder=\"Enter pay rate\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div v-if=\"user.type == 'moderator'\" class=\"form-group\">\n\t                <label class=\"col-md-3 control-label\">Managed websites</label>\n\t                <div class=\"col-md-6\">\n\t                    <div v-for=\"website in websites\" class=\"icheck-list\">\n\t                        <label>\n\t\t                        <input :checked=\"checkWebsites(website)\" v-model=\"checkedWebsites\" :value=\"website.id\" type=\"checkbox\" class=\"icheck\">\n\t\t                        {{ website.name }}\n\t                        </label>\n\t                    </div>\n\t                </div>\n\t            </div>\n\t\t\t</div>\n\t\t\t<div class=\"form-actions\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-md-offset-3 col-md-9\">\n\t\t\t\t\t\t<button type=\"submit\" class=\"btn green\">Submit</button>\n\t\t\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</form>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -21817,7 +21829,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5924a4e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../spin":49,"./../stores/user":51,"./../stores/website":52,"./PhotoUpload.vue":33,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],37:[function(require,module,exports){
+},{"./../spin":50,"./../stores/currency":51,"./../stores/user":53,"./../stores/website":54,"./PhotoUpload.vue":33,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],37:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.website-list {\n  position: relative; }\n  /* line 5, stdin */\n  .website-list button {\n    top: 10px;\n    right: 10px; }\n\n/* line 11, stdin */\n.absolute {\n  position: absolute; }\n")
 'use strict';
@@ -21916,7 +21928,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c76eb4fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/website.vue":46,"./../stores/website":52,"./Modal.vue":32,"sweetalert":14,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],38:[function(require,module,exports){
+},{"./../forms/website.vue":47,"./../stores/website":54,"./Modal.vue":32,"sweetalert":14,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21982,11 +21994,20 @@ exports.default = {
 				_this.messages.push(message);
 				toastr.error('Message not sent!');
 			});
+		},
+		sendAndNext: function sendAndNext() {
+			this.send();
+		}
+	},
+
+	events: {
+		'chat:send': function chatSend() {
+			this.send();
 		}
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\t<i class=\"icon-bubble font-red-sunglo\"></i>\n\t\t\t<span class=\"caption-subject font-red-sunglo bold uppercase\">Chats</span>\n\t\t</div>\n\t\t<div class=\"inputs\">\n\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t<input v-model=\"searchMessage\" type=\"text\" class=\"form-control input-circle\" placeholder=\"Search message...\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"chat-box-scroller\" style=\"height: 400px;\" data-always-visible=\"1\" data-rail-visible=\"1\">\n\t\t\t<ul v-if=\"messages\" class=\"chats\">\n\t\t\t\t<li v-for=\"message in messages | filterBy searchMessage\" class=\"{{ message.is_sender ? 'out' : 'in' }}\">\n\t\t\t\t\t<img class=\"avatar\" :src=\"message.is_sender ? initiator.avatar.url : interlocutor.avatar.url\">\n\t\t\t\t\t<div class=\"message\">\n\t\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"name\">\n\t\t\t\t\t\t\t{{ message.sender ? message.sender.username : '' }}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<span class=\"datetime\">\n\t\t\t\t\t\tat {{ message.timeStamp | date 'unix' }}</span>\n\t\t\t\t\t\t<span class=\"body\">{{ message.text }}</span>\n\t\t\t\t\t</div>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<p v-else=\"\">No messages to show.</p>\n\t\t</div>\n\t\t<div v-if=\"messages\" class=\"chat-form\">\n\t\t\t<form @submit.prevent=\"send()\">\n\t\t\t\t<div class=\"input-cont\">\n\t\t\t\t\t<input class=\"form-control\" v-model=\"textContent\" type=\"text\" placeholder=\"Press enter to send...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-cont\">\n\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t</span>\n\t\t\t\t\t<button type=\"submit\" class=\"btn blue icn-only\">\n\t\t\t\t\t\t<i class=\"fa fa-arrow-right icon-white\"></i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\t<i class=\"icon-bubble font-red-sunglo\"></i>\n\t\t\t<span class=\"caption-subject font-red-sunglo bold uppercase\">Chats</span>\n\t\t</div>\n\t\t<div class=\"inputs\">\n\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t<input v-model=\"searchMessage\" type=\"text\" class=\"form-control input-circle\" placeholder=\"Search message...\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"chat-box-scroller\" style=\"height: 400px;\" data-always-visible=\"1\" data-rail-visible=\"1\">\n\t\t\t<ul v-if=\"messages\" class=\"chats\">\n\t\t\t\t<li v-for=\"message in messages | filterBy searchMessage\" class=\"{{ message.is_sender ? 'out' : 'in' }}\">\n\t\t\t\t\t<img class=\"avatar\" :src=\"message.is_sender ? initiator.avatar.url : interlocutor.avatar.url\">\n\t\t\t\t\t<div class=\"message\">\n\t\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"name\">\n\t\t\t\t\t\t\t{{ message.sender ? message.sender.username : '' }}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<span class=\"datetime\">\n\t\t\t\t\t\tat {{ message.timeStamp | date 'unix' }}</span>\n\t\t\t\t\t\t<span class=\"body\">{{ message.text }}</span>\n\t\t\t\t\t</div>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<p v-else=\"\">No messages to show.</p>\n\t\t</div>\n\t\t<div v-if=\"messages\" class=\"chat-form\">\n\t\t\t<form @submit.prevent=\"send()\">\n\t\t\t\t<div class=\"input-cont\">\n\t\t\t\t\t<input class=\"form-control\" v-model=\"textContent\" type=\"text\" placeholder=\"Press enter to send...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-cont\">\n\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t</span>\n\t\t\t\t\t<button type=\"submit\" class=\"btn blue icn-only\">\n\t\t\t\t\t\t<i class=\"fa fa-arrow-right icon-white\"></i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"row\">\n\t<div class=\"col-md-12\">\n\t\t<div class=\"pull-left\">\n\t\t\t<button onclick=\"window.history.back();\" class=\"btn btn-danger btn-block\">Cancel</button>\n\t\t</div>\n\t\t<div class=\"pull-right\">\n\t\t\t<button @click=\"sendAndNext()\" class=\"btn btn-success btn-block\">Send and next</button>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22038,6 +22059,12 @@ exports.default = {
 				return {};
 			}
 		}
+	},
+
+	methods: {
+		sendAndNext: function sendAndNext() {
+			this.$broadcast('chat:send');
+		}
 	}
 
 };
@@ -22059,6 +22086,17 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _Conversation = require('./Conversation.vue');
+
+var _Conversation2 = _interopRequireDefault(_Conversation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 
 	props: {
@@ -22074,10 +22112,20 @@ exports.default = {
 		return {
 			search: ''
 		};
+	},
+
+
+	methods: {
+		getInitiatorMessagesCount: function getInitiatorMessagesCount(conversation) {
+			return _underscore2.default.filter(conversation.messages, function (message) {
+				return message.senderId == conversation.initiator.id;
+			}).length;
+		}
 	}
+
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light\">\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-container\">\n\t\t\t<table class=\"table table-striped table-bordered table-hover\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr role=\"row\" class=\"heading\">\n\t\t\t\t\t\t<th width=\"5%\">\n\t\t\t\t\t\t\tSite\n\t\t\t\t\t\t</th> \n\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\tMember\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\tModerated Profile\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"20%\">\n\t\t\t\t\t\t\tMessage count\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"10%\"></th>\n\t\t\t\t\t</tr>\n\t\t\t\t\t\n\t\t\t\t\t<tr v-for=\"conversation in conversations | filterBy search\" role=\"row\" class=\"filter\">\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t<img width=\"100%\" :src=\"conversation.interlocutor.website[0].logo || '/img/default-photo.png'\">\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td>{{ conversation.initiator.username}}</td>\n\t\t\t\t\t\t<td class=\"editable\">{{ conversation.interlocutor.username }}</td>\n\t\t\t\t\t\t<td>{{ conversation.initiator_messages_count }}</td>\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t<!-- chat/{website}/{conversation} -->\n\t\t\t\t\t\t\t<a href=\"/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}\" class=\"btn btn-xs green filter-cancel\"><i class=\"fa fa-comments-o\"></i>&nbsp;Take chat</a>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t</table>\n\t\t\t<div v-if=\"!conversations.length\">\n\t\t\t\t<div class=\"note note-info note-bordered\">\n\t\t\t\t\t<p>No chat listed.</p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</div>\n</div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"chat\">\n\t<div class=\"portlet light\">\n\t\t<div class=\"portlet-body\">\n\t\t\t<div class=\"table-container\">\n\t\t\t\t<table class=\"table table-striped table-bordered table-hover\">\n\t\t\t\t\t<thead>\n\t\t\t\t\t\t<tr role=\"row\" class=\"heading\">\n\t\t\t\t\t\t\t<th width=\"5%\">\n\t\t\t\t\t\t\t\tSite\n\t\t\t\t\t\t\t</th> \n\t\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\t\tMember\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\t\tModerated Profile\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"20%\">\n\t\t\t\t\t\t\t\tMessage count\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"10%\"></th>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<tr v-for=\"conversation in conversations | filterBy search\" role=\"row\" class=\"filter\">\n\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t<img width=\"100%\" :src=\"conversation.interlocutor.website[0].logo || '/img/default-photo.png'\">\n\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t<td>{{ conversation.initiator.username}}</td>\n\t\t\t\t\t\t\t<td class=\"editable\">{{ conversation.interlocutor.username }}</td>\n\t\t\t\t\t\t\t<td>{{ getInitiatorMessagesCount(conversation) }}</td>\n\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t<!-- chat/{website}/{conversation} -->\n\t\t\t\t\t\t\t\t<a href=\"/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}\" class=\"btn btn-xs green filter-cancel\"><i class=\"fa fa-comments-o\"></i>&nbsp;Take chat</a>\n\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</thead>\n\t\t\t\t</table>\n\t\t\t\t<div v-if=\"!conversations.length\">\n\t\t\t\t\t<div class=\"note note-info note-bordered\">\n\t\t\t\t\t\t<p>No chat listed.</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22088,7 +22136,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-75e113ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16}],41:[function(require,module,exports){
+},{"./Conversation.vue":39,"underscore":15,"vue":26,"vue-hot-reload-api":16}],41:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.hand-cursor {\n  cursor: pointer; }\n")
 'use strict';
@@ -22184,10 +22232,10 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5b641955", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../stores/note":50,"sweetalert":14,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],42:[function(require,module,exports){
+},{"./../../stores/note":52,"sweetalert":14,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],42:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.chat-box-profile {\n  padding: 0px !important; }\n  /* line 4, stdin */\n  .chat-box-profile .details {\n    padding: 20px; }\n")
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -22200,10 +22248,26 @@ exports.default = {
 				return {};
 			}
 		}
+	},
+
+	data: function data() {
+		return {
+			auth: {},
+			website: null
+		};
+	},
+	ready: function ready() {
+		var _this = this;
+
+		this.website = this.$parent.conversation.interlocutor.website;
+
+		this.$http.get('auth').then(function (response) {
+			_this.auth = response.data;
+		});
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light chat-box-profile\">\n\t<img :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t<div class=\"details\">\n\t\t<h4 class=\"profile-desc-title\">{{ profile.username }}</h4>\n\t\t\n\t\t<div v-if=\"profile.profile.address != ''\" class=\"margin-top-10 profile-desc-link\">\n\t\t\tCity: <a href=\"javascipt:;\">{{ profile.profile.address }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tLooking for: <a href=\"#\">{{ profile.sex }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tDescription: <a href=\"#\">{{ profile.about_me }}</a>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light chat-box-profile\">\n\t<a v-if=\"auth.is_admin || auth.is_super\" target=\"_blank\" href=\"{{ website[0].url }}user/{{ profile.username }}\">\n\t\t<img :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t</a>\n\t<img v-else=\"\" :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t<div class=\"details\">\n\t\t<h4 class=\"profile-desc-title\">{{ profile.username }}</h4>\n\t\t\n\t\t<div v-if=\"profile.profile.address != ''\" class=\"margin-top-10 profile-desc-link\">\n\t\t\tCity: <a href=\"javascipt:;\">{{ profile.profile.address }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tLooking for: <a href=\"#\">{{ profile.sex }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tDescription: <a href=\"#\">{{ profile.about_me }}</a>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22219,11 +22283,22 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],43:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _spin = require('./../../spin.js');
+
+var _spin2 = _interopRequireDefault(_spin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 
 	props: {
@@ -22235,24 +22310,72 @@ exports.default = {
 		}
 	},
 
-	ready: function ready() {
-		var data = {
-			label: "Time",
-			data: [[2010, 1], [2010, 5], [2016, 13]]
+	data: function data() {
+
+		return {
+			data: [],
+			fetching: false,
+			stats: []
 		};
-		var plot = $("#message-graph").plot(data).data("plot");
+	},
+	ready: function ready() {
+		var _this = this;
+
+		this.showData(this.websites[0]);
+
+		this.$http.get('stats').then(function (response) {
+			_this.stats = response.data;
+		});
 	},
 
 
 	methods: {
 		showData: function showData(website) {
-			console.info('Website: ' + website.name);
+			var _this2 = this;
+
+			if (!this.fetching) {
+				this.fetching = true;
+				this.$http.get('stats/' + website.id + '/messages').then(function (response) {
+					_this2.data = _underscore2.default.map(response.data, function (value, key) {
+						return { date: key, value: value.length };
+					});
+
+					$('#message-graph-' + website.id).empty();
+
+					Morris.Bar({
+						element: 'message-graph-' + website.id,
+						data: _this2.data,
+						xkey: 'date',
+						// A list of names of data record attributes that contain y-values.
+						ykeys: ['value'],
+						// Labels for the ykeys -- will be displayed when you hover over the
+						// chart.
+						labels: ['Messages']
+					});
+					_this2.fetching = false;
+				}).catch(function (err) {
+					toastr.error('We cannot fetch analytics.');
+					_this2.fetching = false;
+				});
+			}
+		}
+	},
+
+	watch: {
+		fetching: function fetching(val) {
+			this.$nextTick(function () {
+				if (val) {
+					_spin2.default.spin();
+				} else {
+					_spin2.default.stop();
+				}
+			});
 		}
 	}
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light\">\n\t<div class=\"portlet-title tabbable-line\">\n\t\t<div class=\"caption\">\n\t\t\t<i class=\"fa fa-usd font-green-sharp\"></i>\n\t\t\t<span class=\"caption-subject font-green-sharp bold uppercase\">Messages</span>\n\t\t</div>\n\t\t<ul class=\"nav nav-tabs\">\n\t\t\t<li @click=\"showData(website)\" v-for=\"website in websites\" :class=\"{active: $index == 0}\">\n\t\t\t\t<a href=\"#website-{{ website.id }}\" data-toggle=\"tab\">\n\t\t\t\t{{ website.name }} </a>\n\t\t\t</li>\n\t\t</ul>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"tab-content\">\n\t\t\t<div v-for=\"website in websites\" class=\"tab-pane\" :class=\"{active: $index == 0}\" id=\"website-{{ website.id }}\">\n\t\t\t\t<div id=\"message-graph\" style=\"height: 300px;\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div v-for=\"stat in stats\" class=\"col-lg-3 col-md-3 col-sm-6 col-xs-12\">\n\t\t<a class=\"dashboard-stat dashboard-stat-light {{ stat.color }}-soft\" href=\"{{ stat.link }}\">\n\t\t<div class=\"visual\">\n\t\t\t<i class=\"{{ stat.icon }}\"></i>\n\t\t</div>\n\t\t<div class=\"details\">\n\t\t\t<div class=\"number\">\n\t\t\t\t{{ stat.count }}\n\t\t\t</div>\n\t\t\t<div class=\"desc\">\n\t\t\t\t{{ stat.name }}\n\t\t\t</div>\n\t\t</div>\n\t\t</a>\n\t</div>\n</div>\n<div class=\"portlet light\">\n\t<div class=\"portlet-title tabbable-line\">\n\t\t<div class=\"caption\">\n\t\t\t<span class=\"caption-subject font-green-sharp bold uppercase\">Messages analytics</span>\n\t\t\t<span class=\"caption-helper\">&nbsp;monthly stats</span>\n\t\t</div>\n\t\t<ul class=\"nav nav-tabs\">\n\t\t\t<li @click=\"showData(website)\" v-for=\"website in websites\" :class=\"{active: $index == 0}\">\n\t\t\t\t<a href=\"#website-{{ website.id }}\" data-toggle=\"tab\">\n\t\t\t\t{{ website.name }} </a>\n\t\t\t</li>\n\t\t</ul>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"tab-content\">\n\t\t\t<div v-for=\"website in websites\" class=\"tab-pane\" :class=\"{active: $index == 0}\" id=\"website-{{ website.id }}\">\n\t\t\t\t<div id=\"message-graph-{{ website.id }}\" style=\"height: 300px;\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22263,7 +22386,62 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f222d5b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16}],44:[function(require,module,exports){
+},{"./../../spin.js":50,"underscore":15,"vue":26,"vue-hot-reload-api":16}],44:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	props: {
+		user: {
+			type: Object,
+			default: function _default() {
+				return {};
+			}
+		}
+	},
+
+	data: function data() {
+		return {
+			form: {
+				email: ''
+			},
+
+			errors: []
+		};
+	},
+	ready: function ready() {
+
+		this.form.email = this.user.email;
+	},
+
+
+	methods: {
+		submit: function submit() {
+			var _this = this;
+
+			this.$http.put('users/' + this.user.id + '/account', this.form).then(function (response) {
+				toastr.success(response.data);
+			}).catch(function (error) {
+				_this.errors = error.data;
+			});
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet box green \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\tAccount settings\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body form\">\n\t\t<form @submit.prevent=\"submit()\" class=\"form-horizontal\" role=\"form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Email</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input type=\"text\" v-model=\"form.email\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Old password</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input type=\"password\" v-model=\"form.old_password\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t \t<small v-if=\"errors.old_password\" class=\"text-danger\">{{ errors.old_password[0] }}</small>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">New password</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input type=\"password\" v-model=\"form.password\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<small v-if=\"errors.password\" class=\"text-danger\">{{ errors.password[0] }}</small>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-md-3 control-label\">Confirm password</label>\n\t\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t\t<input type=\"password\" v-model=\"form.password_confirmation\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-actions\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-md-offset-3 col-md-9\">\n\t\t\t\t\t\t<button type=\"submit\" class=\"btn green\">Submit</button>\n\t\t\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</form>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-7fdbd3b4", module.exports)
+  } else {
+    hotAPI.update("_v-7fdbd3b4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":26,"vue-hot-reload-api":16}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22387,7 +22565,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3375b704", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../services/paginator":48,"./../spin":49,"vue":26,"vue-hot-reload-api":16}],45:[function(require,module,exports){
+},{"./../services/paginator":49,"./../spin":50,"vue":26,"vue-hot-reload-api":16}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22413,6 +22591,10 @@ var _user4 = _interopRequireDefault(_user3);
 var _spin = require('./../spin');
 
 var _spin2 = _interopRequireDefault(_spin);
+
+var _currency = require('./../stores/currency');
+
+var _currency2 = _interopRequireDefault(_currency);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22447,6 +22629,7 @@ exports.default = {
         _website2.default.all().then(function (response) {
             _this.websites = response.data;
         });
+        this.currencies = _currency2.default.getCurrencies();
     },
     data: function data() {
         return {
@@ -22454,7 +22637,9 @@ exports.default = {
 
             errors: [],
 
-            saving: false
+            saving: false,
+
+            currencies: []
         };
     },
 
@@ -22498,7 +22683,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form role=\"form\">\n    <div class=\"form-body\">\n        <div class=\"form-group\">\n            <label>Photo</label>\n            <div class=\"row\">\n                <div class=\"col-md-4\">\n                    <user-photo-upload :photo.sync=\"form.photo\"></user-photo-upload>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Name</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-user\"></i>\n                </span>\n                <input v-model=\"form.name\" type=\"text\" class=\"form-control\" placeholder=\"Full name\">\n            </div>\n            <small v-if=\"errors.name\" class=\"text-danger\">{{ errors.name[0] }}</small>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Email</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-envelope\"></i>\n                </span>\n                <input v-model=\"form.email\" type=\"email\" class=\"form-control\" placeholder=\"Email\" required=\"\">\n            </div>\n            <small v-if=\"errors.email\" class=\"text-danger\">{{ errors.email[0] }}</small>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Password</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-lock\"></i>\n                </span>\n                <input v-model=\"form.password\" type=\"text\" class=\"form-control\" placeholder=\"Generate password\" required=\"\">\n            </div>\n            <small v-if=\"errors.password\" class=\"text-danger\">{{ errors.password[0] }}</small>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Account type</label>\n            <select v-model=\"form.type\" class=\"form-control\">\n                <option value=\"user\" selected=\"\">User</option>\n                <option value=\"admin\">Admin</option> \n            </select>\n        </div>\n\n        <hr>\n\n        <div class=\"form-group\">\n            <label>Contact information</label>\n            <textarea v-model=\"form.contact_info\" class=\"form-control\"></textarea>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Pay rate</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-usd\"></i>\n                </span>\n                <input v-model=\"form.pay_rate\" type=\"number\" class=\"form-control\" placeholder=\"Pay rate\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Managed websites</label>\n            <div class=\"input-group\">\n                <div v-for=\"website in websites\" class=\"icheck-list\">\n                    <label>\n                    <input v-model=\"form.websites\" v-bind:value=\"website.id\" type=\"checkbox\" class=\"icheck\">\n                    {{ website.name }}\n                    </label>\n                </div>\n            </div>\n        </div>\n    </div>\n</form>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form role=\"form\">\n    <div class=\"form-body\">\n        <div class=\"form-group\">\n            <label>Photo</label>\n            <div class=\"row\">\n                <div class=\"col-md-4\">\n                    <user-photo-upload :photo.sync=\"form.photo\"></user-photo-upload>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Name</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-user\"></i>\n                </span>\n                <input v-model=\"form.name\" type=\"text\" class=\"form-control\" placeholder=\"Full name\">\n            </div>\n            <small v-if=\"errors.name\" class=\"text-danger\">{{ errors.name[0] }}</small>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Email</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-envelope\"></i>\n                </span>\n                <input v-model=\"form.email\" type=\"email\" class=\"form-control\" placeholder=\"Email\" required=\"\">\n            </div>\n            <small v-if=\"errors.email\" class=\"text-danger\">{{ errors.email[0] }}</small>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Password</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-lock\"></i>\n                </span>\n                <input v-model=\"form.password\" type=\"text\" class=\"form-control\" placeholder=\"Generate password\" required=\"\">\n            </div>\n            <small v-if=\"errors.password\" class=\"text-danger\">{{ errors.password[0] }}</small>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Account type</label>\n            <select v-model=\"form.type\" class=\"form-control\">\n                <option value=\"moderator\" selected=\"\">Moderator</option>\n                <option value=\"admin\">Admin</option> \n            </select>\n        </div>\n\n        <hr>\n\n        <div class=\"form-group\">\n            <label>Contact information</label>\n            <textarea v-model=\"form.contact_info\" class=\"form-control\"></textarea>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Currency</label>\n            <select v-model=\"form.currecny\" class=\"form-control\">\n                <option v-for=\"currency in currencies\" :value=\"currency.code\">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option> \n            </select>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Pay rate</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">\n                    <i class=\"fa fa-usd\"></i>\n                </span>\n                <input v-model=\"form.pay_rate\" type=\"number\" class=\"form-control\" placeholder=\"Pay rate\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label>Managed websites</label>\n            <div class=\"input-group\">\n                <div v-for=\"website in websites\" class=\"icheck-list\">\n                    <label>\n                    <input v-model=\"form.websites\" v-bind:value=\"website.id\" type=\"checkbox\" class=\"icheck\">\n                    {{ website.name }}\n                    </label>\n                </div>\n            </div>\n        </div>\n    </div>\n</form>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22509,7 +22694,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-17fa904d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":33,"./../models/user":47,"./../spin":49,"./../stores/user":51,"./../stores/website":52,"vue":26,"vue-hot-reload-api":16}],46:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":33,"./../models/user":48,"./../spin":50,"./../stores/currency":51,"./../stores/user":53,"./../stores/website":54,"vue":26,"vue-hot-reload-api":16}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22636,7 +22821,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3c53abc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":33,"./../spin":49,"./../stores/website":52,"vue":26,"vue-hot-reload-api":16}],47:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":33,"./../spin":50,"./../stores/website":54,"vue":26,"vue-hot-reload-api":16}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22650,7 +22835,7 @@ exports.default = {
 	type: 'user'
 };
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22669,7 +22854,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],49:[function(require,module,exports){
+},{"vue":26}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22698,7 +22883,30 @@ exports.default = {
 	}
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+	state: [{ currency: 'Abkhazian apsar', symbol: '', code: '' }, { currency: 'Russian ruble', symbol: '', code: 'RUB' }, { currency: 'Afghan afghani', symbol: '؋', code: 'AFN' }, { currency: 'Euro', symbol: '€', code: 'EUR' }, { currency: 'Albanian lek', symbol: 'L', code: 'ALL' }, { currency: 'Alderney pound', symbol: '£', code: '' }, { currency: 'British pound', symbol: '£', code: 'GBP' }, { currency: 'Guernsey pound', symbol: '£', code: 'GGP' }, { currency: 'Algerian dinar', symbol: 'د.ج', code: 'DZD' }, { currency: 'Angolan kwanza', symbol: 'Kz', code: 'AOA' }, { currency: 'East Caribbean dollar', symbol: '$', code: 'XCD' }, { currency: 'Argentine peso', symbol: '$', code: 'ARS' }, { currency: 'Armenian dram', symbol: '', code: 'AMD' }, { currency: 'Aruban florin', symbol: 'ƒ', code: 'AWG' }, { currency: 'Australian dollar', symbol: '$', code: 'AUD' }, { currency: 'Azerbaijani manat', symbol: '', code: 'AZN' }, { currency: 'Bahamian dollar', symbol: '$', code: 'BSD' }, { currency: 'Bahraini dinar', symbol: '.د.ب', code: 'BHD' }, { currency: 'Bangladeshi taka', symbol: '৳', code: 'BDT' }, { currency: 'Barbadian dollar', symbol: '$', code: 'BBD' }, { currency: 'Belarusian ruble', symbol: 'Br', code: 'BYR' }, { currency: 'Belize dollar', symbol: '$', code: 'BZD' }, { currency: 'West African CFA franc', symbol: 'Fr', code: 'XOF' }, { currency: 'Bermudian dollar', symbol: '$', code: 'BMD' }, { currency: 'Bhutanese ngultrum', symbol: 'Nu', code: 'BTN' }, { currency: 'Indian rupee', symbol: '₹', code: 'INR' }, { currency: 'Bolivian boliviano', symbol: 'Bs.', code: 'BOB' }, { currency: 'United States dollar', symbol: '$.', code: 'USD' }, { currency: 'Bosnia and Herzegovina convertible mark', symbol: 'KM', code: 'BAM' }, { currency: 'Botswana pula', symbol: 'P', code: 'BWP' }, { currency: 'Brazilian real', symbol: 'R$', code: 'BRL' }, { currency: 'Brunei dollar', symbol: '$', code: 'BND' }, { currency: 'Singapore dollar', symbol: '$', code: 'SGD' }, { currency: 'Bulgarian lev', symbol: 'лв', code: 'BGN' }, { currency: 'Burundian franc', symbol: 'Fr', code: 'BIF' }, { currency: 'Cambodian riel', symbol: '៛', code: 'KHR' }, { currency: 'Canadian dollar', symbol: '$', code: 'CAD' }, { currency: 'Cape Verdean escudo', symbol: 'Esc', code: 'CVE' }, { currency: 'Cayman Islands dollar', symbol: '$', code: 'KYD' }, { currency: 'Chilean peso', symbol: '$', code: 'CLP' }, { currency: 'Chinese yuan', symbol: '¥', code: 'CNY' }, { currency: 'Colombian peso', symbol: '$', code: 'COP' }, { currency: 'Comorian franc', symbol: 'Fr', code: 'KMF' }, { currency: 'Congolese franc', symbol: 'Fr', code: 'CDF' }, { currency: 'Central African CFA franc', symbol: 'Fr', code: 'XAF' }, { currency: 'New Zealand dollar', symbol: '$', code: 'NZD' }, { currency: 'Cook Islands dollar', symbol: '$', code: '' }, { currency: 'Costa Rican colón', symbol: '₡', code: 'CRC' }, { currency: 'Croatian kuna', symbol: 'kn', code: 'HRK' }, { currency: 'Cuban peso', symbol: '$', code: 'CUP' }, { currency: 'Netherlands Antillean guilder', symbol: 'ƒ', code: 'ANG' }, { currency: 'Czech koruna', symbol: 'Kč', code: 'CZK' }, { currency: 'Danish krone', symbol: 'kr', code: 'DKK' }, { currency: 'Djiboutian franc', symbol: 'Fr', code: 'DJF' }, { currency: 'Dominican peso', symbol: '$', code: 'DOP' }, { currency: 'Egyptian pound', symbol: '£', code: 'EGP' }, { currency: 'Eritrean nakfa', symbol: 'Nfk', code: 'ERN' }, { currency: 'Ethiopian birr', symbol: 'Br', code: 'ETB' }, { currency: 'Falkland Islands pound', symbol: '£', code: 'FKP' }, { currency: 'Faroese króna', symbol: 'kr', code: '' }, { currency: 'Fijian dollar', symbol: '$', code: 'FJD' }, { currency: 'CFP franc', symbol: 'Fr', code: 'XPF' }, { currency: 'Gambian dalasi', symbol: 'D', code: 'GMD' }, { currency: 'Georgian lari', symbol: 'ლ', code: 'GEL' }, { currency: 'Ghana cedi', symbol: '₵', code: 'GHS' }, { currency: 'Gibraltar pound', symbol: '£', code: 'GIP' }, { currency: 'Guatemalan quetzal', symbol: 'Q', code: 'GTQ' }, { currency: 'Guinean franc', symbol: 'Fr', code: 'GNF' }, { currency: 'Guyanese dollar', symbol: '$', code: 'GYD' }, { currency: 'Haitian gourde', symbol: 'G', code: 'HTG' }, { currency: 'Honduran lempira', symbol: 'L', code: 'HNL' }, { currency: 'Hong Kong dollar', symbol: '$', code: 'HKD' }, { currency: 'Hungarian forint', symbol: 'Ft', code: 'HUF' }, { currency: 'Icelandic króna', symbol: 'kr', code: 'ISK' }, { currency: 'Indian rupee', symbol: '₹', code: 'INR' }, { currency: 'Indonesian rupiah', symbol: 'Rp', code: 'IDR' }, { currency: 'Iranian rial', symbol: '', code: 'IRR' }, { currency: 'Iraqi dinar', symbol: 'ع.د', code: 'IQD' }, { currency: 'Manx pound', symbol: '£', code: 'IMP' }, { currency: 'Israeli new shekel', symbol: '₪', code: 'ILS' }, { currency: 'Jamaican dollar', symbol: '$', code: 'JMD' }, { currency: 'Japanese yen', symbol: '¥', code: 'JPY' }, { currency: 'Jersey pound', symbol: '£', code: 'JEP' }, { currency: 'Jordanian dinar', symbol: 'د.ا', code: 'JOD' }, { currency: 'Kazakhstani tenge', symbol: '', code: 'KZT' }, { currency: 'Kenyan shilling', symbol: 'Sh', code: 'KES' }, { currency: 'Kiribati dollar', symbol: '$', code: '' }, { currency: 'North Korean won', symbol: '₩', code: 'KPW' }, { currency: 'South Korean won', symbol: '₩', code: 'KRW' }, { currency: 'Kuwaiti dinar', symbol: 'د.ك', code: 'KWD' }, { currency: 'Kyrgyzstani som', symbol: 'лв', code: 'KGS' }, { currency: 'Lao kip', symbol: '₭', code: '₭' }, { currency: 'Lebanese pound', symbol: 'ل.ل', code: 'LBP' }, { currency: 'Lesotho loti', symbol: 'L', code: 'LSL' }, { currency: 'South African rand', symbol: 'R', code: 'ZAR' }, { currency: 'Liberian dollar', symbol: '$', code: 'LRD' }, { currency: 'Libyan dinar', symbol: 'ل.د', code: 'LYD' }, { currency: 'Swiss franc', symbol: 'Fr', code: 'CHF' }, { currency: 'Macanese pataca', symbol: 'P', code: 'MOP' }, { currency: 'Macedonian denar', symbol: 'ден', code: 'MKD' }, { currency: 'Malagasy ariary', symbol: 'Ar', code: 'MGA' }, { currency: 'Malawian kwacha', symbol: 'MK', code: 'MWK' }, { currency: 'Malaysian ringgit', symbol: 'RM', code: 'MYR' }, { currency: 'Maldivian rufiyaa', symbol: '.ރ', code: 'MVR' }, { currency: 'Mauritanian ouguiya', symbol: 'UM', code: 'MRO' }, { currency: 'Mauritian rupee', symbol: '₨', code: 'MUR' }, { currency: 'Mexican peso', symbol: '$', code: 'MXN' }, { currency: 'Moldovan leu', symbol: 'L', code: 'MDL' }, { currency: 'Mongolian tögrög', symbol: '₮', code: 'MNT' }, { currency: 'Moroccan dirham', symbol: 'د.م.', code: 'MAD' }, { currency: 'Mozambican metical', symbol: 'MT', code: 'MZN' }, { currency: 'Burmese kyat', symbol: 'Ks', code: 'MMK' }, { currency: 'Armenian dram', symbol: '', code: 'AMD' }, { currency: 'Namibian dollar', symbol: '$', code: 'NAD' }, { currency: 'Nepalese rupee', symbol: '₨', code: 'NPR' }, { currency: 'Nicaraguan córdoba', symbol: 'C$', code: 'NIO' }, { currency: 'Nigerian naira', symbol: '₦', code: 'NGN' }, { currency: 'Turkish lira', symbol: '', code: 'TRY' }, { currency: 'Norwegian krone', symbol: 'kr', code: 'NOK' }, { currency: 'Omani rial', symbol: 'ر.ع.', code: 'OMR' }, { currency: 'Pakistani rupee', symbol: '₨.', code: 'PKR' }, { currency: 'Papua New Guinean kina', symbol: 'K', code: 'PGK' }, { currency: 'Paraguayan guaraní', symbol: '₲', code: 'PYG' }, { currency: 'Peruvian nuevo sol', symbol: 'S/.', code: 'PEN' }, { currency: 'Philippine peso', symbol: '₱', code: 'PHP' }, { currency: 'Polish złoty', symbol: 'zł', code: 'PLN' }, { currency: 'Qatari riyal', symbol: 'ر.ق', code: 'QAR' }, { currency: 'Romanian leu', symbol: 'lei', code: 'RON' }, { currency: 'Russian ruble', symbol: '', code: 'RUB' }, { currency: 'Rwandan franc', symbol: 'Fr', code: 'RWF' }, { currency: 'Samoan tālā', symbol: 'T', code: 'WST' }, { currency: 'São Tomé and Príncipe dobra', symbol: 'Db', code: 'STD' }, { currency: 'Saudi riyal', symbol: 'ر.س', code: 'SAR' }, { currency: 'Serbian dinar', symbol: 'дин', code: 'RSD' }, { currency: 'Seychellois rupee', symbol: '₨', code: 'SCR' }, { currency: 'Sierra Leonean leone', symbol: 'Le', code: 'SLL' }, { currency: 'Solomon Islands dollar', symbol: '$', code: 'SBD' }, { currency: 'Somali shilling', symbol: 'Sh', code: 'SOS' }, { currency: 'Somaliland shilling', symbol: 'Sh', code: '' }, { currency: 'South African rand', symbol: 'R', code: 'ZAR' }, { currency: 'South Sudanese pound', symbol: '£', code: 'SSP' }, { currency: 'Sri Lankan rupee', symbol: 'Rs', code: 'LKR' }, { currency: 'Sudanese pound', symbol: 'ج.س.', code: 'SDG' }, { currency: 'Surinamese dollar', symbol: '$', code: 'SRD' }, { currency: 'Swazi lilangeni', symbol: 'L', code: 'SZL' }, { currency: 'Swedish krona', symbol: 'kr', code: 'SEK' }, { currency: 'Swiss franc', symbol: 'Fr', code: 'CHF' }, { currency: 'Syrian pound', symbol: '£', code: 'SYP' }, { currency: 'New Taiwan dollar', symbol: '$', code: 'TWD' }, { currency: 'Tajikistani somoni', symbol: 'ЅМ', code: 'TJS' }, { currency: 'Tanzanian shilling', symbol: 'Sh', code: 'TZS' }, { currency: 'Thai baht', symbol: '฿', code: 'THB' }, { currency: 'Tongan paʻanga', symbol: 'T$', code: 'TOP' }, { currency: 'Transnistrian ruble', symbol: 'р.', code: 'PRB' }, { currency: 'Trinidad and Tobago dollar', symbol: '$', code: 'TTD' }, { currency: 'Saint Helena pound', symbol: '£', code: 'SHP' }, { currency: 'Tunisian dinar', symbol: 'د.ت', code: 'TND' }, { currency: 'Turkmenistan manat', symbol: 'm', code: 'TMT' }, { currency: 'Tuvaluan dollar', symbol: '$', code: '' }, { currency: 'Ugandan shilling', symbol: 'Sh', code: 'UGX' }, { currency: 'United Arab Emirates dirham', symbol: 'د.إ', code: 'AED' }, { currency: 'Uruguayan peso', symbol: '$', code: 'UYU' }, { currency: 'Uzbekistani som', symbol: '', code: 'UZS' }, { currency: 'Vanuatu vatu', symbol: 'Vt', code: 'VUV' }, { currency: 'Venezuelan bolívar', symbol: 'Bs F', code: 'VEF' }, { currency: 'Vietnamese đồng', symbol: '₫', code: 'VND' }, { currency: 'Yemeni rial', symbol: '', code: 'YER' }, { currency: 'Zambian kwacha', symbol: 'ZK', code: 'ZMW' }],
+
+	getCurrencies: function getCurrencies() {
+		return this.state;
+	},
+	getCurrencyByCode: function getCurrencyByCode(code) {}
+};
+
+},{"underscore":15}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22723,7 +22931,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],51:[function(require,module,exports){
+},{"vue":26}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22751,7 +22959,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],52:[function(require,module,exports){
+},{"vue":26}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22779,7 +22987,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],53:[function(require,module,exports){
+},{"vue":26}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

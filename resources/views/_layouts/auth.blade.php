@@ -89,14 +89,17 @@
     <script src="/assets/globals/js/metronic.js" type="text/javascript"></script>
     <script src="/assets/admin/js/layout.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://spin.js.org/spin.min.js"></script>
+    <script type="text/javascript" src="/js/offline.min.js"></script>
     <script>
-    jQuery(document).ready(function() {
-        Metronic.init();
-        Layout.init();
-    });
+        jQuery(document).ready(function() {
+            Metronic.init();
+            Layout.init();
+        });
     </script>
 
     @yield('scripts')
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/0.7.10/vue-router.min.js"></script>
 
     <script src="/js/app.js" type="text/javascript"></script>
 

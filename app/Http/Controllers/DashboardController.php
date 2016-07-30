@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Services\MessageService;
 use App\Website;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(MessageService $msgService)
+    public function index(Request $request, MessageService $msgService)
     {
+        if ($request->user()->is_moderator) {
+            return redirect()->to('/chat');
+        }
+
         $conversations = count($msgService->getConversations());
 
         $websites = Website::all();

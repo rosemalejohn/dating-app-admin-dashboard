@@ -72,6 +72,21 @@ class UserController extends Controller
         return null;
     }
 
+    public function updateAccount(Request $request, User $user)
+    {
+        $this->validate($request, [
+            'email' => 'required|email|max:255',
+            'password' => 'required|min:6|confirmed',
+            'old_password' => "validate_auth:{$user->id}",
+        ]);
+
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json('Account updated.', 201);
+    }
+
     public function validator()
     {
         return [

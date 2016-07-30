@@ -23,6 +23,7 @@
 
 	// Dashboard 
 	import MessageGraph from './components/dashboard/MessageGraph.vue'
+	import Account from './components/user/Account.vue'
 
 	export default {
 		
@@ -43,7 +44,8 @@
 			WebsiteForm,
 			UserForm,
 
-			MessageGraph
+			MessageGraph,
+			Account
 		},
 
 		methods: {
@@ -64,7 +66,7 @@
 			'website:created'(website) {
 				this.$broadcast('website:created', website);
 			}
-		}
+		},
 	}
 
 	Vue.filter('date', function(value, type = null, format = null) {

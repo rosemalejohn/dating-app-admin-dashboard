@@ -1,25 +1,37 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
- */
-
 Route::auth();
 
 Route::group(['middleware' => ['auth', 'tenant']], function () {
+
+    Route::get('/testing', function (\App\Services\TenantService $tenant) {
+
+        $this_month = \Carbon\Carbon::now()->startOfMonth();
+
+        $user_sent_messages = \App\UserSentMessage::with('website', 'user')->where('created_at', '>=', $this_month)->get();
+
+        $user_sent_messages->filter(function ($user_sent_message, $key) use ($tenant) {
+            $tenant->connect($user_sent_message->website);
+
+            $message = $user_sent_message->message->conversation->messages()
+                ->where('id', $user_sent_message->message_id)->first();
+
+            dd($message);
+        });
+
+    });
 
     Route::get('/', 'DashboardController@index');
 
     Route::get('profile', 'UserController@profile');
 
     Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {
+
+        Route::get('auth', function () {
+
+            return response()->json(auth()->user());
+
+        });
 
         Route::group(['prefix' => 'users'], function () {
 
@@ -29,6 +41,8 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
             Route::delete('/', 'UserController@delete');
 
+            Route::put('{user}/account', 'UserController@updateAccount');
+
         });
 
         Route::delete('notes/{note}', 'NoteController@delete');
@@ -36,6 +50,10 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
         Route::put('notes/{note}', 'NoteController@update');
 
         Route::group(['prefix' => 'chat'], function () {
+
+            Route::get('/', 'ChatController@lobby');
+
+            Route::get('{website}/{conversation}', 'ChatController@conversation');
 
             Route::post('{website}/{conversation}', 'ChatController@send');
 
@@ -69,6 +87,14 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
         });
 
+        Route::group(['prefix' => 'stats'], function () {
+
+            Route::get('/', 'StatController@getStats');
+
+            Route::get('{website}/messages', 'StatController@getMessagesPerDay');
+
+        });
+
     });
 
     Route::group(['prefix' => 'users'], function () {
@@ -76,6 +102,9 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
         Route::get('/', 'UserController@index');
 
         Route::get('{user}/edit', 'UserController@edit');
+
+        Route::get('{user}/account', 'UserController@getAccount');
+
     });
 
     Route::group(['prefix' => 'chat'], function () {

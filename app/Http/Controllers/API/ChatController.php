@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Note;
+use App\Services\MessageService;
 use App\Services\ProfileService;
 use App\Tenant\Conversation;
 use App\Tenant\Message;
@@ -22,8 +23,33 @@ class ChatController extends Controller
         $this->profile = $profile;
     }
 
+    public function lobby(MessageService $msgService)
+    {
+        $conversations = $msgService->getConversations();
+        return response()->json($conversations);
+    }
+
+    public function conversation(Website $website, $conversation_id)
+    {
+        $conversation = Conversation::whereId($conversation_id)->with(
+            'messages.sender.avatar',
+            'messages.recipient.avatar',
+            'initiator.avatar',
+            'interlocutor.avatar',
+            'initiator.profile',
+            'interlocutor.profile',
+            'notes',
+            'interlocutor.website')->first();
+
+        return response()->json(['conversation' => $conversation, 'website' => $website]);
+    }
+
     public function send(Request $request, Website $website, $conversation_id)
     {
+        $this->validate($request, [
+            'text' => 'required|min:1',
+        ]);
+
         $conversation = Conversation::findOrFail($conversation_id);
 
         $message = new Message;

@@ -35,4 +35,5 @@ elixir(function(mix) {
 	    .browserify('app.js', null, 'vue');
 
 	 mix.copy('node_modules/sweetalert/dist/sweetalert.css', 'public/css/sweetalert.css');
+	 mix.copy('resources/assets/js/offline.min.js', 'public/js/offline.min.js');
 });

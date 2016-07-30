@@ -29,7 +29,8 @@ class ChatController extends Controller
             'interlocutor.avatar',
             'initiator.profile',
             'interlocutor.profile',
-            'notes')->first();
+            'notes',
+            'interlocutor.website')->first();
         return view('chat.conversation')->with(compact('website', 'conversation'));
     }
 }

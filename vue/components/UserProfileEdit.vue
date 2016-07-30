@@ -4,6 +4,11 @@
 			<div class="caption">
 				Update details
 			</div>
+			<div class="actions">
+				<div class="btn-group">
+					<a href="/users/{{ user.id }}/account" class="btn btn-danger">Account settings</a>
+				</div>
+			</div>
 		</div>
 		<div class="portlet-body form">
 			<form @submit.prevent="submit()" class="form-horizontal" role="form">
@@ -24,8 +29,8 @@
 		                <label class="col-md-3 control-label">Account type</label>
 		                <div class="col-md-6">
 			                <select v-model="user.type" class="form-control">
-			                    <option value="user" {{ user.type == 'user' ? 'selected' : '' }}>User</option>
-			                    <option value="admin" {{ user.type == 'admin' ? 'selected' : '' }}>Admin</option> 
+			                    <option value="moderator" {{ user.type == 'moderator' ? 'selected' : '' }}>Moderator</option>
+			                    <option value="admin" {{ user.type == 'admin' ? 'selected' : '' }}>Admin</option>
 			                </select>
 		                </div>
 		            </div>
@@ -47,13 +52,22 @@
 					</div>
 
 					<div class="form-group">
+		                <label class="col-md-3 control-label">Currency</label>
+		                <div class="col-md-6">
+			                <select v-model="user.currency" class="form-control">
+			                    <option {{ user.currency == currency.code ? 'selected' : '' }} v-for="currency in currencies" :value="currency.code">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option>
+			                </select>
+		                </div>
+		            </div>
+
+					<div class="form-group">
 						<label class="col-md-3 control-label">Pay rate</label>
 						<div class="col-md-6">
 							<input v-model="user.pay_rate" type="number" class="form-control" placeholder="Enter pay rate">
 						</div>
 					</div>
 
-					<div v-if="user.type == 'user'" class="form-group">
+					<div v-if="user.type == 'moderator'" class="form-group">
 		                <label class="col-md-3 control-label">Managed websites</label>
 		                <div class="col-md-6">
 		                    <div v-for="website in websites" class="icheck-list">
@@ -92,6 +106,7 @@
 
 	import Spinner from './../spin'
 	import _ from 'underscore'
+	import Currency from './../stores/currency'
 
 	export default {
 
@@ -107,7 +122,9 @@
 
 				saving: false,
 
-				checkedWebsites: []
+				checkedWebsites: [],
+
+				currencies: []
 			}
 		},
 
@@ -115,6 +132,7 @@
 			Website.all().then(response => {
 				this.websites = response.data;
 			})
+			this.currencies = Currency.getCurrencies();
 		},
 
 		props: {
@@ -132,7 +150,7 @@
 
 			submit() {
 				this.saving = true
-				if (!this.user == 'admin') {
+				if (this.user.type == 'moderator') {
 					this.user.websites = this.checkedWebsites;
 				} else {
 					this.user.websites = [];

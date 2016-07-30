@@ -46,7 +46,7 @@
             <div class="form-group">
                 <label>Account type</label>
                 <select v-model="form.type" class="form-control">
-                    <option value="user" selected="">User</option>
+                    <option value="moderator" selected="">Moderator</option>
                     <option value="admin">Admin</option> 
                 </select>
             </div>
@@ -56,6 +56,13 @@
             <div class="form-group">
                 <label>Contact information</label>
                 <textarea v-model="form.contact_info" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Currency</label>
+                <select v-model="form.currecny" class="form-control">
+                    <option v-for="currency in currencies" :value="currency.code">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option> 
+                </select>
             </div>
 
             <div class="form-group">
@@ -92,6 +99,7 @@ import UserPhotoUpload from './../components/PhotoUpload.vue'
 import UserModel from './../models/user'
 
 import Spinner from './../spin'
+import Currency from './../stores/currency'
 
 export default {
     
@@ -121,6 +129,7 @@ export default {
         Website.all().then(response => {
             this.websites = response.data
         })
+        this.currencies = Currency.getCurrencies();
     },
 
     data() {
@@ -129,7 +138,9 @@ export default {
 
             errors: [], 
 
-            saving: false
+            saving: false,
+
+            currencies: []
         }
     },
 

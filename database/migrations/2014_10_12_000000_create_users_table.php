@@ -19,7 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->text('contact_info')->nullable();
             $table->longtext('photo')->nullable();
-            $table->enum('type', ['user', 'admin'])->default('user');
+            $table->enum('type', ['moderator', 'admin', 'super'])->default('moderator');
+            $table->string('currency')->default('USD');
             $table->double('pay_rate')->nullable();
             $table->rememberToken();
             $table->timestamps();

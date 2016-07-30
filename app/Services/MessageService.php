@@ -30,7 +30,7 @@ class MessageService
                             ->orWhere('read', 1)
                             ->has('initiator')
                             ->has('interlocutor')
-                            ->with('interlocutor.website', 'initiator');
+                            ->with('interlocutor.website', 'initiator', 'messages');
                     },
                 ])->get();
 

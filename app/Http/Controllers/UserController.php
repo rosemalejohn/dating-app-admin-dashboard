@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Tenant\User as TenantUser;
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        if (auth()->user()->is_super) {
+            $users = User::all();
+        } elseif (auth()->user()->is_admin) {
+            $users = User::whereType('admin')->orWhere('type', 'moderator')->get();
+        }
         return view('users.index', compact('users'));
     }
 
@@ -35,4 +40,10 @@ class UserController extends Controller
         $user = auth()->user();
         return view('users.edit')->with(compact('user'));
     }
+
+    public function getAccount(User $user)
+    {
+        return view('users.account')->with(compact('user'));
+    }
+
 }

@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type', 'contact_info', 'photo', 'pay_rate',
+        'name', 'email', 'password', 'type', 'contact_info', 'photo', 'currency', 'pay_rate',
     ];
 
     /**
@@ -29,11 +29,21 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['is_admin', 'is_mine'];
+    protected $appends = ['is_admin', 'is_super', 'is_mine', 'is_moderator'];
 
     public function getIsAdminAttribute()
     {
         return $this->type == 'admin';
+    }
+
+    public function getIsSuperAttribute()
+    {
+        return $this->type == 'super';
+    }
+
+    public function getIsModeratorAttribute()
+    {
+        return $this->type == 'moderator';
     }
 
     public function getIsMineAttribute()

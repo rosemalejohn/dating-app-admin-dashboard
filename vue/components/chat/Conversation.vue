@@ -38,6 +38,12 @@
 				default() {
 					return {}
 				}
+			},
+		},
+
+		methods: {
+			sendAndNext() {
+				this.$broadcast('chat:send');
 			}
 		}
 

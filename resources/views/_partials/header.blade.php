@@ -12,7 +12,7 @@
         </a>
 
         <div class="page-actions">
-            @if (auth()->user()->is_admin)
+            @if (auth()->user() && (auth()->user()->is_admin) or auth()->user()->is_super)
             <div class="btn-group">
                 <button type="button" class="btn btn-circle red-pink dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>&nbsp;<span class="hidden-sm hidden-xs">New&nbsp;</span>&nbsp;<i class="fa fa-angle-down"></i>
@@ -29,10 +29,10 @@
             @endif
             &nbsp;
             <div class="navbar-stats">
-                <span>Current month income: <strong>$12.00</strong></span>
+                <span>Current month income: <strong>12.00 {{ auth()->user()->currency }}</strong></span>
             </div>
             <div class="navbar-stats">
-                <span>Last month income: <strong>$0.00</strong></span>
+                <span>Last month income: <strong>0.00 {{ auth()->user()->currency }}</strong></span>
             </div>
         </div>
 

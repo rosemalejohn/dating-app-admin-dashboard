@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\User;
+use Auth;
 use Illuminate\Support\ServiceProvider;
+use Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('validate_auth', function ($attribute, $value, $parameters, $validator) {
+            $user = User::findOrFail($parameters[0]);
+            return Auth::validate([
+                'email' => $user->email,
+                'password' => $value,
+            ]);
+        });
     }
 
     /**

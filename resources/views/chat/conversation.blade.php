@@ -9,7 +9,6 @@
 	<link rel="stylesheet" type="text/css" href="/css/sweetalert.css" />
 @stop
 
-
 @section('content')
 	{!! Breadcrumbs::render('chat:conversation', $website, $conversation) !!}
 
