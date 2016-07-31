@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserTakeChatEvent;
 use App\Services\MessageService;
 use App\Tenant\Conversation;
 use App\Website;
@@ -31,6 +32,7 @@ class ChatController extends Controller
             'interlocutor.profile',
             'notes',
             'interlocutor.website')->first();
+        event(new UserTakeChatEvent($conversation));
         return view('chat.conversation')->with(compact('website', 'conversation'));
     }
 }

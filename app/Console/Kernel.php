@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\LoginFakeProfiles::class,
         Commands\SendMessage::class,
+        Commands\RedisSubscribe::class,
     ];
 
     /**

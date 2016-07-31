@@ -99,10 +99,9 @@
 
     @yield('scripts')
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/0.7.10/vue-router.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
 
     <script src="/js/app.js" type="text/javascript"></script>
-
 
 </body>
 

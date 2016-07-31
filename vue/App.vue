@@ -48,6 +48,13 @@
 			Account
 		},
 
+		ready() {
+			socket.on('take-chat:App\\Events\\UserTakeChatEvent', function(conversation) {
+				console.log(conversation);
+				this.$broadcast('conversation:remove', conversation);
+			});
+		},
+
 		methods: {
 			saveUser() {
 				this.$broadcast('form:submit', 'user');

@@ -21110,6 +21110,14 @@ exports.default = {
 		Account: _Account2.default
 	},
 
+	ready: function ready() {
+		socket.on('take-chat:App\\Events\\UserTakeChatEvent', function (conversation) {
+			console.log(conversation);
+			this.$broadcast('conversation:remove', conversation);
+		});
+	},
+
+
 	methods: {
 		saveUser: function saveUser() {
 			this.$broadcast('form:submit', 'user');
@@ -21180,6 +21188,8 @@ _vue2.default.use(_vueValidator2.default);
 
 _vue2.default.http.options.root = '/api';
 _vue2.default.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
+
+window.socket = io('http://homestead.app:6001');
 
 new _vue2.default(_App2.default).$mount('body');
 
@@ -22120,6 +22130,12 @@ exports.default = {
 			return _underscore2.default.filter(conversation.messages, function (message) {
 				return message.senderId == conversation.initiator.id;
 			}).length;
+		}
+	},
+
+	events: {
+		'conversation:remove': function conversationRemove(conversation) {
+			this.conversation.$remove(conversation);
 		}
 	}
 

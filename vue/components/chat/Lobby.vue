@@ -74,6 +74,12 @@
 					return message.senderId == conversation.initiator.id;
 				}).length;
 			}
+		},
+
+		events: {
+			'conversation:remove'(conversation) {
+				this.conversation.$remove(conversation);
+			}
 		}
 
 	}
