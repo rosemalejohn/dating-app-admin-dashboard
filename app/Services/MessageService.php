@@ -30,6 +30,7 @@ class MessageService
                             ->orWhere('read', 1)
                             ->has('initiator')
                             ->has('interlocutor')
+                            ->has('messages')
                             ->with('interlocutor.website', 'initiator', 'messages');
                     },
                 ])->get();
@@ -46,16 +47,6 @@ class MessageService
 
         $conversations = $conversations->flatten()->sortBy('createStamp')->values();
         return $conversations;
-    }
-
-    public function getMessagePerDay(Website $website)
-    {
-
-    }
-
-    public function countMessagesPerDay($date)
-    {
-
     }
 
 }

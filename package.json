@@ -13,6 +13,7 @@
     "laravel-elixir-vueify": "^1.0.1"
   },
   "dependencies": {
+    "express": "^4.14.0",
     "ioredis": "^2.2.0",
     "jquery": "^3.1.0",
     "ladda": "^1.0.0",

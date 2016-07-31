@@ -10,6 +10,6 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('con
 
 import App from './App.vue'
 
-window.socket = io('http://homestead.app:6001');
+window.socket = io('http://homestead.app:3000');
 
 new Vue(App).$mount('body');

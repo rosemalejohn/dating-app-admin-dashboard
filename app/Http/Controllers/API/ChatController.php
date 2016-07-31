@@ -60,6 +60,18 @@ class ChatController extends Controller
 
         $conversation->messages()->save($message);
 
+        $initiatorMessages = $conversation->messages()->where('senderId', $conversation->initiatorId)->get();
+
+        $last_message = $conversation->last_message()->create([
+            'initiatorMessageId' => $initiatorMessages ? $initiatorMessages->last()->id : 0,
+            'interlocutorMessageId' => $message->id,
+        ]);
+
+        $conversation->update([
+            'read' => 3,
+            'lastMessageId' => $last_message->id,
+        ]);
+
         $user = User::findOrFail($request->sender['id']);
         if ($user) {
             $this->profile->login($user);

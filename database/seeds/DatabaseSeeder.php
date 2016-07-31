@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Administrator',
             'email' => 'admin@n8core.com',
             'password' => bcrypt('admin'),
-            'type' => 'admin',
+            'type' => 'super',
         ]);
 
         Config::create([

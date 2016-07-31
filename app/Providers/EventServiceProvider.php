@@ -13,9 +13,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\UserTakeChatEvent::class => [
-            \App\Listeners\UserTakeChatEventListener::class,
-        ],
+        // \App\Events\UserTakeChatEvent::class => [
+        //     \App\Listeners\UserTakeChatEventListener::class,
+        // ],
     ];
 
     /**

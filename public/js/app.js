@@ -21189,7 +21189,7 @@ _vue2.default.use(_vueValidator2.default);
 _vue2.default.http.options.root = '/api';
 _vue2.default.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 
-window.socket = io('http://homestead.app:6001');
+window.socket = io('http://homestead.app:3000');
 
 new _vue2.default(_App2.default).$mount('body');
 
