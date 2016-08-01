@@ -7,6 +7,8 @@ use DB;
 class TenantService
 {
 
+    public $tenant;
+
     public function testConnection(Website $website)
     {
         $this->connect($website);
@@ -34,7 +36,12 @@ class TenantService
             'database.connections.tenant.prefix' => $website->prefix,
         ]);
 
-        return true;
+        return $this;
+    }
+
+    public function toDB()
+    {
+        return DB::connection('tenant');
     }
 
     public function getConnection()

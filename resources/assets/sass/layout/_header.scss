@@ -2,6 +2,14 @@
 Page Header
 ***/
 
+@media screen and (max-width: 480px) {
+    .page-actions {
+    	.navbar-stats {
+    		display: none !important;
+    	}
+    }
+}
+
 .page-header.navbar {
 	width: 100%; 
 	padding: 0 20px 0 20px;

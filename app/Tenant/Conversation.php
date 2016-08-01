@@ -2,6 +2,7 @@
 
 namespace App\Tenant;
 
+use App\FlaggedConversation;
 use App\Note;
 use App\Tenant\Model;
 
@@ -33,6 +34,10 @@ class Conversation extends Model
         'notificationSent' => 'boolean',
     ];
 
+    protected $appends = [
+        'is_flagged',
+    ];
+
     public function initiator()
     {
         return $this->belongsTo(User::class, 'initiatorId');
@@ -58,12 +63,14 @@ class Conversation extends Model
         return $this->hasMany(Note::class, 'conversation_id');
     }
 
-    public function getInitiatorMessagesCountAttribute()
+    public function flagged()
     {
-        $conversation = Conversation::whereId($this->id)->with(['messages', function ($query) {
-            $query->where('senderId', $this->initiatorId);
-        }])->first();
-        return $conversation;
+        return $this->hasOne(FlaggedConversation::class);
+    }
+
+    public function getIsFlaggedAttribute()
+    {
+        return !is_null($this->flagged);
     }
 
 }

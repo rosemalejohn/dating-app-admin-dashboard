@@ -22,9 +22,9 @@ $bg-color: #364150;
 
 .login .content {
   background-color: #eceef1;
-  @include border-radius(7px);
+  @include border-radius(4px);
   width: 400px;
-  margin: 40px auto 10px auto;
+  margin: 10px auto 10px auto;
   padding: 30px;  
   padding-top: 10px;
   overflow: hidden;

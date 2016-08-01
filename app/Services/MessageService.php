@@ -24,16 +24,23 @@ class MessageService
 
                 $this->tenant->connect($website);
 
-                $collections = $website->managed_users()->with([
-                    'user.conversation_interlocutors' => function ($query) {
-                        $query->where('read', 0)
+                $collections = $website->managed_users()
+                    ->with(['user.conversation_interlocutors' => function ($query) {
+                        $query
+                            ->select('id', 'read', 'initiatorId', 'interlocutorId')
+                            ->where('read', 0)
                             ->orWhere('read', 1)
                             ->has('initiator')
                             ->has('interlocutor')
                             ->has('messages')
-                            ->with('interlocutor.website', 'initiator', 'messages');
-                    },
-                ])->get();
+                            ->with(['interlocutor.website',
+                                'initiator' => function ($i) {
+                                    $i->select('id', 'username');
+                                },
+                                'messages' => function ($q) {
+                                    $q->select('conversationId', 'senderId');
+                                }]);
+                    }])->get();
 
                 $filtered = $collections->filter(function ($collection) {
                     return $collection->user->conversation_interlocutors;

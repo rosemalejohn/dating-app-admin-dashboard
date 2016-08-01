@@ -21,7 +21,7 @@
 								<th width="10%"></th>
 							</tr>
 							
-							<tr v-for="conversation in conversations | filterBy search" role="row" class="filter">
+							<tr v-if="!conversation.is_flagged || (conversation.is_flagged && (auth.is_super || auth.is_admin))" v-for="conversation in conversations | filterBy search" role="row" class="filter" :class="{'danger': conversation.is_flagged}">
 								<td>
 									<img width="100%" :src="conversation.interlocutor.website[0].logo || '/img/default-photo.png'" />
 								</td>
@@ -29,7 +29,6 @@
 								<td class="editable">{{ conversation.interlocutor.username }}</td>
 								<td>{{ getInitiatorMessagesCount(conversation) }}</td>
 								<td>
-									<!-- chat/{website}/{conversation} -->
 									<a href="/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}" class="btn btn-xs green filter-cancel"><i class="fa fa-comments-o"></i>&nbsp;Take chat</a>
 								</td>
 							</tr>
@@ -64,8 +63,15 @@
 
 		data() {
 			return {
-				search: ''
+				search: '',
+				auth: {}
 			}
+		},
+
+		ready() {
+			this.$http.get('auth').then(response => {
+				this.auth = response.data;
+			})
 		},
 
 		methods: {
@@ -78,7 +84,9 @@
 
 		events: {
 			'conversation:remove'(conversation) {
-				this.conversation.$remove(conversation);
+				this.conversations = _.reject(this.conversations, (item) => {
+					return item.id == conversation.id
+				});
 			}
 		}
 

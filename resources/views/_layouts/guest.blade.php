@@ -16,8 +16,6 @@
 
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.3.2/css/simple-line-icons.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Uniform.js/3.0.0/css/default.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -38,38 +36,27 @@
 <!-- BEGIN BODY -->
 
 <body class="page-md login">
-    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
     <div class="menu-toggler sidebar-toggler">
     </div>
-    <!-- END SIDEBAR TOGGLER BUTTON -->
-    <!-- BEGIN LOGO -->
     <div class="logo">
         <a href="/">
-            <!-- <img src="../../assets/admin/layout2/img/logo-big.png" alt="" /> -->
+            <img src="/img/logo.png" alt="Logo" />
         </a>
     </div>
-    <!-- END LOGO -->
-    <!-- BEGIN LOGIN -->
     <div class="content">
         @yield('content')
     </div>
     <div class="copyright">
         2016 © Mach1 Online. Admin Dashboard.
     </div>
-    <!-- END LOGIN -->
-    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-    <!-- BEGIN CORE PLUGINS -->
     <!--[if lt IE 9]>
 	<script src="../../assets/global/plugins/respond.min.js"></script>
 	<script src="../../assets/global/plugins/excanvas.min.js"></script>
 	<![endif]-->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" type="text/javascript"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Uniform.js/3.0.0/js/jquery.uniform.standalone.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" type="text/javascript"></script>
     <!-- END CORE PLUGINS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS -->

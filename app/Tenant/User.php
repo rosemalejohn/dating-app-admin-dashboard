@@ -46,4 +46,11 @@ class User extends Model
     {
         return $this->hasMany(Conversation::class, 'interlocutorId');
     }
+
+    public function messages($query)
+    {
+        // return $query->with(['messages' => function ($q) {
+        //     $q->where('senderId', $this->id)->orWhere('recipientId', $this->id);
+        // }]);
+    }
 }

@@ -1,24 +1,33 @@
-var socket = require('socket.io');
-var express = require('express');
-var http = require('http');
-var app = express();
-var server = http.createServer(app);
-var io = socket.listen(server);
-
-server.listen(3000, function(){
-    console.log('Listening on Port 3000');
-});
+var app = require('http').createServer(handler);
+var io = require('socket.io')(app);
 
 var Redis = require('ioredis');
 var redis = new Redis();
 
-redis.subscribe('take-chat', function(err, count) {
+app.listen(3000, function() {
+    console.log('Server is running on port 3000!');
 });
 
-redis.on('message', function(channel, message) {
-    console.log('Message Recieved: ' + message);
+function handler(req, res) {
+    res.writeHead(200);
+    res.end('');
+}
+
+io.on('connection', function(socket) {
     
+	console.log('- Client connected!')
+
+	socket.on('disconnect', function() {
+		console.log('* Client disconnected.');
+	})
+
+});
+
+redis.psubscribe('*', function(err, count) {
+    //
+});
+
+redis.on('pmessage', function(subscribed, channel, message) {
     message = JSON.parse(message);
     io.emit(channel + ':' + message.event, message.data);
 });
-

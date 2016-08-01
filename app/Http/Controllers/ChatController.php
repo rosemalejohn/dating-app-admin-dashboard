@@ -24,8 +24,6 @@ class ChatController extends Controller
     public function conversation(Website $website, $conversation_id)
     {
         $conversation = Conversation::whereId($conversation_id)->with(
-            'messages.sender.avatar',
-            'messages.recipient.avatar',
             'initiator.avatar',
             'interlocutor.avatar',
             'initiator.profile',

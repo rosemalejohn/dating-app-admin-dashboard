@@ -9,7 +9,6 @@ use App\Services\ProfileService;
 use App\Tenant\Conversation;
 use App\Tenant\Message;
 use App\Tenant\User;
-use App\UserSentMessage;
 use App\Website;
 use Illuminate\Http\Request;
 
@@ -77,11 +76,16 @@ class ChatController extends Controller
             $this->profile->login($user);
         }
 
-        UserSentMessage::create([
-            'user_id' => auth()->user()->id,
+        $request->user()->create([
             'website_id' => $website->id,
             'message_id' => $message->id,
         ]);
+
+        // UserSentMessage::create([
+        //     'user_id' => auth()->user()->id,
+        //     'website_id' => $website->id,
+        //     'message_id' => $message->id,
+        // ]);
 
         return response()->json($message);
     }
@@ -98,5 +102,32 @@ class ChatController extends Controller
         $note = Note::create($data);
 
         return response()->json($note);
+    }
+
+    public function flagConversation(Request $request, Website $website, $conversation_id)
+    {
+        $conversation = Conversation::findOrFail($conversation_id);
+
+        $conversation->flagged()->create([
+            'user_id' => $request->user()->id,
+        ]);
+
+        return response()->json($conversation);
+    }
+
+    public function unflagConversation(Website $website, $conversation_id)
+    {
+        $conversation = Conversation::findOrFail($conversation_id);
+        $conversation->flagged->delete();
+        return response()->json('Conversation unflagged.');
+    }
+
+    public function getMessages(Website $website, $conversation_id)
+    {
+        $conversation = Conversation::findOrFail($conversation_id);
+
+        $messages = $conversation->messages()->with('sender.avatar', 'recipient.avatar')->get();
+
+        return response()->json($messages, 200);
     }
 }

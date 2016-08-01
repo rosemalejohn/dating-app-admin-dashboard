@@ -6,18 +6,30 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
     Route::get('/testing', function (\App\Services\TenantService $tenant) {
 
-        $this_month = \Carbon\Carbon::now()->startOfMonth();
+        $websites = \App\Website::all();
 
-        $user_sent_messages = \App\UserSentMessage::with('website', 'user')->where('created_at', '>=', $this_month)->get();
+        $conversations = collect();
 
-        $user_sent_messages->filter(function ($user_sent_message, $key) use ($tenant) {
-            $tenant->connect($user_sent_message->website);
+        foreach ($websites as $website) {
+            $database = $tenant->connect($website)->toDB();
 
-            $message = $user_sent_message->message->conversation->messages()
-                ->where('id', $user_sent_message->message_id)->first();
+            $users = $website->managed_users()->select('userId')->get()->map(function ($item) {
+                return $item->userId;
+            })->all();
 
-            dd($message);
-        });
+            $group = \App\Tenant\Message::select('id', 'recipientId', 'recipientRead', 'conversationId')->whereIn('recipientId', $users)
+                ->where('recipientRead', 0)
+                ->get()
+                ->groupBy(function ($message) {
+                    return $message->conversationId;
+                })->all();
+
+            $conversations->push([
+                $website->id => $messages,
+            ]);
+        }
+
+        dump($conversations->all());
 
     });
 
@@ -57,7 +69,13 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
             Route::post('{website}/{conversation}', 'ChatController@send');
 
+            Route::get('{website}/{conversation}/messages', 'ChatController@getMessages');
+
             Route::post('{website}/{conversation}/notes', 'ChatController@storeNotes');
+
+            Route::post('{website}/{conversation}/flag', 'ChatController@flagConversation');
+
+            Route::delete('{website}/{conversation}/unflag', 'ChatController@unflagConversation');
 
         });
 

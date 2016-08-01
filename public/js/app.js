@@ -1,15 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/json/stringify"), __esModule: true };
-},{"core-js/library/fn/json/stringify":2}],2:[function(require,module,exports){
-var core  = require('../../modules/_core')
-  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-},{"../../modules/_core":3}],3:[function(require,module,exports){
-var core = module.exports = {version: '2.4.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],4:[function(require,module,exports){
 //! moment.js
 //! version : 2.14.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -4205,7 +4194,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
     return _moment;
 
 }));
-},{}],5:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4326,7 +4315,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],6:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4359,7 +4348,7 @@ var defaultParams = {
 
 exports['default'] = defaultParams;
 module.exports = exports['default'];
-},{}],7:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4495,7 +4484,7 @@ exports['default'] = {
   handleCancel: handleCancel
 };
 module.exports = exports['default'];
-},{"./handle-dom":8,"./handle-swal-dom":10,"./utils":13}],8:[function(require,module,exports){
+},{"./handle-dom":5,"./handle-swal-dom":7,"./utils":10}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4687,7 +4676,7 @@ exports.fadeIn = fadeIn;
 exports.fadeOut = fadeOut;
 exports.fireClick = fireClick;
 exports.stopEventPropagation = stopEventPropagation;
-},{}],9:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4767,7 +4756,7 @@ var handleKeyDown = function handleKeyDown(event, params, modal) {
 
 exports['default'] = handleKeyDown;
 module.exports = exports['default'];
-},{"./handle-dom":8,"./handle-swal-dom":10}],10:[function(require,module,exports){
+},{"./handle-dom":5,"./handle-swal-dom":7}],7:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -4935,7 +4924,7 @@ exports.openModal = openModal;
 exports.resetInput = resetInput;
 exports.resetInputError = resetInputError;
 exports.fixVerticalPosition = fixVerticalPosition;
-},{"./default-params":6,"./handle-dom":8,"./injected-html":11,"./utils":13}],11:[function(require,module,exports){
+},{"./default-params":3,"./handle-dom":5,"./injected-html":8,"./utils":10}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4978,7 +4967,7 @@ var injectedHTML =
 
 exports["default"] = injectedHTML;
 module.exports = exports["default"];
-},{}],12:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5204,7 +5193,7 @@ var setParameters = function setParameters(params) {
 
 exports['default'] = setParameters;
 module.exports = exports['default'];
-},{"./handle-dom":8,"./handle-swal-dom":10,"./utils":13}],13:[function(require,module,exports){
+},{"./handle-dom":5,"./handle-swal-dom":7,"./utils":10}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5278,7 +5267,7 @@ exports.hexToRgb = hexToRgb;
 exports.isIE8 = isIE8;
 exports.logStr = logStr;
 exports.colorLuminance = colorLuminance;
-},{}],14:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -5582,7 +5571,7 @@ if (typeof window !== 'undefined') {
   _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('SweetAlert is a frontend module!');
 }
 module.exports = exports['default'];
-},{"./modules/default-params":6,"./modules/handle-click":7,"./modules/handle-dom":8,"./modules/handle-key":9,"./modules/handle-swal-dom":10,"./modules/set-params":12,"./modules/utils":13}],15:[function(require,module,exports){
+},{"./modules/default-params":3,"./modules/handle-click":4,"./modules/handle-dom":5,"./modules/handle-key":6,"./modules/handle-swal-dom":7,"./modules/set-params":9,"./modules/utils":10}],12:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -7132,7 +7121,7 @@ module.exports = exports['default'];
   }
 }.call(this));
 
-},{}],16:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -7433,7 +7422,7 @@ function format (id) {
   return match ? match[0] : id
 }
 
-},{}],17:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * Service for sending network requests.
  */
@@ -7595,7 +7584,7 @@ module.exports = function (_) {
     return _.http = Http;
 };
 
-},{"./lib/jsonp":19,"./lib/promise":20,"./lib/xhr":22}],18:[function(require,module,exports){
+},{"./lib/jsonp":16,"./lib/promise":17,"./lib/xhr":19}],15:[function(require,module,exports){
 /**
  * Install plugin.
  */
@@ -7636,7 +7625,7 @@ if (window.Vue) {
 }
 
 module.exports = install;
-},{"./http":17,"./lib/util":21,"./resource":23,"./url":24}],19:[function(require,module,exports){
+},{"./http":14,"./lib/util":18,"./resource":20,"./url":21}],16:[function(require,module,exports){
 /**
  * JSONP request.
  */
@@ -7688,7 +7677,7 @@ module.exports = function (_, options) {
 
 };
 
-},{"./promise":20}],20:[function(require,module,exports){
+},{"./promise":17}],17:[function(require,module,exports){
 /**
  * Promises/A+ polyfill v1.1.0 (https://github.com/bramstein/promis)
  */
@@ -7900,7 +7889,7 @@ if (window.MutationObserver) {
 
 module.exports = window.Promise || Promise;
 
-},{}],21:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * Utility functions.
  */
@@ -7982,7 +7971,7 @@ module.exports = function (Vue) {
     return _;
 };
 
-},{}],22:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * XMLHttp request.
  */
@@ -8035,7 +8024,7 @@ module.exports = function (_, options) {
     return promise;
 };
 
-},{"./promise":20}],23:[function(require,module,exports){
+},{"./promise":17}],20:[function(require,module,exports){
 /**
  * Service for interacting with RESTful services.
  */
@@ -8148,7 +8137,7 @@ module.exports = function (_) {
     return _.resource = Resource;
 };
 
-},{}],24:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /**
  * Service for URL templating.
  */
@@ -8307,7 +8296,7 @@ module.exports = function (_) {
     return _.url = Url;
 };
 
-},{}],25:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function (process){
 /*!
  * vue-validator v2.1.3
@@ -10909,7 +10898,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 module.exports = plugin;
 }).call(this,require('_process'))
-},{"_process":5}],26:[function(require,module,exports){
+},{"_process":2}],23:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.26
@@ -20986,7 +20975,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":5}],27:[function(require,module,exports){
+},{"_process":2}],24:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -21006,7 +20995,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],28:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21111,9 +21100,15 @@ exports.default = {
 	},
 
 	ready: function ready() {
-		socket.on('take-chat:App\\Events\\UserTakeChatEvent', function (conversation) {
-			console.log(conversation);
-			this.$broadcast('conversation:remove', conversation);
+		var self = this;
+
+		socket.on('take-chat:App\\Events\\UserTakeChatEvent', function (data) {
+			console.log(data.conversation);
+			self.$broadcast('conversation:remove', data.conversation);
+		});
+
+		socket.on('disconnect', function () {
+			console.log('Client disconnected.');
 		});
 	},
 
@@ -21162,7 +21157,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-024a1533", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./components/ManageWebsite.vue":30,"./components/ManagedUserListings.vue":31,"./components/Modal.vue":32,"./components/SystemSettings.vue":34,"./components/UserListings.vue":35,"./components/UserProfileEdit.vue":36,"./components/WebsiteListings.vue":37,"./components/chat/Conversation.vue":39,"./components/chat/Lobby.vue":40,"./components/dashboard/MessageGraph.vue":43,"./components/user/Account.vue":44,"./forms/users.vue":46,"./forms/website.vue":47,"moment":4,"vue":26,"vue-hot-reload-api":16}],29:[function(require,module,exports){
+},{"./components/ManageWebsite.vue":27,"./components/ManagedUserListings.vue":28,"./components/Modal.vue":29,"./components/SystemSettings.vue":31,"./components/UserListings.vue":32,"./components/UserProfileEdit.vue":33,"./components/WebsiteListings.vue":34,"./components/chat/Conversation.vue":36,"./components/chat/Lobby.vue":37,"./components/dashboard/MessageGraph.vue":40,"./components/user/Account.vue":41,"./forms/users.vue":43,"./forms/website.vue":44,"moment":1,"vue":23,"vue-hot-reload-api":13}],26:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -21193,7 +21188,7 @@ window.socket = io('http://homestead.app:3000');
 
 new _vue2.default(_App2.default).$mount('body');
 
-},{"./App.vue":28,"vue":26,"vue-resource":18,"vue-validator":25}],30:[function(require,module,exports){
+},{"./App.vue":25,"vue":23,"vue-resource":15,"vue-validator":22}],27:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.profile-userpic {\n  padding: 10px; }\n  /* line 4, stdin */\n  .profile-userpic img {\n    cursor: pointer;\n    border-radius: 0px !important;\n    width: 100%; }\n")
 'use strict';
@@ -21268,7 +21263,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1370eece", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":33,"./../forms/website.vue":47,"./Modal.vue":32,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],31:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":30,"./../forms/website.vue":44,"./Modal.vue":29,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],28:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -21447,7 +21442,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43b6831e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/managed-user.vue":45,"./../services/paginator":49,"./../spin":50,"./../stores/website_user":55,"./Modal.vue":32,"sweetalert":14,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],32:[function(require,module,exports){
+},{"./../forms/managed-user.vue":42,"./../services/paginator":46,"./../spin":47,"./../stores/website_user":53,"./Modal.vue":29,"sweetalert":11,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21484,7 +21479,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-293e4685", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16}],33:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13}],30:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.img-holder {\n  width: 100%;\n  cursor: pointer; }\n")
 'use strict';
@@ -21543,7 +21538,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-765643ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],34:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21605,7 +21600,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9448c56c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16}],35:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13}],32:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -21700,7 +21695,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45d17132", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/user":53,"sweetalert":14,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],36:[function(require,module,exports){
+},{"./../stores/user":51,"sweetalert":11,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],33:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.image-picker {\n  cursor: pointer;\n  width: 50%; }\n")
 'use strict';
@@ -21839,7 +21834,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5924a4e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../spin":50,"./../stores/currency":51,"./../stores/user":53,"./../stores/website":54,"./PhotoUpload.vue":33,"underscore":15,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],37:[function(require,module,exports){
+},{"./../spin":47,"./../stores/currency":49,"./../stores/user":51,"./../stores/website":52,"./PhotoUpload.vue":30,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],34:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.website-list {\n  position: relative; }\n  /* line 5, stdin */\n  .website-list button {\n    top: 10px;\n    right: 10px; }\n\n/* line 11, stdin */\n.absolute {\n  position: absolute; }\n")
 'use strict';
@@ -21938,16 +21933,12 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c76eb4fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/website.vue":47,"./../stores/website":54,"./Modal.vue":32,"sweetalert":14,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],38:[function(require,module,exports){
+},{"./../forms/website.vue":44,"./../stores/website":52,"./Modal.vue":29,"sweetalert":11,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
 
 var _moment = require('moment');
 
@@ -21957,37 +21948,44 @@ var _vue = require('vue');
 
 var _vue2 = _interopRequireDefault(_vue);
 
+var _spin = require('./../../spin');
+
+var _spin2 = _interopRequireDefault(_spin);
+
+var _conversation = require('../../stores/conversation');
+
+var _conversation2 = _interopRequireDefault(_conversation);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-
-	props: {
-		messages: {
-			type: Array,
-			default: function _default() {
-				return [];
-			}
-		}
-	},
-
 	data: function data() {
 		return {
-			searchMessage: '',
 			textContent: '',
 			initiator: this.$parent.conversation.initiator,
-			interlocutor: this.$parent.conversation.interlocutor
+			interlocutor: this.$parent.conversation.interlocutor,
+			conversation: this.$parent.conversation,
+			website: this.$parent.website,
+			messages: []
 		};
 	},
 	ready: function ready() {
-		$('.chat-box-scroller').slimScroll({
-			start: 'bottom'
+		var _this = this;
+
+		_spin2.default.spin();
+		this.$http.get('chat/' + this.website.id + '/' + this.conversation.id + '/messages').then(function (response) {
+			_spin2.default.stop();
+			_this.messages = response.data;
+		}).catch(function (err) {
+			_spin2.default.stop();
+			toastr.error('Cannot fetch conversation messages.');
 		});
 	},
 
 
 	methods: {
 		send: function send() {
-			var _this = this;
+			var _this2 = this;
 
 			var message = {
 				text: this.textContent,
@@ -21995,18 +21993,34 @@ exports.default = {
 				recipient: this.$parent.conversation.initiator,
 				timeStamp: (0, _moment2.default)().unix()
 			};
+			this.messages.push(message);
+			this.textContent = '';
 			this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(function (response) {
-				console.log((0, _stringify2.default)(response.data));
-				_this.messages.push(message);
-				_this.textContent = '';
 				toastr.success('Message sent!');
 			}).catch(function (response) {
-				_this.messages.push(message);
+				_this2.textContent = message.text;
+				_this2.messages.$remove(message);
 				toastr.error('Message not sent!');
 			});
 		},
 		sendAndNext: function sendAndNext() {
 			this.send();
+		},
+		flagConversation: function flagConversation() {
+			var _this3 = this;
+
+			_conversation2.default.flag(this.website.id, this.conversation.id).then(function (response) {
+				_this3.conversation.is_flagged = true;
+				toastr.success('Conversation flagged.');
+			});
+		},
+		unflagConversation: function unflagConversation() {
+			var _this4 = this;
+
+			_conversation2.default.unflag(this.website.id, this.conversation.id).then(function (response) {
+				_this4.conversation.is_flagged = false;
+				toastr.success(response.data);
+			});
 		}
 	},
 
@@ -22014,10 +22028,20 @@ exports.default = {
 		'chat:send': function chatSend() {
 			this.send();
 		}
+	},
+
+	watch: {
+		messages: function messages() {
+			this.$nextTick(function () {
+				$('.chat-box-scroller').slimScroll({
+					start: 'bottom'
+				});
+			});
+		}
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\t<i class=\"icon-bubble font-red-sunglo\"></i>\n\t\t\t<span class=\"caption-subject font-red-sunglo bold uppercase\">Chats</span>\n\t\t</div>\n\t\t<div class=\"inputs\">\n\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t<input v-model=\"searchMessage\" type=\"text\" class=\"form-control input-circle\" placeholder=\"Search message...\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"chat-box-scroller\" style=\"height: 400px;\" data-always-visible=\"1\" data-rail-visible=\"1\">\n\t\t\t<ul v-if=\"messages\" class=\"chats\">\n\t\t\t\t<li v-for=\"message in messages | filterBy searchMessage\" class=\"{{ message.is_sender ? 'out' : 'in' }}\">\n\t\t\t\t\t<img class=\"avatar\" :src=\"message.is_sender ? initiator.avatar.url : interlocutor.avatar.url\">\n\t\t\t\t\t<div class=\"message\">\n\t\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"name\">\n\t\t\t\t\t\t\t{{ message.sender ? message.sender.username : '' }}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<span class=\"datetime\">\n\t\t\t\t\t\tat {{ message.timeStamp | date 'unix' }}</span>\n\t\t\t\t\t\t<span class=\"body\">{{ message.text }}</span>\n\t\t\t\t\t</div>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<p v-else=\"\">No messages to show.</p>\n\t\t</div>\n\t\t<div v-if=\"messages\" class=\"chat-form\">\n\t\t\t<form @submit.prevent=\"send()\">\n\t\t\t\t<div class=\"input-cont\">\n\t\t\t\t\t<input class=\"form-control\" v-model=\"textContent\" type=\"text\" placeholder=\"Press enter to send...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-cont\">\n\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t</span>\n\t\t\t\t\t<button type=\"submit\" class=\"btn blue icn-only\">\n\t\t\t\t\t\t<i class=\"fa fa-arrow-right icon-white\"></i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div>\n\t</div>\n</div>\n<div class=\"row\">\n\t<div class=\"col-md-12\">\n\t\t<div class=\"pull-left\">\n\t\t\t<button onclick=\"window.history.back();\" class=\"btn btn-danger btn-block\">Cancel</button>\n\t\t</div>\n\t\t<div class=\"pull-right\">\n\t\t\t<button @click=\"sendAndNext()\" class=\"btn btn-success btn-block\">Send and next</button>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light \">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption\">\n\t\t\t<i class=\"icon-bubble font-red-sunglo\"></i>\n\t\t\t<span class=\"caption-subject font-red-sunglo bold uppercase\">Chats</span>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"btn-group btn-group-devided\" data-toggle=\"buttons\">\n\t\t\t\t<button onclick=\"window.history.back();\" class=\"btn btn-danger grey-salsa btn-circle btn-sm\">Cancel</button>\n\t\t\t\t<button v-if=\"conversation.is_flagged\" @click=\"unflagConversation()\" class=\"btn btn-danger grey-salsa btn-circle btn-sm\">Unflag</button>\n\t\t\t\t<button v-else=\"\" @click=\"flagConversation()\" class=\"btn btn-danger grey-salsa btn-circle btn-sm\">Flag</button>\n\t\t\t\t<button @click=\"sendAndNext()\" class=\"btn btn-success grey-salsa btn-circle btn-sm\">Send and next</button>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"chat-box-scroller\" style=\"height: 400px;\" data-always-visible=\"1\" data-rail-visible=\"1\">\n\t\t\t<ul v-if=\"messages\" class=\"chats\">\n\t\t\t\t<li v-for=\"message in messages | filterBy searchMessage\" class=\"{{ message.is_sender ? 'out' : 'in' }}\">\n\t\t\t\t\t<img class=\"avatar\" :src=\"message.is_sender ? initiator.avatar.url : interlocutor.avatar.url\">\n\t\t\t\t\t<div class=\"message\">\n\t\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<a target=\"_blank\" href=\"{{ website.url + '/user/' + message.sender.username }}\" class=\"name\">\n\t\t\t\t\t\t\t{{ message.sender ? message.sender.username : '' }}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<span class=\"datetime\">\n\t\t\t\t\t\tat {{ message.timeStamp | date 'unix' }}</span>\n\t\t\t\t\t\t<span class=\"body\">{{ message.text }}</span>\n\t\t\t\t\t</div>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<p v-else=\"\">No messages to show.</p>\n\t\t</div>\n\t\t<div v-if=\"messages\" class=\"chat-form\">\n\t\t\t<form @submit.prevent=\"send()\">\n\t\t\t\t<div class=\"input-cont\">\n\t\t\t\t\t<input class=\"form-control\" v-model=\"textContent\" type=\"text\" placeholder=\"Press enter to send...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-cont\">\n\t\t\t\t\t<span class=\"arrow\">\n\t\t\t\t\t</span>\n\t\t\t\t\t<button type=\"submit\" class=\"btn blue icn-only\">\n\t\t\t\t\t\t<i class=\"fa fa-arrow-right icon-white\"></i>\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22028,7 +22052,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-62e095e7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"moment":4,"vue":26,"vue-hot-reload-api":16}],39:[function(require,module,exports){
+},{"../../stores/conversation":48,"./../../spin":47,"moment":1,"vue":23,"vue-hot-reload-api":13}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22079,7 +22103,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-md-3\">\n\t\t<profile-box :profile=\"conversation.interlocutor\"></profile-box>\n\t\t<notes :notes.sync=\"conversation.notes\" filter=\"interlocutor\"></notes>\n\t</div>\n\t<div class=\"col-md-6\">\n\t\t<chat-box :messages=\"conversation.messages\"></chat-box>\n\t</div>\n\t<div class=\"col-md-3\">\n\t\t<profile-box :profile=\"conversation.initiator\"></profile-box>\n\t\t<notes :notes.sync=\"conversation.notes\" filter=\"initiator\"></notes>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-md-3\">\n\t\t<profile-box :profile=\"conversation.interlocutor\"></profile-box>\n\t\t<notes :notes.sync=\"conversation.notes\" filter=\"interlocutor\"></notes>\n\t</div>\n\t<div class=\"col-md-6\">\n\t\t<chat-box></chat-box>\n\t</div>\n\t<div class=\"col-md-3\">\n\t\t<profile-box :profile=\"conversation.initiator\"></profile-box>\n\t\t<notes :notes.sync=\"conversation.notes\" filter=\"initiator\"></notes>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22090,7 +22114,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c7ff19f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./ChatBox.vue":38,"./Notes.vue":41,"./ProfileBox.vue":42,"vue":26,"vue-hot-reload-api":16}],40:[function(require,module,exports){
+},{"./ChatBox.vue":35,"./Notes.vue":38,"./ProfileBox.vue":39,"vue":23,"vue-hot-reload-api":13}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22120,8 +22144,16 @@ exports.default = {
 
 	data: function data() {
 		return {
-			search: ''
+			search: '',
+			auth: {}
 		};
+	},
+	ready: function ready() {
+		var _this = this;
+
+		this.$http.get('auth').then(function (response) {
+			_this.auth = response.data;
+		});
 	},
 
 
@@ -22135,13 +22167,15 @@ exports.default = {
 
 	events: {
 		'conversation:remove': function conversationRemove(conversation) {
-			this.conversation.$remove(conversation);
+			this.conversations = _underscore2.default.reject(this.conversations, function (item) {
+				return item.id == conversation.id;
+			});
 		}
 	}
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"chat\">\n\t<div class=\"portlet light\">\n\t\t<div class=\"portlet-body\">\n\t\t\t<div class=\"table-container\">\n\t\t\t\t<table class=\"table table-striped table-bordered table-hover\">\n\t\t\t\t\t<thead>\n\t\t\t\t\t\t<tr role=\"row\" class=\"heading\">\n\t\t\t\t\t\t\t<th width=\"5%\">\n\t\t\t\t\t\t\t\tSite\n\t\t\t\t\t\t\t</th> \n\t\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\t\tMember\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\t\tModerated Profile\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"20%\">\n\t\t\t\t\t\t\t\tMessage count\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"10%\"></th>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<tr v-for=\"conversation in conversations | filterBy search\" role=\"row\" class=\"filter\">\n\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t<img width=\"100%\" :src=\"conversation.interlocutor.website[0].logo || '/img/default-photo.png'\">\n\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t<td>{{ conversation.initiator.username}}</td>\n\t\t\t\t\t\t\t<td class=\"editable\">{{ conversation.interlocutor.username }}</td>\n\t\t\t\t\t\t\t<td>{{ getInitiatorMessagesCount(conversation) }}</td>\n\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t<!-- chat/{website}/{conversation} -->\n\t\t\t\t\t\t\t\t<a href=\"/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}\" class=\"btn btn-xs green filter-cancel\"><i class=\"fa fa-comments-o\"></i>&nbsp;Take chat</a>\n\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</thead>\n\t\t\t\t</table>\n\t\t\t\t<div v-if=\"!conversations.length\">\n\t\t\t\t\t<div class=\"note note-info note-bordered\">\n\t\t\t\t\t\t<p>No chat listed.</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"chat\">\n\t<div class=\"portlet light\">\n\t\t<div class=\"portlet-body\">\n\t\t\t<div class=\"table-container\">\n\t\t\t\t<table class=\"table table-striped table-bordered table-hover\">\n\t\t\t\t\t<thead>\n\t\t\t\t\t\t<tr role=\"row\" class=\"heading\">\n\t\t\t\t\t\t\t<th width=\"5%\">\n\t\t\t\t\t\t\t\tSite\n\t\t\t\t\t\t\t</th> \n\t\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\t\tMember\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"35%\">\n\t\t\t\t\t\t\t\tModerated Profile\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"20%\">\n\t\t\t\t\t\t\t\tMessage count\n\t\t\t\t\t\t\t</th>\n\t\t\t\t\t\t\t<th width=\"10%\"></th>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\n\t\t\t\t\t\t<tr v-if=\"!conversation.is_flagged || (conversation.is_flagged &amp;&amp; (auth.is_super || auth.is_admin))\" v-for=\"conversation in conversations | filterBy search\" role=\"row\" class=\"filter\" :class=\"{'danger': conversation.is_flagged}\">\n\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t<img width=\"100%\" :src=\"conversation.interlocutor.website[0].logo || '/img/default-photo.png'\">\n\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t<td>{{ conversation.initiator.username}}</td>\n\t\t\t\t\t\t\t<td class=\"editable\">{{ conversation.interlocutor.username }}</td>\n\t\t\t\t\t\t\t<td>{{ getInitiatorMessagesCount(conversation) }}</td>\n\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t<a href=\"/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}\" class=\"btn btn-xs green filter-cancel\"><i class=\"fa fa-comments-o\"></i>&nbsp;Take chat</a>\n\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</thead>\n\t\t\t\t</table>\n\t\t\t\t<div v-if=\"!conversations.length\">\n\t\t\t\t\t<div class=\"note note-info note-bordered\">\n\t\t\t\t\t\t<p>No chat listed.</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22152,7 +22186,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-75e113ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./Conversation.vue":39,"underscore":15,"vue":26,"vue-hot-reload-api":16}],41:[function(require,module,exports){
+},{"./Conversation.vue":36,"underscore":12,"vue":23,"vue-hot-reload-api":13}],38:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.hand-cursor {\n  cursor: pointer; }\n")
 'use strict';
@@ -22248,7 +22282,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5b641955", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../stores/note":52,"sweetalert":14,"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],42:[function(require,module,exports){
+},{"./../../stores/note":50,"sweetalert":11,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],39:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.chat-box-profile {\n  padding: 0px !important; }\n  /* line 4, stdin */\n  .chat-box-profile .details {\n    padding: 20px; }\n")
 'use strict';
@@ -22283,7 +22317,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light chat-box-profile\">\n\t<a v-if=\"auth.is_admin || auth.is_super\" target=\"_blank\" href=\"{{ website[0].url }}user/{{ profile.username }}\">\n\t\t<img :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t</a>\n\t<img v-else=\"\" :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t<div class=\"details\">\n\t\t<h4 class=\"profile-desc-title\">{{ profile.username }}</h4>\n\t\t\n\t\t<div v-if=\"profile.profile.address != ''\" class=\"margin-top-10 profile-desc-link\">\n\t\t\tCity: <a href=\"javascipt:;\">{{ profile.profile.address }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tLooking for: <a href=\"#\">{{ profile.sex }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tDescription: <a href=\"#\">{{ profile.about_me }}</a>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light chat-box-profile\">\n\t<a v-if=\"auth.is_admin || auth.is_super\" target=\"_blank\" href=\"{{ website[0].url }}/user/{{ profile.username }}\">\n\t\t<img :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t</a>\n\t<img v-else=\"\" :src=\"profile.avatar.url || '/img/default-photo.png'\" style=\"width: 100%;\">\n\t<div class=\"details\">\n\t\t<h4 class=\"profile-desc-title\">{{ profile.username }}</h4>\n\t\t\n\t\t<div v-if=\"profile.profile.address != ''\" class=\"margin-top-10 profile-desc-link\">\n\t\t\tCity: <a href=\"javascipt:;\">{{ profile.profile.address }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tLooking for: <a href=\"#\">{{ profile.sex }}</a>\n\t\t</div>\n\t\t<div class=\"margin-top-10 profile-desc-link\">\n\t\t\tDescription: <a href=\"#\">{{ profile.about_me }}</a>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22298,7 +22332,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-60a56dfe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16,"vueify/lib/insert-css":27}],43:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22402,7 +22436,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f222d5b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../spin.js":50,"underscore":15,"vue":26,"vue-hot-reload-api":16}],44:[function(require,module,exports){
+},{"./../../spin.js":47,"underscore":12,"vue":23,"vue-hot-reload-api":13}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22457,7 +22491,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7fdbd3b4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":26,"vue-hot-reload-api":16}],45:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22581,7 +22615,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3375b704", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../services/paginator":49,"./../spin":50,"vue":26,"vue-hot-reload-api":16}],46:[function(require,module,exports){
+},{"./../services/paginator":46,"./../spin":47,"vue":23,"vue-hot-reload-api":13}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22710,7 +22744,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-17fa904d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":33,"./../models/user":48,"./../spin":50,"./../stores/currency":51,"./../stores/user":53,"./../stores/website":54,"vue":26,"vue-hot-reload-api":16}],47:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":30,"./../models/user":45,"./../spin":47,"./../stores/currency":49,"./../stores/user":51,"./../stores/website":52,"vue":23,"vue-hot-reload-api":13}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22837,7 +22871,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3c53abc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":33,"./../spin":50,"./../stores/website":54,"vue":26,"vue-hot-reload-api":16}],48:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":30,"./../spin":47,"./../stores/website":52,"vue":23,"vue-hot-reload-api":13}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22851,7 +22885,7 @@ exports.default = {
 	type: 'user'
 };
 
-},{}],49:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22870,7 +22904,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],50:[function(require,module,exports){
+},{"vue":23}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22899,7 +22933,29 @@ exports.default = {
 	}
 };
 
-},{}],51:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	flag: function flag(website_id, conversation_id) {
+		return _vue2.default.http.post('chat/' + website_id + '/' + conversation_id + '/flag');
+	},
+	unflag: function unflag(website_id, conversation_id) {
+		return _vue2.default.http.delete('chat/' + website_id + '/' + conversation_id + '/unflag');
+	}
+};
+
+},{"vue":23}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22922,7 +22978,7 @@ exports.default = {
 	getCurrencyByCode: function getCurrencyByCode(code) {}
 };
 
-},{"underscore":15}],52:[function(require,module,exports){
+},{"underscore":12}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22947,7 +23003,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],53:[function(require,module,exports){
+},{"vue":23}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22975,7 +23031,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],54:[function(require,module,exports){
+},{"vue":23}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23003,7 +23059,7 @@ exports.default = {
 	}
 };
 
-},{"vue":26}],55:[function(require,module,exports){
+},{"vue":23}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23022,4 +23078,4 @@ exports.default = {
 	}
 };
 
-},{"vue":26}]},{},[29]);
+},{"vue":23}]},{},[26]);

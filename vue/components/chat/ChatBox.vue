@@ -5,14 +5,15 @@
 				<i class="icon-bubble font-red-sunglo"></i>
 				<span class="caption-subject font-red-sunglo bold uppercase">Chats</span>
 			</div>
-			<div class="inputs">
-				<div class="portlet-input input-inline input-small">
-					<div class="input-icon right">
-						<i class="icon-magnifier"></i>
-						<input v-model="searchMessage" type="text" class="form-control input-circle" placeholder="Search message...">
-					</div>
+			<div class="actions">
+				<div class="btn-group btn-group-devided" data-toggle="buttons">
+					<button onclick="window.history.back();" class="btn btn-danger grey-salsa btn-circle btn-sm">Cancel</button>
+					<button v-if="conversation.is_flagged" @click="unflagConversation()" class="btn btn-danger grey-salsa btn-circle btn-sm">Unflag</button>
+					<button v-else @click="flagConversation()" class="btn btn-danger grey-salsa btn-circle btn-sm">Flag</button>
+					<button @click="sendAndNext()" class="btn btn-success grey-salsa btn-circle btn-sm">Send and next</button>
 				</div>
 			</div>
+
 		</div>
 		<div class="portlet-body">
 			<div class="chat-box-scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="1">
@@ -22,7 +23,7 @@
 						<div class="message">
 							<span class="arrow">
 							</span>
-							<a href="javascript:;" class="name">
+							<a target="_blank" href="{{ website.url + '/user/' + message.sender.username }}" class="name">
 								{{ message.sender ? message.sender.username : '' }}
 							</a>
 							<span class="datetime">
@@ -49,46 +50,37 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="pull-left">
-				<button onclick="window.history.back();" class="btn btn-danger btn-block">Cancel</button>
-			</div>
-			<div class="pull-right">
-				<button @click="sendAndNext()" class="btn btn-success btn-block">Send and next</button>
-			</div>
-		</div>
-	</div>
 </template>
 
 <script>
 	import moment from 'moment'
 	import Vue from 'vue'
+	import Spinner from './../../spin'
+	import Conversation from '../../stores/conversation'
 
 	export default {
 
-		props: {
-			messages: {
-				type: Array,
-				default() {
-					return []
-				}
-			}
-		},
-
 		data() {
 			return {
-				searchMessage: '',
 				textContent: '',
 				initiator: this.$parent.conversation.initiator,
-				interlocutor: this.$parent.conversation.interlocutor
+				interlocutor: this.$parent.conversation.interlocutor,
+				conversation: this.$parent.conversation,
+				website: this.$parent.website,
+				messages: []
 			}
 		},
 
 		ready() {
-			$('.chat-box-scroller').slimScroll({
-			    start: 'bottom',
-			});
+			Spinner.spin();
+			this.$http.get('chat/' + this.website.id + '/' + this.conversation.id + '/messages')
+				.then(response => {
+					Spinner.stop();
+					this.messages = response.data;
+				}).catch(err => {
+					Spinner.stop();
+					toastr.error('Cannot fetch conversation messages.');
+				})
 		},
 
 		methods: {
@@ -100,19 +92,34 @@
 					recipient: this.$parent.conversation.initiator,
 					timeStamp: moment().unix()
 				}
+				this.messages.push(message);
+				this.textContent = ''
 				this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(response => {
-					console.log(JSON.stringify(response.data));
-					this.messages.push(message);
-					this.textContent = ''
 					toastr.success('Message sent!');
-				}).catch(response => { 
-					this.messages.push(message);
+				}).catch(response => {
+					this.textContent = message.text;
+					this.messages.$remove(message);
 					toastr.error('Message not sent!');
 				})
 			},
 
 			sendAndNext() {
 				this.send();
+			},
+
+			flagConversation() {
+				Conversation.flag(this.website.id, this.conversation.id)
+					.then(response => {
+						this.conversation.is_flagged = true;
+						toastr.success('Conversation flagged.')
+					})
+			},
+
+			unflagConversation() {
+				Conversation.unflag(this.website.id, this.conversation.id).then(response => {
+					this.conversation.is_flagged = false;
+						toastr.success(response.data);
+					})
 			}
 
 		},
@@ -120,6 +127,16 @@
 		events: {
 			'chat:send'() {
 				this.send();
+			}
+		},
+
+		watch: {
+			messages() {
+				this.$nextTick(() => {
+					$('.chat-box-scroller').slimScroll({
+					    start: 'bottom',
+					});
+				})
 			}
 		}
 	}

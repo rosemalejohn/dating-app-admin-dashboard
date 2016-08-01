@@ -1,6 +1,6 @@
 <template>
 	<div class="portlet light chat-box-profile">
-		<a v-if="auth.is_admin || auth.is_super" target="_blank" href="{{ website[0].url }}user/{{ profile.username }}">
+		<a v-if="auth.is_admin || auth.is_super" target="_blank" href="{{ website[0].url }}/user/{{ profile.username }}">
 			<img :src="profile.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
 		</a>
 		<img v-else :src="profile.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
