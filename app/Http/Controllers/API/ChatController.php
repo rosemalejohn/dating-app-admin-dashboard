@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\ConversationFlaggedEvent;
 use App\Http\Controllers\Controller;
 use App\Note;
 use App\Services\MessageService;
@@ -108,9 +109,7 @@ class ChatController extends Controller
     {
         $conversation = Conversation::findOrFail($conversation_id);
 
-        $conversation->flagged()->create([
-            'user_id' => $request->user()->id,
-        ]);
+        event(new ConversationFlaggedEvent($conversation));
 
         return response()->json($conversation);
     }

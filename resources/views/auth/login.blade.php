@@ -4,7 +4,7 @@
 <!-- BEGIN LOGIN FORM -->
 <form class="login-form" action="{{ url('/login') }}" method="post">
     {{ csrf_field() }}
-    <h3 class="form-title">Sign In</h3>
+    <h3 class="form-title">Sign in</h3>
     <div class="alert alert-danger display-hide">
         <button class="close" data-close="alert"></button>
         <span>Enter email and password. </span>
@@ -26,8 +26,7 @@
         <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
     </div>
 </form>
-<!-- END LOGIN FORM -->
-<!-- BEGIN FORGOT PASSWORD FORM -->
+
 <form class="forget-form" action="{{ url('/password/email') }}" method="post">
     {{ csrf_field() }}
     <h3>Forget Password ?</h3>

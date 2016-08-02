@@ -2,6 +2,7 @@
 
 namespace App\Tenant;
 
+use App\ActiveConversation;
 use App\FlaggedConversation;
 use App\Note;
 use App\Tenant\Model;
@@ -66,6 +67,11 @@ class Conversation extends Model
     public function flagged()
     {
         return $this->hasOne(FlaggedConversation::class);
+    }
+
+    public function active()
+    {
+        return $this->hasOne(ActiveConversation::class);
     }
 
     public function getIsFlaggedAttribute()

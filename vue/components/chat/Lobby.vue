@@ -87,6 +87,13 @@
 				this.conversations = _.reject(this.conversations, (item) => {
 					return item.id == conversation.id
 				});
+			},
+
+			'conversation:flag'(conversation) {
+				var conversation = _.find(this.conversations, (item) => {
+					return item.id == conversation.id
+				});
+				conversation.is_flagged = true;
 			}
 		}
 

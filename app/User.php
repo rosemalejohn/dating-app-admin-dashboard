@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserSentMessage::class);
     }
+
+    public function active_conversation()
+    {
+        return $this->hasOne(ActiveConversation::class);
+    }
 }

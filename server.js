@@ -15,10 +15,10 @@ function handler(req, res) {
 
 io.on('connection', function(socket) {
     
-	console.log('- Client connected!')
+	console.log('+ Client connected!')
 
 	socket.on('disconnect', function() {
-		console.log('* Client disconnected.');
+		console.log('- Client disconnected.');
 	})
 
 });

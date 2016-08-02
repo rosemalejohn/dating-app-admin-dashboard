@@ -21103,12 +21103,9 @@ exports.default = {
 		var self = this;
 
 		socket.on('take-chat:App\\Events\\UserTakeChatEvent', function (data) {
-			console.log(data.conversation);
 			self.$broadcast('conversation:remove', data.conversation);
-		});
-
-		socket.on('disconnect', function () {
-			console.log('Client disconnected.');
+		}).on('conversation:App\\Events\\ConversationFlaggedEvent', function (data) {
+			self.$broadcast('conversation:flag', data.conversation);
 		});
 	},
 
@@ -22170,6 +22167,12 @@ exports.default = {
 			this.conversations = _underscore2.default.reject(this.conversations, function (item) {
 				return item.id == conversation.id;
 			});
+		},
+		'conversation:flag': function conversationFlag(conversation) {
+			var conversation = _underscore2.default.find(this.conversations, function (item) {
+				return item.id == conversation.id;
+			});
+			conversation.is_flagged = true;
 		}
 	}
 

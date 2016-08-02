@@ -52,12 +52,9 @@
 			let self = this;
 
 			socket.on('take-chat:App\\Events\\UserTakeChatEvent', function(data) {
-				console.log(data.conversation);
 				self.$broadcast('conversation:remove', data.conversation);
-			});
-
-			socket.on('disconnect', function() {
-				console.log('Client disconnected.');
+			}).on('conversation:App\\Events\\ConversationFlaggedEvent', function(data) {
+				self.$broadcast('conversation:flag', data.conversation);
 			});
 		},
 

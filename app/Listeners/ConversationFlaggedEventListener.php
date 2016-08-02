@@ -2,9 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Events\UserTakeChatEvent;
+use App\Events\ConversationFlaggedEvent;
 
-class UserTakeChatEventListener
+class ConversationFlaggedEventListener
 {
     /**
      * Create the event listener.
@@ -19,14 +19,15 @@ class UserTakeChatEventListener
     /**
      * Handle the event.
      *
-     * @param  UserTakeChatEvent  $event
+     * @param  ConversationFlaggedEvent  $event
      * @return void
      */
-    public function handle(UserTakeChatEvent $event)
+    public function handle(ConversationFlaggedEvent $event)
     {
-        $user = auth()->user();
         $conversation = $event->conversation;
 
-        $user->active_conversation()->create(['conversation_id' => $conversation->id]);
+        $conversation->flagged()->create([
+            'user_id' => auth()->user()->id,
+        ]);
     }
 }
