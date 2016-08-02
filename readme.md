@@ -22,3 +22,8 @@ User moderator dashboard for various dating app managed by n8core.
 - open .env file in the root directory and fill in the required credentials
 - run `php artisan migrate` to create tables
 - run `php artisan db:seed` to create the required database inputs
+
+# Allowing ports to firewall (CENTOS 6)
+
+- `sudo iptables -I INPUT -p tcp -m tcp --dport 3000 -j ACCEPT
+- `sudo service iptables save`
