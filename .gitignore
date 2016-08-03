@@ -6,3 +6,4 @@ Homestead.json
 .env
 /public/js
 /public/css
+server.js
