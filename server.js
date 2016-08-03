@@ -18,16 +18,17 @@ io.on('connection', function(socket) {
 	console.log('+ Client connected!')
 
 	socket.on('disconnect', function() {
-		console.log('- Client disconnected.');
+		console.log('- Client disconnected!');
 	})
 
 });
 
 redis.psubscribe('*', function(err, count) {
-    //
+
 });
 
 redis.on('pmessage', function(subscribed, channel, message) {
     message = JSON.parse(message);
+
     io.emit(channel + ':' + message.event, message.data);
 });

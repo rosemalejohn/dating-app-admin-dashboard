@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ActiveConversation extends Model
 {
 
-    protected $fillable = ['conversation_id'];
+    protected $fillable = ['website_id', 'conversation_id'];
 
     public function user()
     {

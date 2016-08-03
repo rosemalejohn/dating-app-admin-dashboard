@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\ActiveConversation;
 use App\Events\ConversationFlaggedEvent;
 use App\Http\Controllers\Controller;
 use App\Note;
@@ -128,5 +129,15 @@ class ChatController extends Controller
         $messages = $conversation->messages()->with('sender.avatar', 'recipient.avatar')->get();
 
         return response()->json($messages, 200);
+    }
+
+    public function removeActiveConversation(Website $website, $conversation_id)
+    {
+        $active_conversation = ActiveConversation::where('website_id', $website->id)
+            ->where('conversation_id', $conversation_id)->first();
+
+        $active_conversation->delete();
+
+        return response()->json('Active conversation deleted!');
     }
 }

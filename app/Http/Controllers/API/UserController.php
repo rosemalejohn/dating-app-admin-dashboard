@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
@@ -29,6 +30,8 @@ class UserController extends Controller
         $this->validate($request, $this->validator());
 
         $user = User::create($data);
+
+        event(new UserCreated($user));
 
         $user->managed_websites()->sync($request->websites);
 

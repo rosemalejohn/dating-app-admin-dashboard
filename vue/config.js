@@ -2,6 +2,6 @@ export default {
 
 	host: 'http://mach1.online',
 
-	port: 3000
-
+	port: 3000,
+	
 }

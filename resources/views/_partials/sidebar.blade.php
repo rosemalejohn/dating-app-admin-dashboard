@@ -26,7 +26,7 @@
             </li>
             <li>
                 <a href="/users">
-                    <i class="fa fa-users"></i>
+                    <i class="icon-user"></i>
                     <span class="title">Users</span>
                     <span class="arrow "></span>
                 </a>

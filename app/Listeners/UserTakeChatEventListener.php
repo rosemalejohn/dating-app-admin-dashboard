@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UserTakeChatEvent;
+use Illuminate\Database\QueryException;
 
 class UserTakeChatEventListener
 {
@@ -25,8 +26,13 @@ class UserTakeChatEventListener
     public function handle(UserTakeChatEvent $event)
     {
         $user = auth()->user();
+        $website = $event->website;
         $conversation = $event->conversation;
 
-        $user->active_conversation()->create(['conversation_id' => $conversation->id]);
+        try {
+            $user->active_conversation()->create(['website_id' => $website->id, 'conversation_id' => $conversation->id]);
+        } catch (QueryException $ex) {
+
+        }
     }
 }

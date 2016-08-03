@@ -3,29 +3,24 @@
 namespace App\Events;
 
 use App\Events\Event;
-use App\Tenant\Conversation;
-use App\Website;
+use App\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
-class UserTakeChatEvent extends Event implements ShouldBroadcast
+class UserCreated extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 
-    public $website;
-
-    public $conversation;
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Website $website, Conversation $conversation)
+    public function __construct(User $user)
     {
-        $this->website = $website;
-
-        $this->conversation = $conversation;
+        $this->user = $user;
     }
 
     /**
@@ -35,6 +30,6 @@ class UserTakeChatEvent extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['take-chat'];
+        return ['user'];
     }
 }

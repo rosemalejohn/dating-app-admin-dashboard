@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Policies\ConversationPolicy;
 use App\Policies\WebsitePolicy;
+use App\Tenant\Conversation;
 use App\Website;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -15,8 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
         Website::class => WebsitePolicy::class,
+        Conversation::class => ConversationPolicy::class,
     ];
 
     /**

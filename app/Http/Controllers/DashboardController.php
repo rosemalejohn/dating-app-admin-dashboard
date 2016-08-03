@@ -10,6 +10,11 @@ class DashboardController extends Controller
 {
     public function index(Request $request, MessageService $msgService)
     {
+
+        if (!auth()->check()) {
+            return view('auth.login');
+        }
+
         if ($request->user()->is_moderator) {
             return redirect()->to('/chat');
         }

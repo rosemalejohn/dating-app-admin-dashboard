@@ -53,9 +53,20 @@
 
 			socket.on('take-chat:App\\Events\\UserTakeChatEvent', function(data) {
 				self.$broadcast('conversation:remove', data.conversation);
-			}).on('conversation:App\\Events\\ConversationFlaggedEvent', function(data) {
+			});
+
+			socket.on('conversation:App\\Events\\ConversationFlaggedEvent', function(data) {
 				self.$broadcast('conversation:flag', data.conversation);
 			});
+
+			socket.on('user:App\\Events\\UserCreated', function(data) {
+				console.log(data);
+				self.$broadcast('user:created', data.user);
+			});
+
+			// socket.on('user:App\\Events\\UserDeleted', function(data) {
+			// 	self.$broadcast('user:deleted', data.user);
+			// });
 		},
 
 		methods: {

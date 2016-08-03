@@ -14,3 +14,7 @@
 
 	<conversation :website="{{ $website }}" :conversation="{{ $conversation }}"></conversation>
 @stop
+
+@section('scripts')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js" type="text/javascript"></script>
+@stop

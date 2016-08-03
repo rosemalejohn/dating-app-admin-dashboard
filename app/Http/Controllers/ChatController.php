@@ -30,7 +30,11 @@ class ChatController extends Controller
             'interlocutor.profile',
             'notes',
             'interlocutor.website')->first();
-        event(new UserTakeChatEvent($conversation));
-        return view('chat.conversation')->with(compact('website', 'conversation'));
+
+        if (auth()->user()->can('view', $conversation)) {
+            event(new UserTakeChatEvent($website, $conversation));
+            return view('chat.conversation')->with(compact('website', 'conversation'));
+        }
+        abort(403);
     }
 }

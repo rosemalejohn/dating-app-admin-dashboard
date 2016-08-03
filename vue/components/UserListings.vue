@@ -144,6 +144,10 @@
 		events: {
 			'user:created'(user) {
 				this.users.push(user);
+			},
+
+			'user:deleted'(user) {
+				
 			}
 		}
 		

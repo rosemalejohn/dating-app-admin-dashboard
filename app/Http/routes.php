@@ -2,6 +2,8 @@
 
 Route::auth();
 
+Route::get('/', 'DashboardController@index');
+
 Route::group(['middleware' => ['auth', 'tenant']], function () {
 
     Route::get('/testing', function (\App\Services\TenantService $tenant) {
@@ -32,8 +34,6 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
         dump($conversations->all());
 
     });
-
-    Route::get('/', 'DashboardController@index');
 
     Route::get('profile', 'UserController@profile');
 
@@ -76,6 +76,8 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
             Route::post('{website}/{conversation}/flag', 'ChatController@flagConversation');
 
             Route::delete('{website}/{conversation}/unflag', 'ChatController@unflagConversation');
+
+            Route::delete('{website}/{conversation}/active-conversation', 'ChatController@removeActiveConversation');
 
         });
 
