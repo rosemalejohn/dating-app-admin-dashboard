@@ -94,6 +94,11 @@
 					return item.id == conversation.id
 				});
 				conversation.is_flagged = true;
+			},
+
+			'conversation:push'(conversation) {
+				console.log(conversation);
+				var conversation = this.conversations.push(conversation);
 			}
 		}
 

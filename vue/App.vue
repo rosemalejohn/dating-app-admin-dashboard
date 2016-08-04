@@ -64,6 +64,10 @@
 				self.$broadcast('user:created', data.user);
 			});
 
+			socket.on('user:App\\Events\\UserLeaveChat', function(data) {
+				self.$broadcast('conversation:push', data.conversation);
+			});
+
 			// socket.on('user:App\\Events\\UserDeleted', function(data) {
 			// 	self.$broadcast('user:deleted', data.user);
 			// });

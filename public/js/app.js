@@ -21115,6 +21115,10 @@ exports.default = {
 			self.$broadcast('user:created', data.user);
 		});
 
+		socket.on('user:App\\Events\\UserLeaveChat', function (data) {
+			self.$broadcast('conversation:push', data.conversation);
+		});
+
 		// socket.on('user:App\\Events\\UserDeleted', function(data) {
 		// 	self.$broadcast('user:deleted', data.user);
 		// });
@@ -22203,6 +22207,10 @@ exports.default = {
 				return item.id == conversation.id;
 			});
 			conversation.is_flagged = true;
+		},
+		'conversation:push': function conversationPush(conversation) {
+			console.log(conversation);
+			var conversation = this.conversations.push(conversation);
 		}
 	}
 
@@ -22532,7 +22540,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 
-	host: 'http://mach1.online',
+	host: 'http://homestead.app',
 
 	port: 3000
 

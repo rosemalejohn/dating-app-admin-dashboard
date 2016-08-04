@@ -138,6 +138,22 @@ class ChatController extends Controller
 
         $active_conversation->delete();
 
-        return response()->json('Active conversation deleted!');
+        $conversation = Conversation::whereId($conversation_id)
+            ->select('id', 'read', 'initiatorId', 'interlocutorId')
+            ->where('read', 0)
+            ->orWhere('read', 1)
+            ->has('initiator')
+            ->has('interlocutor')
+            ->has('messages')
+            ->with(['interlocutor.website',
+                'initiator' => function ($i) {
+                    $i->select('id', 'username');
+                },
+                'messages' => function ($q) {
+                    $q->select('conversationId', 'senderId');
+                }])->first();
+
+        event(new \App\Events\UserLeaveChat($conversation));
+        return response()->json('One conversation is inactive');
     }
 }

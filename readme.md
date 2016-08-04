@@ -25,5 +25,5 @@ User moderator dashboard for various dating app managed by n8core.
 
 # Allowing ports to firewall (CENTOS 6)
 
-- `sudo iptables -I INPUT -p tcp -m tcp --dport 3000 -j ACCEPT
+- `sudo iptables -I INPUT -p tcp -m tcp --dport 3000 -j ACCEPT`
 - `sudo service iptables save`
