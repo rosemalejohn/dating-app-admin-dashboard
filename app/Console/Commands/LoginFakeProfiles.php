@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Config;
 use App\Services\ProfileService;
 use App\Services\TenantService;
 use App\Website;
@@ -32,18 +33,24 @@ class LoginFakeProfiles extends Command
     {
         $websites = Website::all();
 
-        foreach ($websites as $website) {
+        $auto_login_fake_accounts = Config::whereKey('auto_login_fake_accounts')->first();
 
-            $tenant->connect($website);
+        if ($auto_login_fake_accounts) {
+            $count = Config::whereKey('auto_login_fake_accounts_per_cron_job')->first();
 
-            $managed_users = $website->managed_users->random()->all();
+            foreach ($websites as $website) {
 
-            foreach ($managed_users as $managed_user) {
-                $user = $managed_user->user;
-                if ($user) {
-                    $profile->login($user);
+                $tenant->connect($website);
+
+                $managed_users = $website->managed_users->random()->take($count->value);
+
+                foreach ($managed_users as $managed_user) {
+                    $user = $managed_user->user;
+                    if ($user) {
+                        $profile->login($user);
+                    }
+
                 }
-
             }
         }
 

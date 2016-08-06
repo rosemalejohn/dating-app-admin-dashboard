@@ -27,6 +27,7 @@ class ConversationFlaggedEventListener
         $conversation = $event->conversation;
 
         $conversation->flagged()->create([
+            'website_id' => $conversation->website->id,
             'user_id' => auth()->user()->id,
         ]);
     }

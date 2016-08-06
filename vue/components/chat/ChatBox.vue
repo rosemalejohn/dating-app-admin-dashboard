@@ -104,7 +104,22 @@
 			},
 
 			sendAndNext() {
-				this.send();
+				let message = {
+					text: this.textContent,
+					sender: this.$parent.conversation.interlocutor,
+					recipient: this.$parent.conversation.initiator,
+					timeStamp: moment().unix()
+				}
+				this.messages.push(message);
+				this.textContent = ''
+				this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(response => {
+					toastr.success('Message sent!');
+					window.location.replace('/chat/next');
+				}).catch(response => {
+					this.textContent = message.text;
+					this.messages.$remove(message);
+					toastr.error('Message not sent!');
+				})
 			},
 
 			flagConversation() {

@@ -21062,20 +21062,12 @@ var _Account = require('./components/user/Account.vue');
 
 var _Account2 = _interopRequireDefault(_Account);
 
+var _FlaggedConversation = require('./components/FlaggedConversation.vue');
+
+var _FlaggedConversation2 = _interopRequireDefault(_FlaggedConversation);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Dashboard 
-
-// Forms
-
-
-// Modals
-
-
-// Chat
-
-
-// Pages
 exports.default = {
 
 	components: {
@@ -21096,7 +21088,8 @@ exports.default = {
 		UserForm: _users2.default,
 
 		MessageGraph: _MessageGraph2.default,
-		Account: _Account2.default
+		Account: _Account2.default,
+		FlaggedConversation: _FlaggedConversation2.default
 	},
 
 	ready: function ready() {
@@ -21110,6 +21103,10 @@ exports.default = {
 			self.$broadcast('conversation:flag', data.conversation);
 		});
 
+		socket.on('conversation:App\\Events\\ConversationUnflagged', function (data) {
+			self.$broadcast('conversation:unflagged', data.conversation);
+		});
+
 		socket.on('user:App\\Events\\UserCreated', function (data) {
 			console.log(data);
 			self.$broadcast('user:created', data.user);
@@ -21118,10 +21115,6 @@ exports.default = {
 		socket.on('user:App\\Events\\UserLeaveChat', function (data) {
 			self.$broadcast('conversation:push', data.conversation);
 		});
-
-		// socket.on('user:App\\Events\\UserDeleted', function(data) {
-		// 	self.$broadcast('user:deleted', data.user);
-		// });
 	},
 
 
@@ -21144,6 +21137,18 @@ exports.default = {
 	}
 };
 
+// Dashboard 
+
+// Forms
+
+
+// Modals
+
+
+// Chat
+
+
+// Pages
 
 _vue2.default.filter('date', function (value) {
 	var type = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
@@ -21169,7 +21174,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-024a1533", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./components/ManageWebsite.vue":27,"./components/ManagedUserListings.vue":28,"./components/Modal.vue":29,"./components/SystemSettings.vue":31,"./components/UserListings.vue":32,"./components/UserProfileEdit.vue":33,"./components/WebsiteListings.vue":34,"./components/chat/Conversation.vue":36,"./components/chat/Lobby.vue":37,"./components/dashboard/MessageGraph.vue":40,"./components/user/Account.vue":41,"./forms/users.vue":44,"./forms/website.vue":45,"moment":1,"vue":23,"vue-hot-reload-api":13}],26:[function(require,module,exports){
+},{"./components/FlaggedConversation.vue":27,"./components/ManageWebsite.vue":28,"./components/ManagedUserListings.vue":29,"./components/Modal.vue":30,"./components/SystemSettings.vue":32,"./components/UserListings.vue":33,"./components/UserProfileEdit.vue":34,"./components/WebsiteListings.vue":35,"./components/chat/Conversation.vue":37,"./components/chat/Lobby.vue":38,"./components/dashboard/MessageGraph.vue":41,"./components/user/Account.vue":42,"./forms/users.vue":45,"./forms/website.vue":46,"moment":1,"vue":23,"vue-hot-reload-api":13}],26:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -21204,7 +21209,57 @@ window.socket = io(_config2.default.host + ':' + _config2.default.port);
 
 new _vue2.default(_App2.default).$mount('body');
 
-},{"./App.vue":25,"./config":42,"vue":23,"vue-resource":15,"vue-validator":22}],27:[function(require,module,exports){
+},{"./App.vue":25,"./config":43,"vue":23,"vue-resource":15,"vue-validator":22}],27:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	ready: function ready() {
+		this.getFlaggedConversations();
+	},
+	data: function data() {
+		return {
+			conversations: []
+		};
+	},
+
+
+	methods: {
+		getFlaggedConversations: function getFlaggedConversations() {
+			var _this = this;
+
+			this.$http.get('conversations/flagged').then(function (response) {
+				_this.conversations = response.data;
+			});
+		}
+	},
+
+	events: {
+		'conversation:flag': function conversationFlag(conversation) {
+			toastr.success('New conversation flagged.');
+			this.getFlaggedConversations();
+		},
+		'conversation:unflagged': function conversationUnflagged(conversation) {
+			this.getFlaggedConversations();
+		}
+	}
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <li class=\"dropdown dropdown-extended dropdown-inbox\">\n\t\t<a href=\"javascript:;\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" data-hover=\"dropdown\" data-close-others=\"true\">\n\t\t<i class=\"icon-bell\"></i>\n\t\t<span class=\"badge badge-danger\">{{ conversations.length }}</span>\n\t\t</a>\n\t\t<ul class=\"dropdown-menu\">\n\t\t\t<li class=\"external\">\n\t\t\t\t<h3>New <span class=\"bold\">{{ conversations.length }} flagged</span> conversations</h3>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<ul class=\"dropdown-menu-list scroller\" style=\"height: 275px;\" data-handle-color=\"#637283\">\n\t\t\t\t\t<li v-for=\"conversation in conversations\">\n\t\t\t\t\t\t<a href=\"/chat/{{ conversation.website_id }}/{{ conversation.conversation_id }}\">\n\t\t\t\t\t\t<span class=\"photo\">\n\t\t\t\t\t\t\t<img :src=\"conversation.user.photo || '/img/default-photo.png'\" class=\"img-circle\" alt=\"User photo\">\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"subject\">\n\t\t\t\t\t\t\t<span class=\"from\">{{ conversation.user.name }}</span>\n\t\t\t\t\t\t\t<span class=\"time\">{{ conversation.created_at | date 'relative' }}</span>\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"message\">\n\t\t\t\t\t\t\tNew conversation flagged.\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-469555d5", module.exports)
+  } else {
+    hotAPI.update("_v-469555d5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":23,"vue-hot-reload-api":13}],28:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.profile-userpic {\n  padding: 10px; }\n  /* line 4, stdin */\n  .profile-userpic img {\n    cursor: pointer;\n    border-radius: 0px !important;\n    width: 100%; }\n")
 'use strict';
@@ -21279,7 +21334,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1370eece", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":30,"./../forms/website.vue":45,"./Modal.vue":29,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],28:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":31,"./../forms/website.vue":46,"./Modal.vue":30,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -21458,7 +21513,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43b6831e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/managed-user.vue":43,"./../services/paginator":47,"./../spin":48,"./../stores/website_user":54,"./Modal.vue":29,"sweetalert":11,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
+},{"./../forms/managed-user.vue":44,"./../services/paginator":48,"./../spin":49,"./../stores/website_user":56,"./Modal.vue":30,"sweetalert":11,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21495,7 +21550,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-293e4685", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":13}],30:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13}],31:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.img-holder {\n  width: 100%;\n  cursor: pointer; }\n")
 'use strict';
@@ -21554,58 +21609,73 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-765643ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],31:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _settings = require('./../stores/settings');
+
+var _settings2 = _interopRequireDefault(_settings);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	data: function data() {
-
 		return {
-			form: {
-				auto_login_entire_site: false,
-				auto_login_fake_accounts: false,
-				trigger_intro_message: false
+			configs: {
+				auto_login_entire_site: { name: '', value: '' },
+				auto_login_accounts_per_cron_jobs: { name: '', value: '' },
+				auto_login_fake_accounts: { name: '', value: '' },
+				auto_login_fake_accounts_per_cron_job: { name: '', value: '' },
+				allow_intro_message_sent_to_male_members: { name: '', value: '' },
+				number_of_messages_per_cron_job: { name: '', value: '' }
 			}
 		};
 	},
+	ready: function ready() {
+		var _this = this;
 
-
-	props: {
-
-		configs: {
-			type: Array,
-			default: function _default() {
-				return [];
-			}
-		}
-
+		_settings2.default.getConfigs().then(function (response) {
+			_this.configs = response.data;
+		});
 	},
+
 
 	methods: {
 		saveSettings: function saveSettings() {
-			toastr.success('Settings saved.');
+			_settings2.default.updateConfigs(this.configs).then(function (response) {
+				toastr.success(response.data);
+			});
 		}
 	},
 
 	watch: {
-		'form.auto_login_fake_accounts': function formAuto_login_fake_accounts(val) {
-			if (val) {
-				this.form.auto_login_entire_site = !val;
-			}
+		'configs.auto_login_entire_site.value': function configsAuto_login_entire_siteValue(val) {
+			var _this2 = this;
+
+			this.$nextTick(function () {
+				if (val == 1 || val == true) {
+					_this2.configs.auto_login_fake_accounts.value = false;
+				}
+			});
 		},
-		'form.auto_login_entire_site': function formAuto_login_entire_site(val) {
-			if (val) {
-				this.form.auto_login_fake_accounts = !val;
-			}
+		'configs.auto_login_fake_accounts.value': function configsAuto_login_fake_accountsValue(val) {
+			var _this3 = this;
+
+			this.$nextTick(function () {
+				if (val == 1 || val == true) {
+					_this3.configs.auto_login_entire_site.value = false;
+				}
+			});
 		}
 	}
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet box green\">\n\t<div class=\"portlet-body form\">\n\t\t<form @submit.prevent=\"saveSettings()\" role=\"form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div v-for=\"config in configs\" class=\"form-group\">\n\t\t\t\t\t<label>{{ config.name }}</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<div class=\"icheck-list\">\n\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t<input v-model=\"config.value\" type=\"checkbox\" class=\"icheck\"> Yes </label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-actions\">\n\t\t\t\t<button type=\"submit\" class=\"btn green-haze\">Submit</button>\n\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t</div>\n\t\t</form>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet box green\">\n\t<div class=\"portlet-body form\">\n\t\t<form @submit.prevent=\"saveSettings()\" role=\"form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label>{{ configs.auto_login_entire_site.name }}</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<div class=\"icheck-list\">\n\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t<input v-model=\"configs.auto_login_entire_site.value\" type=\"checkbox\" class=\"icheck\"> Yes </label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div v-if=\"configs.auto_login_entire_site.value\" class=\"form-group\">\n\t\t\t\t\t<label>{{ configs.auto_login_accounts_per_cron_jobs.name }}</label>\n\t\t\t\t\t<div class=\"input-group col-md-6\">\n\t\t\t\t\t\t<input v-model=\"configs.auto_login_accounts_per_cron_jobs.value\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label>{{ configs.auto_login_fake_accounts.name }}</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<div class=\"icheck-list\">\n\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t<input v-model=\"configs.auto_login_fake_accounts.value\" type=\"checkbox\" class=\"icheck\"> Yes </label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div v-if=\"configs.auto_login_fake_accounts.value\" class=\"form-group\">\n\t\t\t\t\t<label>{{ configs.auto_login_fake_accounts_per_cron_job.name }}</label>\n\t\t\t\t\t<div class=\"input-group col-md-6\">\n\t\t\t\t\t\t<input v-model=\"configs.auto_login_fake_accounts_per_cron_job.value\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label>{{ configs.allow_intro_message_sent_to_male_members.name }}</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<div class=\"icheck-list\">\n\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t<input v-model=\"configs.allow_intro_message_sent_to_male_members.value\" type=\"checkbox\" class=\"icheck\"> Yes </label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div v-if=\"configs.allow_intro_message_sent_to_male_members.value\" class=\"form-group\">\n\t\t\t\t\t<label>{{ configs.number_of_messages_per_cron_job.name }}</label>\n\t\t\t\t\t<div class=\"input-group col-md-6\">\n\t\t\t\t\t\t<input v-model=\"configs.number_of_messages_per_cron_job.value\" class=\"form-control\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\n\t\t\t<div class=\"form-actions\">\n\t\t\t\t<button type=\"submit\" class=\"btn green-haze\">Submit</button>\n\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t</div>\n\t\t</form>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -21616,7 +21686,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9448c56c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":13}],32:[function(require,module,exports){
+},{"./../stores/settings":53,"vue":23,"vue-hot-reload-api":13}],33:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -21712,7 +21782,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45d17132", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/user":52,"sweetalert":11,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],33:[function(require,module,exports){
+},{"./../stores/user":54,"sweetalert":11,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],34:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.image-picker {\n  cursor: pointer;\n  width: 50%; }\n")
 'use strict';
@@ -21851,7 +21921,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5924a4e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../spin":48,"./../stores/currency":50,"./../stores/user":52,"./../stores/website":53,"./PhotoUpload.vue":30,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],34:[function(require,module,exports){
+},{"./../spin":49,"./../stores/currency":51,"./../stores/user":54,"./../stores/website":55,"./PhotoUpload.vue":31,"underscore":12,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],35:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.website-list {\n  position: relative; }\n  /* line 5, stdin */\n  .website-list button {\n    top: 10px;\n    right: 10px; }\n\n/* line 11, stdin */\n.absolute {\n  position: absolute; }\n")
 'use strict';
@@ -21950,7 +22020,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c76eb4fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/website.vue":45,"./../stores/website":53,"./Modal.vue":29,"sweetalert":11,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],35:[function(require,module,exports){
+},{"./../forms/website.vue":46,"./../stores/website":55,"./Modal.vue":30,"sweetalert":11,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22021,21 +22091,38 @@ exports.default = {
 			});
 		},
 		sendAndNext: function sendAndNext() {
-			this.send();
-		},
-		flagConversation: function flagConversation() {
 			var _this3 = this;
 
+			var message = {
+				text: this.textContent,
+				sender: this.$parent.conversation.interlocutor,
+				recipient: this.$parent.conversation.initiator,
+				timeStamp: (0, _moment2.default)().unix()
+			};
+			this.messages.push(message);
+			this.textContent = '';
+			this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(function (response) {
+				toastr.success('Message sent!');
+				window.location.replace('/chat/next');
+			}).catch(function (response) {
+				_this3.textContent = message.text;
+				_this3.messages.$remove(message);
+				toastr.error('Message not sent!');
+			});
+		},
+		flagConversation: function flagConversation() {
+			var _this4 = this;
+
 			_conversation2.default.flag(this.website.id, this.conversation.id).then(function (response) {
-				_this3.conversation.is_flagged = true;
+				_this4.conversation.is_flagged = true;
 				toastr.success('Conversation flagged.');
 			});
 		},
 		unflagConversation: function unflagConversation() {
-			var _this4 = this;
+			var _this5 = this;
 
 			_conversation2.default.unflag(this.website.id, this.conversation.id).then(function (response) {
-				_this4.conversation.is_flagged = false;
+				_this5.conversation.is_flagged = false;
 				toastr.success(response.data);
 			});
 		}
@@ -22069,7 +22156,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-62e095e7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../stores/conversation":49,"./../../spin":48,"moment":1,"vue":23,"vue-hot-reload-api":13}],36:[function(require,module,exports){
+},{"../../stores/conversation":50,"./../../spin":49,"moment":1,"vue":23,"vue-hot-reload-api":13}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22145,7 +22232,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c7ff19f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./ChatBox.vue":35,"./Notes.vue":38,"./ProfileBox.vue":39,"vue":23,"vue-hot-reload-api":13}],37:[function(require,module,exports){
+},{"./ChatBox.vue":36,"./Notes.vue":39,"./ProfileBox.vue":40,"vue":23,"vue-hot-reload-api":13}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22227,7 +22314,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-75e113ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./Conversation.vue":36,"underscore":12,"vue":23,"vue-hot-reload-api":13}],38:[function(require,module,exports){
+},{"./Conversation.vue":37,"underscore":12,"vue":23,"vue-hot-reload-api":13}],39:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.hand-cursor {\n  cursor: pointer; }\n")
 'use strict';
@@ -22323,7 +22410,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5b641955", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../stores/note":51,"sweetalert":11,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],39:[function(require,module,exports){
+},{"./../../stores/note":52,"sweetalert":11,"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],40:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.chat-box-profile {\n  padding: 0px !important; }\n  /* line 4, stdin */\n  .chat-box-profile .details {\n    padding: 20px; }\n")
 'use strict';
@@ -22373,7 +22460,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-60a56dfe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],40:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13,"vueify/lib/insert-css":24}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22477,7 +22564,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f222d5b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../spin.js":48,"underscore":12,"vue":23,"vue-hot-reload-api":13}],41:[function(require,module,exports){
+},{"./../../spin.js":49,"underscore":12,"vue":23,"vue-hot-reload-api":13}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22532,7 +22619,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7fdbd3b4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":13}],42:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":13}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22540,13 +22627,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 
-	host: 'http://homestead.app',
+	host: 'http://mach1.online',
 
 	port: 3000
 
 };
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22572,7 +22659,8 @@ exports.default = {
 			user: {},
 			fake_message: '',
 			paginator: {},
-			isFetching: false
+			isFetching: false,
+			hasMore: true
 		};
 	},
 
@@ -22638,6 +22726,7 @@ exports.default = {
 					_this3.isFetching = false;
 				});
 			} else {
+				this.hasMore = false;
 				toastr.info('All users are loaded.');
 			}
 		}
@@ -22659,7 +22748,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"form-group\">\n\t<div class=\"input-group\">\n\t\t<input v-model=\"search\" class=\"form-control\" type=\"text\" name=\"password\" placeholder=\"Search user...\">\n\t\t<span class=\"input-group-btn\">\n\t\t\t<button @click=\"searchUser()\" class=\"btn btn-success\" type=\"button\"><i class=\"fa fa-search fa-fw\"></i></button>\n\t\t</span>\n\t</div>\n</div>\n<div v-show=\"users.length\" class=\"scroller\" style=\"max-height: 350px; height: 100%; margin-top: 10px 0;\" data-always-visible=\"1\" data-rail-visible1=\"1\">\n\t<table class=\"table table-striped table-bordered table-hover\">\n\t\t<thead>\n\t\t\t<tr role=\"row\" class=\"heading\">\n\t\t\t\t<th width=\"10%\"></th>\n\t\t\t\t<th>\n\t\t\t\t\tName\n\t\t\t\t</th>\n\t\t\t\t<th width=\"15%\">\n\t\t\t\t\tEmail\n\t\t\t\t</th>\n\t\t\t\t<th width=\"30%\">\n\t\t\t\t\tAddress\n\t\t\t\t</th>\n\t\t\t\t<th>\n\t\t\t\t \tActions\n\t\t\t\t</th>\n\t\t\t</tr>\n\t\t\t\n\t\t\t<tr v-for=\"user in users\" role=\"row\" class=\"filter\">\n\t\t\t\t<td>\n\t\t\t\t\t<img style=\"width: 100%;\" :src=\"user.avatar.url || '/img/default-photo.png'\">\n\t\t\t\t</td>\n\t\t\t\t<td>{{ user.username }}</td>\n\t\t\t\t<td>{{ user.email }}</td>\n\t\t\t\t<td>{{ user.profile[0].address }}</td>\n\t\t\t\t<td>\n\t\t\t\t\t<a @click=\"manageUser(user)\" href=\"javascript:;\" class=\"btn btn-xs green filter-cancel\">Manage</a>\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t</thead>\n\t</table>\n\t<button v-show=\"!isFetching\" @click=\"showMore()\" class=\"btn btn-default btn-sm\">Load more</button>\n</div>\n<div v-else=\"\" class=\"note note-info note-bordered\">\n\t<p>No users listed.</p>\n</div>\n\n<form @submit.prevent=\"submit()\" v-if=\"showFakeMessageField\">\n\t<hr>\n\t<div class=\"form-group\">\n\t\t<input type=\"text\" v-model=\"user.username\" class=\"form-control\" readonly=\"\">\n\t</div>\n\t<div class=\"form-group\">\n\t\t<textarea class=\"form-control\" v-model=\"fake_message\" placeholder=\"Write a fake message...\"></textarea>\n\t\t<small>This is the fake message that will be sent out by default for this user.</small>\n\t</div>\n\t<input type=\"submit\" value=\"Submit\" class=\"btn btn-primary\">\n\t<button @click=\"showFakeMessageField = false\" type=\"button\" class=\"btn btn-default\">Close</button>\n</form>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"form-group\">\n\t<div class=\"input-group\">\n\t\t<input v-model=\"search\" class=\"form-control\" type=\"text\" name=\"password\" placeholder=\"Search user...\">\n\t\t<span class=\"input-group-btn\">\n\t\t\t<button @click=\"searchUser()\" class=\"btn btn-success\" type=\"button\"><i class=\"fa fa-search fa-fw\"></i></button>\n\t\t</span>\n\t</div>\n</div>\n<div v-show=\"users.length\" class=\"scroller\" style=\"max-height: 350px; height: 100%; margin-top: 10px 0;\" data-always-visible=\"1\" data-rail-visible1=\"1\">\n\t<table class=\"table table-striped table-bordered table-hover\">\n\t\t<thead>\n\t\t\t<tr role=\"row\" class=\"heading\">\n\t\t\t\t<th width=\"10%\"></th>\n\t\t\t\t<th>\n\t\t\t\t\tName\n\t\t\t\t</th>\n\t\t\t\t<th width=\"15%\">\n\t\t\t\t\tEmail\n\t\t\t\t</th>\n\t\t\t\t<th width=\"30%\">\n\t\t\t\t\tAddress\n\t\t\t\t</th>\n\t\t\t\t<th>\n\t\t\t\t \tActions\n\t\t\t\t</th>\n\t\t\t</tr>\n\t\t\t\n\t\t\t<tr v-for=\"user in users\" role=\"row\" class=\"filter\">\n\t\t\t\t<td>\n\t\t\t\t\t<img style=\"width: 100%;\" :src=\"user.avatar.url || '/img/default-photo.png'\">\n\t\t\t\t</td>\n\t\t\t\t<td>{{ user.username }}</td>\n\t\t\t\t<td>{{ user.email }}</td>\n\t\t\t\t<td>{{ user.profile[0].address }}</td>\n\t\t\t\t<td>\n\t\t\t\t\t<a @click=\"manageUser(user)\" href=\"javascript:;\" class=\"btn btn-xs green filter-cancel\">Manage</a>\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t</thead>\n\t</table>\n\t<button v-show=\"!isFetching &amp;&amp; hasMore\" @click=\"showMore()\" class=\"btn btn-default btn-sm\">Load more</button>\n</div>\n<div v-else=\"\" class=\"note note-info note-bordered\">\n\t<p>No users listed.</p>\n</div>\n\n<form @submit.prevent=\"submit()\" v-if=\"showFakeMessageField\">\n\t<hr>\n\t<div class=\"form-group\">\n\t\t<input type=\"text\" v-model=\"user.username\" class=\"form-control\" readonly=\"\">\n\t</div>\n\t<div class=\"form-group\">\n\t\t<textarea class=\"form-control\" v-model=\"fake_message\" placeholder=\"Write a fake message...\"></textarea>\n\t\t<small>This is the fake message that will be sent out by default for this user.</small>\n\t</div>\n\t<input type=\"submit\" value=\"Submit\" class=\"btn btn-primary\">\n\t<button @click=\"showFakeMessageField = false\" type=\"button\" class=\"btn btn-default\">Close</button>\n</form>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -22670,7 +22759,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3375b704", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../services/paginator":47,"./../spin":48,"vue":23,"vue-hot-reload-api":13}],44:[function(require,module,exports){
+},{"./../services/paginator":48,"./../spin":49,"vue":23,"vue-hot-reload-api":13}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22799,7 +22888,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-17fa904d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":30,"./../models/user":46,"./../spin":48,"./../stores/currency":50,"./../stores/user":52,"./../stores/website":53,"vue":23,"vue-hot-reload-api":13}],45:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":31,"./../models/user":47,"./../spin":49,"./../stores/currency":51,"./../stores/user":54,"./../stores/website":55,"vue":23,"vue-hot-reload-api":13}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22926,7 +23015,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3c53abc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":30,"./../spin":48,"./../stores/website":53,"vue":23,"vue-hot-reload-api":13}],46:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":31,"./../spin":49,"./../stores/website":55,"vue":23,"vue-hot-reload-api":13}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22940,7 +23029,7 @@ exports.default = {
 	type: 'user'
 };
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22959,7 +23048,7 @@ exports.default = {
 	}
 };
 
-},{"vue":23}],48:[function(require,module,exports){
+},{"vue":23}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22988,7 +23077,7 @@ exports.default = {
 	}
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23010,7 +23099,7 @@ exports.default = {
 	}
 };
 
-},{"vue":23}],50:[function(require,module,exports){
+},{"vue":23}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23033,7 +23122,7 @@ exports.default = {
 	getCurrencyByCode: function getCurrencyByCode(code) {}
 };
 
-},{"underscore":12}],51:[function(require,module,exports){
+},{"underscore":12}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23058,7 +23147,29 @@ exports.default = {
 	}
 };
 
-},{"vue":23}],52:[function(require,module,exports){
+},{"vue":23}],53:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	getConfigs: function getConfigs() {
+		return _vue2.default.http.get('settings');
+	},
+	updateConfigs: function updateConfigs(configs) {
+		return _vue2.default.http.put('settings', configs);
+	}
+};
+
+},{"vue":23}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23086,7 +23197,7 @@ exports.default = {
 	}
 };
 
-},{"vue":23}],53:[function(require,module,exports){
+},{"vue":23}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23114,7 +23225,7 @@ exports.default = {
 	}
 };
 
-},{"vue":23}],54:[function(require,module,exports){
+},{"vue":23}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

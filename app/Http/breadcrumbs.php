@@ -58,5 +58,5 @@ Breadcrumbs::register('chat:lobby', function ($breadcrumbs) {
 
 Breadcrumbs::register('chat:conversation', function ($breadcrumbs, $website, $conversation) {
     $breadcrumbs->parent('chat:lobby');
-    $breadcrumbs->push($conversation->interlocutor->username, "/chat/{$website->id}/{$conversation->id}");
+    // $breadcrumbs->push($conversation->interlocutor->username, "/chat/{$website->id}/{$conversation->id}");
 });

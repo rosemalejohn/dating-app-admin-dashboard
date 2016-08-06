@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\ActiveConversation;
 use App\Events\ConversationFlaggedEvent;
+use App\Events\ConversationUnflagged;
 use App\Http\Controllers\Controller;
 use App\Note;
 use App\Services\MessageService;
@@ -11,6 +12,7 @@ use App\Services\ProfileService;
 use App\Tenant\Conversation;
 use App\Tenant\Message;
 use App\Tenant\User;
+use App\UserSentMessage;
 use App\Website;
 use Illuminate\Http\Request;
 
@@ -78,16 +80,16 @@ class ChatController extends Controller
             $this->profile->login($user);
         }
 
-        $request->user()->create([
-            'website_id' => $website->id,
-            'message_id' => $message->id,
-        ]);
-
-        // UserSentMessage::create([
-        //     'user_id' => auth()->user()->id,
+        // $request->user()->create([
         //     'website_id' => $website->id,
         //     'message_id' => $message->id,
         // ]);
+
+        UserSentMessage::create([
+            'user_id' => auth()->user()->id,
+            'website_id' => $website->id,
+            'message_id' => $message->id,
+        ]);
 
         return response()->json($message);
     }
@@ -110,6 +112,8 @@ class ChatController extends Controller
     {
         $conversation = Conversation::findOrFail($conversation_id);
 
+        $conversation->website = $website;
+
         event(new ConversationFlaggedEvent($conversation));
 
         return response()->json($conversation);
@@ -119,6 +123,8 @@ class ChatController extends Controller
     {
         $conversation = Conversation::findOrFail($conversation_id);
         $conversation->flagged->delete();
+
+        event(new ConversationUnflagged($conversation));
         return response()->json('Conversation unflagged.');
     }
 

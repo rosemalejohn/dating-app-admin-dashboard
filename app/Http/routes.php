@@ -45,6 +45,12 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
         });
 
+        Route::get('conversations/flagged', function () {
+            $conversations = \App\FlaggedConversation::with('user')->get();
+
+            return response()->json($conversations, 200);
+        });
+
         Route::group(['prefix' => 'users'], function () {
 
             Route::post('/', 'UserController@store');
@@ -115,6 +121,14 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
         });
 
+        Route::group(['prefix' => 'settings'], function () {
+
+            Route::get('/', 'SettingsController@index');
+
+            Route::put('/', 'SettingsController@update');
+
+        });
+
     });
 
     Route::group(['prefix' => 'users'], function () {
@@ -130,6 +144,8 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
     Route::group(['prefix' => 'chat'], function () {
 
         Route::get('/', 'ChatController@lobby');
+
+        Route::get('next', 'ChatController@nextConversation');
 
         Route::get('{website}/{conversation}', 'ChatController@conversation');
 

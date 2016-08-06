@@ -1,6 +1,6 @@
 export default {
 
-	host: 'http://homestead.app',
+	host: 'http://mach1.online',
 
 	port: 3000,
 	

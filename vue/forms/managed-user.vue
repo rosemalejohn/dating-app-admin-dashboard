@@ -39,7 +39,7 @@
 				</tr>
 			</thead>
 		</table>
-		<button v-show="!isFetching" @click="showMore()" class="btn btn-default btn-sm">Load more</button>
+		<button v-show="!isFetching && hasMore" @click="showMore()" class="btn btn-default btn-sm">Load more</button>
 	</div>
 	<div v-else class="note note-info note-bordered">
 		<p>No users listed.</p>
@@ -73,7 +73,8 @@
 				user: {},
 				fake_message: '',
 				paginator: {},
-				isFetching: false
+				isFetching: false,
+				hasMore: true
 			}
 		},
 
@@ -137,6 +138,7 @@
 						this.isFetching = false
 					})
 				} else {
+					this.hasMore = false;
 					toastr.info('All users are loaded.');
 				}
 			}

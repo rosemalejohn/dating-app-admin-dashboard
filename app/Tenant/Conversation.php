@@ -36,7 +36,7 @@ class Conversation extends Model
     ];
 
     protected $appends = [
-        'is_flagged',
+        'is_flagged', 'is_active',
     ];
 
     public function initiator()
@@ -77,6 +77,11 @@ class Conversation extends Model
     public function getIsFlaggedAttribute()
     {
         return !is_null($this->flagged);
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return !is_null($this->active);
     }
 
 }

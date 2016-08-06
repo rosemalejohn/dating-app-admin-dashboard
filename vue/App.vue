@@ -25,6 +25,8 @@
 	import MessageGraph from './components/dashboard/MessageGraph.vue'
 	import Account from './components/user/Account.vue'
 
+	import FlaggedConversation from './components/FlaggedConversation.vue'
+
 	export default {
 		
 		components: {
@@ -45,7 +47,8 @@
 			UserForm,
 
 			MessageGraph,
-			Account
+			Account,
+			FlaggedConversation
 		},
 
 		ready() {
@@ -59,6 +62,10 @@
 				self.$broadcast('conversation:flag', data.conversation);
 			});
 
+			socket.on('conversation:App\\Events\\ConversationUnflagged', function(data) {
+				self.$broadcast('conversation:unflagged', data.conversation);
+			});
+
 			socket.on('user:App\\Events\\UserCreated', function(data) {
 				console.log(data);
 				self.$broadcast('user:created', data.user);
@@ -67,10 +74,6 @@
 			socket.on('user:App\\Events\\UserLeaveChat', function(data) {
 				self.$broadcast('conversation:push', data.conversation);
 			});
-
-			// socket.on('user:App\\Events\\UserDeleted', function(data) {
-			// 	self.$broadcast('user:deleted', data.user);
-			// });
 		},
 
 		methods: {

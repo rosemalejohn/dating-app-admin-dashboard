@@ -17,6 +17,8 @@ class User extends Model
 
     public $timestamps = false;
 
+    protected $dates = ['joinStamp'];
+
     public function avatar()
     {
         return $this->hasOne(UserPhoto::class, 'userId');

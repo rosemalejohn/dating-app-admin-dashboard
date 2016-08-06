@@ -3,15 +3,61 @@
 		<div class="portlet-body form">
 			<form @submit.prevent="saveSettings()" role="form">
 				<div class="form-body">
-					<div v-for="config in configs" class="form-group">
-						<label>{{ config.name }}</label>
+					<div class="form-group">
+						<label>{{ configs.auto_login_entire_site.name }}</label>
 						<div class="input-group">
 							<div class="icheck-list">
 								<label>
-								<input v-model="config.value" type="checkbox" class="icheck"> Yes </label>
+								<input v-model="configs.auto_login_entire_site.value" type="checkbox" class="icheck"> Yes </label>
 							</div>
 						</div>
 					</div>
+
+					<div v-if="configs.auto_login_entire_site.value" class="form-group">
+						<label>{{ configs.auto_login_accounts_per_cron_jobs.name }}</label>
+						<div class="input-group col-md-6">
+							<input v-model="configs.auto_login_accounts_per_cron_jobs.value" class="form-control" />
+						</div>
+					</div>
+
+					<hr />
+
+					<div class="form-group">
+						<label>{{ configs.auto_login_fake_accounts.name }}</label>
+						<div class="input-group">
+							<div class="icheck-list">
+								<label>
+								<input v-model="configs.auto_login_fake_accounts.value" type="checkbox" class="icheck"> Yes </label>
+							</div>
+						</div>
+					</div>
+
+					<div v-if="configs.auto_login_fake_accounts.value" class="form-group">
+						<label>{{ configs.auto_login_fake_accounts_per_cron_job.name }}</label>
+						<div class="input-group col-md-6">
+							<input v-model="configs.auto_login_fake_accounts_per_cron_job.value" class="form-control" />
+						</div>
+					</div>
+
+					<hr />
+
+					<div class="form-group">
+						<label>{{ configs.allow_intro_message_sent_to_male_members.name }}</label>
+						<div class="input-group">
+							<div class="icheck-list">
+								<label>
+								<input v-model="configs.allow_intro_message_sent_to_male_members.value" type="checkbox" class="icheck"> Yes </label>
+							</div>
+						</div>
+					</div>
+
+					<div v-if="configs.allow_intro_message_sent_to_male_members.value" class="form-group">
+						<label>{{ configs.number_of_messages_per_cron_job.name }}</label>
+						<div class="input-group col-md-6">
+							<input v-model="configs.number_of_messages_per_cron_job.value" class="form-control" />
+						</div>
+					</div>
+
 				</div>
 
 				<div class="form-actions">
@@ -24,50 +70,57 @@
 </template>
 
 <script>
+
+	import Settings from './../stores/settings'
+
 	export default {
 
 		data() {
-
 			return {
-				form: {
-					auto_login_entire_site: false,
-					auto_login_fake_accounts: false,
-					trigger_intro_message: false
+				configs: {
+					auto_login_entire_site: {name: '', value: ''},
+					auto_login_accounts_per_cron_jobs: {name: '', value: ''},
+					auto_login_fake_accounts: {name: '', value: ''},
+					auto_login_fake_accounts_per_cron_job: {name: '', value: ''},
+					allow_intro_message_sent_to_male_members: {name: '', value: ''},
+					number_of_messages_per_cron_job: {name: '', value: ''}
 				}
 			}
-
 		},
 
-		props: {
+		ready() {
 
-			configs: {
-				type: Array,
-				default() {
-					return []
-				}
-			}
+			Settings.getConfigs().then(response => {
+				this.configs = response.data;
+			});
 
 		},
 
 		methods: {
 
 			saveSettings() {
-				toastr.success('Settings saved.')
+				Settings.updateConfigs(this.configs).then(response => {
+					toastr.success(response.data);
+				});
 			}
 
 		},
 
 		watch: {
-			'form.auto_login_fake_accounts'(val) {
-				if (val) {
-					this.form.auto_login_entire_site = !val;
-				}
+			'configs.auto_login_entire_site.value'(val) {
+				this.$nextTick(() => {
+					if (val == 1 || val == true) {
+						this.configs.auto_login_fake_accounts.value = false;
+					}
+				})
 			},
 
-			'form.auto_login_entire_site'(val) {
-				if (val) {
-					this.form.auto_login_fake_accounts = !val;
-				}
+			'configs.auto_login_fake_accounts.value'(val) {
+				this.$nextTick(() => {
+					if (val == 1 || val == true) {
+						this.configs.auto_login_entire_site.value = false;
+					}
+				})
 			}
 		}
 

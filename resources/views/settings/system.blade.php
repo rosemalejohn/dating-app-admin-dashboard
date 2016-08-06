@@ -5,5 +5,5 @@
 @section('content')
 	{!! Breadcrumbs::render('settings:system') !!}
 
-	<system-settings :configs="{{ $configs }}"></system-settings>
+	<system-settings></system-settings>
 @stop

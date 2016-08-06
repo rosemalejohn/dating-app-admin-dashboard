@@ -37,4 +37,17 @@ class ChatController extends Controller
         }
         abort(403);
     }
+
+    public function nextConversation()
+    {
+        $conversation = $this->msgService->getConversations()->first();
+
+        $website = $conversation->interlocutor->website;
+
+        if ($website) {
+            $website = $website->first();
+
+            return redirect()->to('/chat/' . $website->id . '/' . $conversation->id);
+        }
+    }
 }
