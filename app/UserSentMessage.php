@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserSentMessage extends Model
 {
 
-    protected $fillable = ['user_id', 'website_id', 'message_id'];
+    protected $fillable = ['user_id', 'website_id', 'message_id', 'replies'];
+
+    protected $casts = [
+        'computed' => 'boolean',
+    ];
 
     public function user()
     {
@@ -23,6 +27,11 @@ class UserSentMessage extends Model
     public function message()
     {
         return $this->belongsTo(Message::class);
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(UserSentMessageReply::class);
     }
 
 }

@@ -6,35 +6,6 @@ Route::get('/', 'DashboardController@index');
 
 Route::group(['middleware' => ['auth', 'tenant']], function () {
 
-    Route::get('/testing', function (\App\Services\TenantService $tenant) {
-
-        $websites = \App\Website::all();
-
-        $conversations = collect();
-
-        foreach ($websites as $website) {
-            $database = $tenant->connect($website)->toDB();
-
-            $users = $website->managed_users()->select('userId')->get()->map(function ($item) {
-                return $item->userId;
-            })->all();
-
-            $group = \App\Tenant\Message::select('id', 'recipientId', 'recipientRead', 'conversationId')->whereIn('recipientId', $users)
-                ->where('recipientRead', 0)
-                ->get()
-                ->groupBy(function ($message) {
-                    return $message->conversationId;
-                })->all();
-
-            $conversations->push([
-                $website->id => $messages,
-            ]);
-        }
-
-        dump($conversations->all());
-
-    });
-
     Route::get('profile', 'UserController@profile');
 
     Route::group(['middleware' => 'api', 'prefix' => 'api', 'namespace' => 'API'], function () {

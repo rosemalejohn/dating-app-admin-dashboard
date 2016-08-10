@@ -36,10 +36,10 @@ class MessageService
                             ->with(['interlocutor.website',
                                 'initiator' => function ($i) {
                                     $i->select('id', 'username');
-                                },
-                                'messages' => function ($q) {
-                                    $q->select('conversationId', 'senderId');
-                                }]);
+                                }])
+                            ->withCount(['messages' => function ($q) {
+                                $q->where('senderId', 1);
+                            }]);
                     }])->get();
 
                 $filtered = $collections->filter(function ($collection) {

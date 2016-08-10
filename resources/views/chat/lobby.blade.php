@@ -7,5 +7,5 @@
 @section('content')
 	{!! Breadcrumbs::render('chat:lobby') !!}
 
-	<chat-lobby :conversations="{{ $conversations }}"></chat-lobby>
+	<chat-lobby :conversations="{{ $conversations->toJson() }}"></chat-lobby>
 @stop

@@ -46,28 +46,25 @@ class StatController extends Controller
             [
                 'name' => 'Earnings',
                 'icon' => 'fa fa-usd',
-                'count' => '120 ' . auth()->user()->currency,
+                'count' => $this->getTotalEarnings() . auth()->user()->currency,
                 'color' => 'purple',
-                'link' => '/chat',
+                'link' => '/',
             ],
         ]);
     }
 
     public function getMessagesPerDay(Website $website)
     {
-        $date = Carbon::createFromDate('2015')->startOfYear()->timestamp;
+        $date = Carbon::createFromDate('2015');
 
-        $end = Carbon::createFromDate('2015')->endOfYear()->timestamp;
+        $messages = Message::select('timeStamp')
+            ->whereBetween('timeStamp', [$date->startOfYear()->timestamp, $date->endOfYear()->timestamp])
+            ->get()
+            ->groupBy(function ($message) {
+                return Carbon::createFromTimestamp($message->timeStamp)->format('M-d-Y');
+            });
 
-        $messages = Message::whereHas('conversation', function ($query) {
-            $query->has('initiator')->has('interlocutor');
-        })->whereBetween('timeStamp', [$date, $end])->get();
-
-        $group = $messages->groupBy(function ($message) {
-            return Carbon::createFromTimestamp($message->timeStamp)->format('M-d-Y');
-        });
-
-        return response()->json($group);
+        return response()->json($messages);
     }
 
     public function getTotalMessages()
@@ -96,5 +93,21 @@ class StatController extends Controller
         }
 
         return $messages->flatten()->count();
+    }
+
+    protected function getTotalEarnings()
+    {
+        $earnings = 0;
+
+        $replies = \App\UserSentMessageReply::with(['user_message.user' => function ($query) {
+            $query->select('id', 'pay_rate');
+        }])->get();
+
+        foreach ($replies as $reply) {
+            $earnings = $earnings + $reply->user_message->user->pay_rate;
+        }
+
+        return $earnings;
+
     }
 }

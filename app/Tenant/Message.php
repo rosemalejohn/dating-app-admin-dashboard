@@ -45,15 +45,15 @@ class Message extends Model
 
     public function getIsSenderAttribute()
     {
-        if ($this->sender && $this->conversation->initiator) {
-            return $this->sender->id == $this->conversation->initiator->id;
+        if ($this->sender && $this->conversation && $this->conversation->initiator) {
+            return $this->senderId == $this->conversation->initiator->id;
         }
     }
 
     public function getIsRecipientAttribute()
     {
-        if ($this->sender && $this->conversation->interlocutor) {
-            return $this->recipient->id == $this->conversation->interlocutor->id;
+        if ($this->sender && $this->conversation && $this->conversation->interlocutor) {
+            return $this->recipientId == $this->conversation->interlocutor->id;
         }
     }
 

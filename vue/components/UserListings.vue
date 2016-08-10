@@ -1,72 +1,105 @@
 <template>
-	<div class="portlet light">
+	<div class="portlet light bordered">
 		<div class="portlet-title">
-			<div class="caption">
-				<span class="caption-subject font-green-sharp bold uppercase">User Listing</span>
+			<div class="caption caption-md font-red-sunglo">
+				<i class="icon-bar-chart theme-font hide"></i>
+				<span class="caption-subject theme-font bold uppercase">Member Activity</span>
+				<span class="caption-helper">user listings</span>
 			</div>
 			<div class="actions">
-				<a data-toggle="modal" data-target="#userFormModal" href="javascript:;" class="btn btn-default btn-circle">
-					<i class="fa fa-plus"></i>
-					<span class="hidden-480">
-					New User </span>
-				</a>
-				<a v-if="checkedUsers.length" @click="deleteUsers()" class="btn btn-danger btn-circle">
-					<i class="fa fa-trash"></i>
-					<span class="hidden-480">
-					Delete </span>
-				</a>
+				<div class="inputs">
+					<div class="portlet-input input-inline input-small">
+						<div class="input-icon right">
+							<i class="icon-magnifier"></i>
+							<input v-model="search" type="text" class="form-control input-circle" placeholder="search...">
+						</div>
+					</div>
+					<div class="btn-group btn-group-devided">
+						<button data-toggle="modal" data-target="#userFormModal" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Add user</button>
+						<button v-if="checkedUsers.length" @click="deleteUsers()" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Delete users</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="portlet-body">
-			<div class="col-md-4 input-group pull-right" style="margin-bottom: 10px;">
-				<input v-model="search" type="text" class="form-control" placeholder="Type to search...">
-				<span class="input-group-addon">
-					<i class="fa fa-search"></i>
-				</span>
+			<div class="row number-stats margin-bottom-30">
+				<div class="col-md-6">
+					<div class="stat-left">
+						<div class="stat-number">
+							<div class="title">
+								 Total
+							</div>
+							<div class="number">
+								 {{ users.length }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="stat-right">
+						<div class="stat-number">
+							<div class="title">
+								 New
+							</div>
+							<div class="number">
+								 {{ users.length }}
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="table-container">
-				<table class="table table-striped table-bordered table-hover">
+			<div class="table-scrollable table-scrollable-borderless">
+				<table class="table table-hover table-light">
 					<thead>
-						<tr role="row" class="heading">
-							<th width="2%">
-								<input type="checkbox" class="group-checkable">
+						<tr class="uppercase">
+							<th>
+								
 							</th>
-							<th width="5%">
-
+							<th colspan="2">
+								 Name
 							</th>
-							<th width="15%">
-								Name
+							<th>
+								 Email
 							</th>
-							<th width="15%">
-								Email
+							<th>
+								 Contact information
 							</th>
-							<th width="20%">
-								Contact info
+							<th>
+								 Type
 							</th>
-							<th width="10%">
-								Type
+							<th>
+								
 							</th>
-							<th width="10%">
-								 Actions
-							</th>
-						</tr>
-						
-						<tr v-for="user in users | filterBy search" role="row" class="filter">
-							<td><input v-if="!user.is_mine" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="group-checkable"></td>
-							<td>
-								<img style="width: 100%;" :src="user.photo || '/img/default-photo.png'" />
-							</td>
-							<td>{{ user.name }}</td>
-							<td>{{ user.email }}</td>
-							<td class="editable">{{ user.contact_info }}</td>
-							<td style="text-align: center;">
-								<span class="label label-sm label-{{ user.is_admin ? 'danger' : 'success' }}">{{ user.type }}</span>
-							</td>
-							<td>
-								<a href="{{ 'users/' + user.id + '/edit' }}" class="btn btn-xs green filter-cancel"><i class="fa fa-edit"></i></a>
-							</td>
 						</tr>
 					</thead>
+					<tr v-for="user in users | filterBy search">
+						<td>
+							<input v-if="!user.is_mine" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="liChild">
+						</td>
+						<td>
+							<img class="user-pic" src="{{ user.photo || '/img/default-photo.png' }}">
+						</td>
+						<td>
+							{{ user.name }}
+						</td>
+						<td>
+							{{ user.email }}
+						</td>
+						<td>
+							{{ user.contact_info }}
+						</td>
+						<td>
+							<span class="label label-sm label-danger">{{ user.type }}</span>
+						</td>
+						<td>
+							<a href="{{ 'users/' + user.id + '/edit' }}" class="btn btn-xs green filter-cancel"><i class="fa fa-edit"></i></a>
+						</td>
+					</tr>
+					<div v-if="!users.length" class="alert alert-block alert-danger fade in">
+						<button type="button" class="close" data-dismiss="alert"></button>
+						<h4 class="alert-heading"><strong>Important!</strong></h4>
+						<p>No users listed.</p>
+					</div>
 				</table>
 			</div>
 		</div>

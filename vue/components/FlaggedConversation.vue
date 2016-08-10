@@ -1,8 +1,8 @@
 <template>
-    <li class="dropdown dropdown-extended dropdown-inbox">
+    <li v-if="conversations.length" class="dropdown dropdown-extended dropdown-inbox">
 		<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-		<i class="icon-bell"></i>
-		<span class="badge badge-danger">{{ conversations.length }}</span>
+			<i class="icon-bell"></i>
+			<span class="badge badge-danger">{{ conversations.length }}</span>
 		</a>
 		<ul class="dropdown-menu">
 			<li class="external">
@@ -17,7 +17,7 @@
 						</span>
 						<span class="subject">
 							<span class="from">{{ conversation.user.name }}</span>
-							<span class="time">{{ conversation.created_at | date 'relative' }}</span>
+							<!-- <span class="time">{{ conversation.created_at | date 'relative' }}</span> -->
 						</span>
 						<span class="message">
 							New conversation flagged.

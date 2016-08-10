@@ -4,9 +4,10 @@ namespace App\Events;
 
 use App\Events\Event;
 use App\Tenant\Conversation;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
-class ConversationUnflagged extends Event
+class ConversationUnflagged extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 

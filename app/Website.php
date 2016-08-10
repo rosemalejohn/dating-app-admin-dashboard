@@ -26,4 +26,9 @@ class Website extends Model
         return $this->belongsToMany(User::class, 'user_managed_websites')->withTimestamps();
     }
 
+    // public function users()
+    // {
+    //     return $this->hasManyThrough(TenantUser::class, WebsiteUser::class);
+    // }
+
 }

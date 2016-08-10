@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\LoginFakeProfiles::class,
         Commands\SendMessage::class,
         Commands\RemoveActiveConversation::class,
+        Commands\ComputeEarnings::class,
     ];
 
     /**

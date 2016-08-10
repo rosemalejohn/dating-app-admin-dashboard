@@ -28,12 +28,12 @@
                 </div>
             @endif
             &nbsp;
-            @if (auth()->user()->is_user)
+            @if (auth()->user()->is_moderator)
                 <div class="navbar-stats">
-                    <span>Current month income: <strong>12.00 {{ auth()->user()->currency }}</strong></span>
+                    <span>Current month income: <strong>{{ $current_month_income }} {{ auth()->user()->currency }}</strong></span>
                 </div>
                 <div class="navbar-stats">
-                    <span>Last month income: <strong>0.00 {{ auth()->user()->currency }}</strong></span>
+                    <span>Last month income: <strong>{{ $last_month_income }} {{ auth()->user()->currency }}</strong></span>
                 </div>
             @endif
         </div>
@@ -43,7 +43,7 @@
                 <ul class="nav navbar-nav pull-right">
                     @if (auth()->user())
 
-                    @if (!auth()->user()->is_user)
+                    @if (!auth()->user()->is_moderator)
                         <flagged-conversation></flagged-conversation>
                     @endif
 

@@ -6,6 +6,7 @@ use App\Policies\ConversationPolicy;
 use App\Policies\WebsitePolicy;
 use App\Tenant\Conversation;
 use App\Website;
+use Auth;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 

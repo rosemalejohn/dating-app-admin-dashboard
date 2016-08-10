@@ -57,7 +57,7 @@ class WebsiteController extends Controller
         $website->password = $request->password;
         $website->port = $request->port;
         $website->prefix = $request->prefix;
-        $website->url = $request->url;
+        $website->url = rtrim($request->url, '/');
         $website->username = $request->username;
 
         if ($tenant->testConnection($website)) {
@@ -69,7 +69,9 @@ class WebsiteController extends Controller
 
     public function update(Request $request, Website $website)
     {
-        $website->update($request->all());
+        $request->url = rtrim($request->url, '/');
+        // dd($request->url);
+        $website->update($this->getWebsite($request));
         return response()->json(true);
     }
 
@@ -106,8 +108,8 @@ class WebsiteController extends Controller
     {
         return [
             'name' => $request->name,
-            'logo' => $request->logo ? $this->getImage($request->logo) : null,
-            'url' => $request->url,
+            'logo' => $request->logo,
+            'url' => rtrim($request->url, '/'),
             'host' => $request->host,
             'database' => $request->database,
             'username' => $request->username,
