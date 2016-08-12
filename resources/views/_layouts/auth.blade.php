@@ -12,7 +12,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta content="A dating app admin dashboard" name="description" />
-    <meta content="Rosemale-John" name="author" />
+    <meta content="Rosemale-John II" name="author" />
 
     <meta content="{{ csrf_token() }}" name="csrf-token" />
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -29,10 +29,8 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" rel="stylesheet" type="text/css"/>
 
-    <!-- BEGIN THEME STYLES -->
     <link href="/assets/css/global.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="/css/themes.css" rel="stylesheet" type="text/css" />
-    <!-- END THEME STYLES -->
 
     <link rel="icon" href="http://n8core.com/wp-content/uploads/2015/10/favicon.png" type="image/png">
 </head>
@@ -89,14 +87,21 @@
         jQuery(document).ready(function() {
             Metronic.init();
             Layout.init();
+
+            var currentPath = window.location.pathname;
+
+            $('.page-sidebar-menu li').each(function(index, elem) {
+                var link = $(this).children('a').attr('href');
+                if (link == currentPath) {
+                    $(this).addClass('active');
+                }
+            });
         });
     </script>
 
     @yield('scripts')
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
-
-
 
     <script src="/js/app.js" type="text/javascript"></script>
 

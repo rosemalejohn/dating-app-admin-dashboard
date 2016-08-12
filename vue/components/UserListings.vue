@@ -95,12 +95,12 @@
 							<a href="{{ 'users/' + user.id + '/edit' }}" class="btn btn-xs green filter-cancel"><i class="fa fa-edit"></i></a>
 						</td>
 					</tr>
-					<div v-if="!users.length" class="alert alert-block alert-danger fade in">
-						<button type="button" class="close" data-dismiss="alert"></button>
-						<h4 class="alert-heading"><strong>Important!</strong></h4>
-						<p>No users listed.</p>
-					</div>
 				</table>
+				<div v-if="!users.length" class="alert alert-block alert-danger fade in">
+					<button type="button" class="close" data-dismiss="alert"></button>
+					<h4 class="alert-heading"><strong>Important!</strong></h4>
+					<p>No users listed.</p>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -31,7 +31,7 @@
                     <span class="arrow "></span>
                 </a>
             </li>
-            <li class="start ">
+            <li>
                 <a href="/settings/system">
                     <i class="icon-settings"></i>
                     <span class="title">System Settings</span>

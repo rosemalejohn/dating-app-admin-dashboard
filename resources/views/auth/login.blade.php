@@ -4,7 +4,7 @@
 <!-- BEGIN LOGIN FORM -->
 <form class="login-form" action="{{ url('/login') }}" method="post">
     {{ csrf_field() }}
-    <h3 class="form-title">Sign in</h3>
+    <h3 class="form-title">Sign in account</h3>
     <div class="alert alert-danger display-hide">
         <button class="close" data-close="alert"></button>
         <span>Enter email and password. </span>
@@ -23,7 +23,12 @@
         <label class="rememberme check">
             <input type="checkbox" name="remember" value="1" />Remember
         </label>
-        <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
+
+    </div>
+    <div class="create-account">
+        <p>
+            <a href="javascript:;" id="forget-password" class="forget-password uppercase">Forgot Password?</a>
+        </p>
     </div>
 </form>
 

@@ -20,13 +20,13 @@ elixir(function(mix) {
 
 		.sass([
 	    	'global/components-md.scss',
-	    	'global/plugins-md.scss'
+	    	'global/plugins-md.scss',
 	    ], 'public/assets/css/global.css')
 
 	    .styles(['custom.css', 'default.css', 'layout.css'])
 
 	    .sass([
-	    	'grey.scss', 'layout.scss'
+    	 	'layout.scss', 'grey.scss'
 	    ], 'public/css/themes.css')
 
 	    .sass('pages/error.scss', 'public/assets/pages/css')

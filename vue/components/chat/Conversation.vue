@@ -1,11 +1,11 @@
 <template>
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-6 col-md-push-3">
+			<chat-box></chat-box>
+		</div>
+		<div class="col-md-3 col-md-pull-6">
 			<profile-box :profile="conversation.interlocutor"></profile-box>
 			<notes :notes.sync="conversation.notes" filter="interlocutor"></notes>
-		</div>
-		<div class="col-md-6">
-			<chat-box></chat-box>
 		</div>
 		<div class="col-md-3">
 			<profile-box :profile="conversation.initiator"></profile-box>

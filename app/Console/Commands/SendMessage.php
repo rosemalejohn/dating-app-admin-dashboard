@@ -3,9 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Config;
-use App\Conversation;
+use App\ProfileSentMessage;
 use App\Services\TenantService;
+use App\Tenant\Conversation;
+use App\Tenant\Message;
 use App\Tenant\User;
+use App\Website;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -34,9 +37,9 @@ class SendMessage extends Command
     {
         $allow_intro_message_sent_to_male_members = Config::whereKey('allow_intro_message_sent_to_male_members')->first();
 
-        if ($allow_intro_message_sent_to_male_members) {
+        if ($allow_intro_message_sent_to_male_members->value == 1) {
 
-            $count = Config::whereKey('number_of_messages_per_cron_job')->first();
+            $count = Config::whereKey('number_of_messages_per_cron_job')->first()->value;
 
             $websites = Website::all();
 
@@ -46,7 +49,7 @@ class SendMessage extends Command
 
                 $tenant->connect($website);
 
-                $dateAgo = Carbon::now()->subDays(15);
+                $dateAgo = Carbon::now()->subYears(3);
 
                 $users = User::where('joinStamp', '>=', $dateAgo)->take($count)->get();
 
@@ -56,20 +59,31 @@ class SendMessage extends Command
                     $managed_user = $managed->user;
 
                     foreach ($users as $user) {
-                        $conversation = Conversation::create([
-                            'initiatorId' => $managed_user->id,
-                            'interlocutorId' => $user->id,
-                            'subject' => '',
-                            'createStamp' => date(),
-                        ]);
+                        $profile_sent_message = ProfileSentMessage::where('website_id', $website->id)
+                            ->where('profile_id', $managed_user->id)
+                            ->where('recipient_id', $user->id)->first();
+                        if (is_null($profile_sent_message) && trim($managed->fake_message)) {
+                            $conversation = Conversation::create([
+                                'initiatorId' => $managed_user->id,
+                                'interlocutorId' => $user->id,
+                                'subject' => '',
+                                'createStamp' => time(),
+                            ]);
 
-                        $message = new Message;
-                        $message->timeStamp = time();
-                        $message->senderId = $managed_user->id;
-                        $message->recipientId = $user->id;
-                        $message->text = $managed->fake_messages;
+                            $message = new Message;
+                            $message->timeStamp = time();
+                            $message->senderId = $managed_user->id;
+                            $message->recipientId = $user->id;
+                            $message->text = $managed->fake_message;
 
-                        $conversation->messages()->save($message);
+                            $conversation->messages()->save($message);
+
+                            ProfileSentMessage::create([
+                                'website_id' => $website->id,
+                                'profile_id' => $managed_user->id,
+                                'recipient_id' => $user->id,
+                            ]);
+                        }
                     }
                 }
             }
