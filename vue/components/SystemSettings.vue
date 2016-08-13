@@ -58,6 +58,15 @@
 						</div>
 					</div>
 
+					<div class="form-group">
+		                <label>{{ configs.currency.name }}</label>
+		                <div class="input-group col-md-6">
+			                <select v-model="configs.currency.value" class="form-control">
+			                    <option {{ configs.currency.value == currency.code }} v-for="currency in currencies" :value="currency.code">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option> 
+			                </select>
+		                </div>
+		            </div>
+
 				</div>
 
 				<div class="form-actions">
@@ -72,6 +81,7 @@
 <script>
 
 	import Settings from './../stores/settings'
+	import Currency from './../stores/currency'
 
 	export default {
 
@@ -83,8 +93,10 @@
 					auto_login_fake_accounts: {name: '', value: ''},
 					auto_login_fake_accounts_per_cron_job: {name: '', value: ''},
 					allow_intro_message_sent_to_male_members: {name: '', value: ''},
-					number_of_messages_per_cron_job: {name: '', value: ''}
-				}
+					number_of_messages_per_cron_job: {name: '', value: ''},
+					currency: {name: '', value: ''},
+				},
+				currencies: []
 			}
 		},
 
@@ -93,6 +105,8 @@
 			Settings.getConfigs().then(response => {
 				this.configs = response.data;
 			});
+
+			this.currencies = Currency.getCurrencies();
 
 		},
 

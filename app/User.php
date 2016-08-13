@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type', 'contact_info', 'photo', 'currency', 'pay_rate',
+        'name', 'email', 'paypal_email', 'password', 'type', 'contact_info', 'photo', 'currency', 'pay_rate',
     ];
 
     /**
@@ -29,7 +29,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['is_admin', 'is_super', 'is_mine', 'is_moderator'];
+    protected $appends = ['is_admin', 'is_super', 'is_mine', 'is_moderator', 'earnings'];
 
     public function getIsAdminAttribute()
     {
@@ -64,5 +64,15 @@ class User extends Authenticatable
     public function active_conversation()
     {
         return $this->hasOne(ActiveConversation::class);
+    }
+
+    public function getEarningsAttribute()
+    {
+        $earnings = 0;
+        $sent = $this->sent_messages()->has('replies')->get();
+        foreach ($sent as $message) {
+            $earnings = $earnings + $message->replies->count() * $this->pay_rate;
+        }
+        return $earnings;
     }
 }

@@ -2,7 +2,7 @@
     <div class="page-sidebar navbar-collapse collapse">
         <ul class="page-sidebar-menu page-sidebar-menu-hover-submenu page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
             @if (auth()->user() && (auth()->user()->is_admin) or auth()->user()->is_super)
-            <li class="start ">
+            <li class="start">
                 <a href="/">
                     <i class="icon-home"></i>
                     <span class="title">Dashboard</span>

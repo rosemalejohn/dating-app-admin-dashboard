@@ -30,10 +30,7 @@
             &nbsp;
             @if (auth()->user()->is_moderator)
                 <div class="navbar-stats">
-                    <span>Current month income: <strong>{{ $current_month_income }} {{ auth()->user()->currency }}</strong></span>
-                </div>
-                <div class="navbar-stats">
-                    <span>Last month income: <strong>{{ $last_month_income }} {{ auth()->user()->currency }}</strong></span>
+                    <span>Current income: <strong>{{ $current_income }} {{ $currency }}</strong></span>
                 </div>
             @endif
         </div>
@@ -49,8 +46,8 @@
 
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            @if (auth()->user()->profile)
-                                <img alt="" class="img-circle" src="{{ auth()->user()->profile->photo }}" />
+                            @if (auth()->user()->photo != '')
+                                <img alt="" class="img-circle" src="{{ auth()->user()->photo }}" />
                             @else
                                 <img alt="" class="img-circle" src="/img/default-photo.png" />
                             @endif

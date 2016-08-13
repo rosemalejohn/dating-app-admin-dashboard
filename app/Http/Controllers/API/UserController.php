@@ -63,18 +63,6 @@ class UserController extends Controller
         return response()->json('Successfully deleted ' . count($request->users) . ' users.', 200);
     }
 
-    protected function getPhoto($photo)
-    {
-        $data = get_base64_string($photo);
-        if ($data) {
-            $image = \Image::make($data);
-            $filename = '/uploads/img/' . str_random(16) . '.jpg';
-            $image->fit(500, 500)->save(public_path($filename));
-            return $filename;
-        }
-        return null;
-    }
-
     public function updateAccount(Request $request, User $user)
     {
         $this->validate($request, [

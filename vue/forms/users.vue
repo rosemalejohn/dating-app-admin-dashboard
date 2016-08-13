@@ -59,13 +59,6 @@
             </div>
 
             <div class="form-group">
-                <label>Currency</label>
-                <select v-model="form.currecny" class="form-control">
-                    <option v-for="currency in currencies" :value="currency.code">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option> 
-                </select>
-            </div>
-
-            <div class="form-group">
                 <label>Pay rate</label>
                 <div class="input-group">
                     <span class="input-group-addon">
@@ -99,7 +92,6 @@ import UserPhotoUpload from './../components/PhotoUpload.vue'
 import UserModel from './../models/user'
 
 import Spinner from './../spin'
-import Currency from './../stores/currency'
 
 export default {
     
@@ -129,33 +121,32 @@ export default {
         Website.all().then(response => {
             this.websites = response.data
         })
-        this.currencies = Currency.getCurrencies();
     },
 
     data() {
         return {
             websites: [],
 
-            errors: [], 
+            errors: [],
 
-            saving: false,
+            currencies: [],
 
-            currencies: []
+            saving: false
         }
     },
 
     methods: {
         submit() {
             if (!this.saving) {
-                this.saving = true;
+                this.saving = Spinner.spin()
                 User.store(this.form).then(response => {
                     this.form = {};
                     this.errors = [];
                     toastr.success('User: ' + response.data.name + ' is created!');
                     this.$dispatch('user:created', response.data);
-                    this.saving = false;
+                    this.saving = Spinner.stop()
                 }).catch(response => {
-                    this.saving = false;
+                    this.saving = Spinner.stop()
                     this.errors = response.data
                 })
             }
@@ -168,17 +159,5 @@ export default {
                 this.submit();
         }
     },
-
-    watch: {
-        saving(val) {
-            this.$nextTick(() => {
-                if (val) {
-                    Spinner.stop()
-                } else {
-                    Spinner.spin()
-                } 
-            })
-        }
-    }
 }
 </script>

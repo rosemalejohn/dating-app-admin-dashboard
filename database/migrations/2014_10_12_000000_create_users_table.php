@@ -16,11 +16,11 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('paypal_email')->nullable();
             $table->string('password');
             $table->text('contact_info')->nullable();
             $table->longtext('photo')->nullable();
             $table->enum('type', ['moderator', 'admin', 'super'])->default('moderator');
-            $table->string('currency')->default('USD');
             $table->double('pay_rate')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -62,5 +62,12 @@ class DatabaseSeeder extends Seeder
             'value' => 5,
             'description' => 'Messages to be sent to male members per cron jobs',
         ]);
+
+        Config::create([
+            'key' => 'currency',
+            'name' => 'Select currency',
+            'value' => 'USD',
+            'description' => 'System currency',
+        ]);
     }
 }

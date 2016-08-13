@@ -52,13 +52,11 @@
 					</div>
 
 					<div class="form-group">
-		                <label class="col-md-3 control-label">Currency</label>
-		                <div class="col-md-6">
-			                <select v-model="user.currency" class="form-control">
-			                    <option {{ user.currency == currency.code ? 'selected' : '' }} v-for="currency in currencies" :value="currency.code">{{ currency.currency }}{{ currency.code ? ' - ' + currency.code : '' }}</option>
-			                </select>
-		                </div>
-		            </div>
+						<label class="col-md-3 control-label">Paypal email</label>
+						<div class="col-md-6">
+							<input v-model="user.paypal_email" type="email" class="form-control" placeholder="Enter paypal email">
+						</div>
+					</div>
 
 					<div class="form-group">
 						<label class="col-md-3 control-label">Pay rate</label>
@@ -106,7 +104,6 @@
 
 	import Spinner from './../spin'
 	import _ from 'underscore'
-	import Currency from './../stores/currency'
 
 	export default {
 
@@ -123,8 +120,6 @@
 				saving: false,
 
 				checkedWebsites: [],
-
-				currencies: []
 			}
 		},
 
@@ -132,7 +127,6 @@
 			Website.all().then(response => {
 				this.websites = response.data;
 			})
-			this.currencies = Currency.getCurrencies();
 		},
 
 		props: {

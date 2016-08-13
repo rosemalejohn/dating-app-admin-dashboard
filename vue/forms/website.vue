@@ -169,12 +169,12 @@ export default {
 
         update() {
             if (!this.saving) {
-                this.saving = true;
+                this.saving = Spinner.spin();
                 Website.update(this.form).then(response => {
                     toastr.success('Website updated!');
-                    this.saving = false;
+                    this.saving = Spinner.stop();
                 }).catch(e => {
-                    this.saving = false;
+                    this.saving = Spinner.stop();
                     toastr.error('Something went wrong while updating. Please reload the page and try again.');
                 })
             }
@@ -185,18 +185,6 @@ export default {
         'form:submit'(form) {
             if (form == 'website')
                 this.submit();
-        }
-    },
-
-    watch: {
-        saving(val) {
-            this.$nextTick(() => {
-                if (val) {
-                    Spinner.spin()
-                } else {
-                    Spinner.stop()
-                } 
-            })
         }
     }
 }

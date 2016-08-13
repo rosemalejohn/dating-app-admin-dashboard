@@ -3,7 +3,7 @@
 		<div class="portlet-title">
 			<div class="caption caption-md font-red-sunglo">
 				<i class="icon-bar-chart theme-font hide"></i>
-				<span class="caption-subject theme-font bold uppercase">Member Activity</span>
+				<span class="caption-subject theme-font bold uppercase">Accounts</span>
 				<span class="caption-helper">user listings</span>
 			</div>
 			<div class="actions">
@@ -22,32 +22,6 @@
 			</div>
 		</div>
 		<div class="portlet-body">
-			<div class="row number-stats margin-bottom-30">
-				<div class="col-md-6">
-					<div class="stat-left">
-						<div class="stat-number">
-							<div class="title">
-								 Total
-							</div>
-							<div class="number">
-								 {{ users.length }}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="stat-right">
-						<div class="stat-number">
-							<div class="title">
-								 New
-							</div>
-							<div class="number">
-								 {{ users.length }}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="table-scrollable table-scrollable-borderless">
 				<table class="table table-hover table-light">
 					<thead>
@@ -61,11 +35,8 @@
 							<th>
 								 Email
 							</th>
-							<th>
-								 Contact information
-							</th>
-							<th>
-								 Type
+							<th colspan="3">
+								 Earnings
 							</th>
 							<th>
 								
@@ -77,7 +48,7 @@
 							<input v-if="!user.is_mine" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="liChild">
 						</td>
 						<td>
-							<img class="user-pic" src="{{ user.photo || '/img/default-photo.png' }}">
+							<img class="user-pic" :src="user.photo || '/img/default-photo.png'">
 						</td>
 						<td>
 							{{ user.name }}
@@ -86,10 +57,13 @@
 							{{ user.email }}
 						</td>
 						<td>
-							{{ user.contact_info }}
+							{{ user.earnings }} {{ currency }}
 						</td>
 						<td>
-							<span class="label label-sm label-danger">{{ user.type }}</span>
+							<paypal-button v-if="user.earnings > 0" :account="user"></paypal-button>
+						</td>
+						<td>
+							<button v-if="user.earnings > 0" @click="clearEarnings(user)" class="btn btn-xs btn-danger">Clear earnings</button>
 						</td>
 						<td>
 							<a href="{{ 'users/' + user.id + '/edit' }}" class="btn btn-xs green filter-cancel"><i class="fa fa-edit"></i></a>
@@ -125,12 +99,20 @@
 	import _ from 'underscore'
 	import swal from 'sweetalert'
 	import User from './../stores/user'
+	import PaypalButton from './PaypalButton.vue'
+	import Settings from './../stores/settings'
 
 	export default {
 
+		components: {
+			PaypalButton
+		},
+
 		data() {
 			return {
-				checkedUsers: []
+				checkedUsers: [],
+				paypalData: {},
+				currency: 'USD'
 			}
 		},
 
@@ -144,6 +126,12 @@
 				required: false
 			}
 
+		},
+
+		ready() {
+			Settings.getConfigs().then(response => {
+				this.currency = response.data.currency.value;
+			})
 		},
 
 		methods: {
@@ -169,8 +157,25 @@
 				}
 			},
 
-			editIntroMessage(user) {
-				console.log(user.id);
+			clearEarnings(user) {
+				swal({
+					title: "Are you sure?",
+					text: "You are about to clear the earnings of " + user.name,
+					type: "warning",
+					showCancelButton: true,
+					showLoaderOnConfirm: true
+				}, () => {
+					
+				});
+			},
+
+			pay(user) {
+				this.paypalData = {
+					business: user.paypal_email,
+					item_name: 'Pay to ' + user.name,
+					amount: 200,
+					name: user.name
+				}
 			}
 		},
 

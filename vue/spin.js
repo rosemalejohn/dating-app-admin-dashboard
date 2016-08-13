@@ -13,10 +13,12 @@ export default {
 
 	spin(opts = this.state.opts) {
 		this.state.spinner = new Spinner(opts).spin(document.getElementById('body'));
+		return true;
 	},
 
 	stop() {
 		this.state.spinner.stop();
+		return false;
 	}
 
 }
