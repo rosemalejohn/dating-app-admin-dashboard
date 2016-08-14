@@ -8,9 +8,6 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
-        "intervention/image": "^2.3",
-        "intervention/imagecache": "^2.3",
-        "laracasts/flash": "^2.0",
         "predis/predis": "^1.1"
     },
     "require-dev": {
