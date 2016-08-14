@@ -19,6 +19,8 @@ class User extends Model
 
     protected $dates = ['joinStamp'];
 
+    protected $appends = ['real_name', 'about_me', 'address'];
+
     public function avatar()
     {
         return $this->hasOne(UserPhoto::class, 'userId');
@@ -49,10 +51,22 @@ class User extends Model
         return $this->hasMany(Conversation::class, 'interlocutorId');
     }
 
-    public function messages($query)
+    public function getAddressAttribute()
     {
-        // return $query->with(['messages' => function ($q) {
-        //     $q->where('senderId', $this->id)->orWhere('recipientId', $this->id);
-        // }]);
+        $address = $this->profile()->where('userId', $this->id)->where('questionName', 'googlemap_location')->first();
+
+        return $address ? $address->textValue : null;
+    }
+
+    public function getRealNameAttribute()
+    {
+        $name = $this->profile()->where('userId', $this->id)->where('questionName', 'realname')->first();
+        return $name ? $name->textValue : null;
+    }
+
+    public function getAboutMeAttribute()
+    {
+        $about_me = $this->profile()->where('userId', $this->id)->where('questionName', 'aboutme')->first();
+        return $about_me ? $about_me->textValue : null;
     }
 }

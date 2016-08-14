@@ -13,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'paypal_email', 'password', 'type', 'contact_info', 'photo', 'currency', 'pay_rate',
+        'name', 'email', 'paypal_email', 'password', 'type', 'contact_info', 'photo', 'pay_rate',
     ];
 
     /**

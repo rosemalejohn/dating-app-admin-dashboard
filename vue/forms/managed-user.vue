@@ -32,7 +32,7 @@
 					</td>
 					<td>{{ user.username }}</td>
 					<td>{{ user.email }}</td>
-					<td>{{ user.profile[0].address }}</td>
+					<td>{{ user.address }}</td>
 					<td>
 						<a @click="manageUser(user)" href="javascript:;" class="btn btn-xs green filter-cancel">Manage</a>
 					</td>

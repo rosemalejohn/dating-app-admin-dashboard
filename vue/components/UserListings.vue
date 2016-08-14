@@ -45,7 +45,7 @@
 					</thead>
 					<tr v-for="user in users | filterBy search">
 						<td>
-							<input v-if="!user.is_mine" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="liChild">
+							<input v-if="!user.is_mine && !user.is_super" value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="liChild">
 						</td>
 						<td>
 							<img class="user-pic" :src="user.photo || '/img/default-photo.png'">
@@ -170,15 +170,6 @@
 						toastr.success(response.data);
 					})
 				});
-			},
-
-			pay(user) {
-				this.paypalData = {
-					business: user.paypal_email,
-					item_name: 'Pay to ' + user.name,
-					amount: 200,
-					name: user.name
-				}
 			}
 		},
 
@@ -186,10 +177,6 @@
 			'user:created'(user) {
 				this.users.push(user);
 			},
-
-			'user:deleted'(user) {
-				
-			}
 		}
 		
 	}

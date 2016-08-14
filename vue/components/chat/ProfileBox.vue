@@ -1,20 +1,20 @@
 <template>
 	<div class="portlet light chat-box-profile">
-		<a v-if="auth.is_admin || auth.is_super" target="_blank" href="{{ website[0].url }}/user/{{ profile.username }}">
-			<img :src="profile.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
+		<a v-if="auth.is_admin || auth.is_super" target="_blank" href="{{ website[0].url }}/user/{{ user.username }}">
+			<img :src="user.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
 		</a>
-		<img v-else :src="profile.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
+		<img v-else :src="user.avatar.url || '/img/default-photo.png'" style="width: 100%;" />
 		<div class="details">
-			<h4 class="profile-desc-title">{{ profile.username }}</h4>
+			<h4 class="profile-desc-title">{{ user.real_name || user.username }}</h4>
 			
-			<div v-if="profile.profile.address != ''" class="margin-top-10 profile-desc-link">
-				City: <a href="javascipt:;">{{ profile.profile.address }}</a>
+			<div v-if="user.address" class="margin-top-10 profile-desc-link">
+				City: <span class="info">{{ user.address }}</span>
 			</div>
-			<div class="margin-top-10 profile-desc-link">
-				Looking for: <a href="#">{{ profile.sex }}</a>
-			</div>
-			<div class="margin-top-10 profile-desc-link">
-				Description: <a href="#">{{ profile.about_me }}</a>
+			<!-- <div class="margin-top-10 profile-desc-link">
+				Looking for: <a href="#">{{ user.profile.looking_for }}</a>
+			</div> -->
+			<div v-if="user.about_me" class="margin-top-10 profile-desc-link">
+				About me: <span class="info">{{ user.about_me }}</span>
 			</div>
 		</div>
 	</div>
@@ -27,12 +27,17 @@
 			padding: 20px;
 		}
 	}
+
+	.info {
+		font-weight: bold;
+		color: #3590c1;
+	}
 </style>
 
 <script>
 	export default {
 		props: {
-			profile: {
+			user: {
 				type: Object,
 				default() {
 					return {}

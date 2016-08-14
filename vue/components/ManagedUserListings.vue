@@ -53,7 +53,7 @@
 							</td>
 							<td>{{ user.user.username }}</td>
 							<td>{{ user.user.email }}</td>
-							<td>{{ user.user.profile[0].address }}</td>
+							<td>{{ user.user.address }}</td>
 							<td>
 								<div class="input-group">
 									<input v-model="user.fake_message" class="form-control" type="text" placeholder="Add fake message">
