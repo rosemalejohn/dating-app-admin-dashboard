@@ -21,9 +21,9 @@ elixir(function(mix) {
 		.sass([
 	    	'global/components-md.scss',
 	    	'global/plugins-md.scss',
-	    ], 'public/assets/css/global.css')
+	    ], 'public/css/global.css')
 
-	    .styles(['custom.css', 'default.css', 'layout.css'])
+	    // .styles(['custom.css', 'default.css', 'layout.css'])
 
 	    .sass([
     	 	'layout.scss', 'grey.scss'

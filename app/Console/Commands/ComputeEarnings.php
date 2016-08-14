@@ -44,6 +44,7 @@ class ComputeEarnings extends Command
 
         foreach ($user_sent_messages as $user_sent_message) {
             $tenant->connect($user_sent_message->website);
+
             $message = Message::whereId($user_sent_message->message_id)->with('conversation.messages')->first();
             if ($message) {
                 $messages = $message->conversation->messages;

@@ -56,10 +56,10 @@ class StatController extends Controller
 
     public function getMessagesPerDay(Website $website)
     {
-        $date = Carbon::createFromDate('2015');
+        $date = Carbon::now();
 
         $messages = Message::select('timeStamp')
-            ->whereBetween('timeStamp', [$date->startOfYear()->timestamp, $date->endOfYear()->timestamp])
+            ->whereBetween('timeStamp', [$date->startOfMonth()->timestamp, $date->endOfMonth()->timestamp])
             ->get()
             ->groupBy(function ($message) {
                 return Carbon::createFromTimestamp($message->timeStamp)->format('M-d-Y');

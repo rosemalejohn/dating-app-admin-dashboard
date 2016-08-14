@@ -29,7 +29,7 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" rel="stylesheet" type="text/css"/>
 
-    <link href="/assets/css/global.css" id="style_components" rel="stylesheet" type="text/css" />
+    <link href="/css/global.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="/css/themes.css" rel="stylesheet" type="text/css" />
 
     <link rel="icon" href="http://n8core.com/wp-content/uploads/2015/10/favicon.png" type="image/png">

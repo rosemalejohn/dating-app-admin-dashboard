@@ -37,9 +37,7 @@ class MessageService
                                 'initiator' => function ($i) {
                                     $i->select('id', 'username');
                                 }])
-                            ->withCount(['messages' => function ($q) {
-                                $q->where('senderId', 1);
-                            }]);
+                            ->withCount('messages');
                     }])->get();
 
                 $filtered = $collections->filter(function ($collection) {

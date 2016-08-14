@@ -14,7 +14,7 @@
         <div class="page-actions">
             @if (auth()->user() && (auth()->user()->is_admin) or auth()->user()->is_super)
                 <div class="btn-group">
-                    <button type="button" class="btn btn-circle red-pink dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn red-pink dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-plus"></i>&nbsp;<span class="hidden-sm hidden-xs">New&nbsp;</span>&nbsp;<i class="fa fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu" role="menu">

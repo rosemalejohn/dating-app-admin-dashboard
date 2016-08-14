@@ -8,7 +8,6 @@ use App\Tenant\User;
 use App\Website;
 use App\WebsiteUser;
 use Illuminate\Http\Request;
-use Image;
 
 class WebsiteController extends Controller
 {
@@ -120,18 +119,6 @@ class WebsiteController extends Controller
             'password' => $request->password,
             'prefix' => $request->prefix,
         ];
-    }
-
-    protected function getImage($image)
-    {
-        $data = get_base64_string($image);
-        if ($data) {
-            $image = Image::make($data);
-            $filename = '/uploads/img/' . str_random(16) . '.jpg';
-            $image->fit(500, 500)->save(public_path($filename));
-            return $filename;
-        }
-        return null;
     }
 
     protected function validator()

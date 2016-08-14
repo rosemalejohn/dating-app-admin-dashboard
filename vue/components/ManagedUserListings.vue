@@ -1,69 +1,77 @@
 <template>
-	<div class="portlet light">
+	<new-managed-account-modal title="Add new user to manage" target="newManagedAccount">
+		<managed-user-form slot="content" :website="website"></managed-user-form>
+		<div slot="modal-footer"></div>
+	</new-managed-account-modal>
+
+	<div class="portlet light bordered">
 		<div class="portlet-title">
-			<div class="caption">
-				<span class="caption-subject font-green-sharp bold uppercase">Moderated profiles</span>
+			<div class="caption caption-md font-red-sunglo">
+				<i class="icon-bar-chart theme-font hide"></i>
+				<span class="caption-subject theme-font bold uppercase">Moderated profiles</span>
 			</div>
 			<div class="actions">
-				<a data-toggle="modal" data-target="#newManagedAccount" href="javascript:;" class="btn btn-default btn-circle">
-					<i class="fa fa-plus"></i>
-					<span class="hidden-480">
-					New managed account </span>
-				</a>
-				<a v-if="checkedUsers.length" @click="unmanageUsers()" class="btn btn-danger btn-circle">
-					<i class="fa fa-trash"></i>
-					<span class="hidden-480">
-					Unmanage </span>
-				</a>
+				<div class="inputs">
+					<div class="portlet-input input-inline input-small">
+						<div class="input-icon right">
+							<i class="icon-magnifier"></i>
+							<input v-model="search" type="text" class="form-control input-circle" placeholder="search...">
+						</div>
+					</div>
+					<div class="btn-group btn-group-devided">
+						<button data-toggle="modal" data-target="#newManagedAccount" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Add moderated profile</button>
+						<button v-if="checkedUsers.length" @click="unmanageUsers()" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Unmanage</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="portlet-body">
-			<div class="col-md-4 input-group pull-right" style="margin-bottom: 10px;">
-				<input v-model="search" type="text" class="form-control" placeholder="Type to search...">
-				<span class="input-group-addon">
-					<i class="fa fa-search"></i>
-				</span>
-			</div>
-			<div class="table-container">
-				<table class="table table-striped table-bordered table-hover">
+			<div class="table-scrollable table-scrollable-borderless">
+				<table class="table table-hover table-light">
 					<thead>
-						<tr role="row" class="heading">
-							<th width="2%">
-								<input type="checkbox" class="group-checkable">
+						<tr class="uppercase">
+							<th>
+								
 							</th>
-							<th width="8%">
-
+							<th colspan="2">
+								 Name
 							</th>
 							<th>
-								Name
+								 Email
 							</th>
-							<th width="15%">
-								Email
+							<th>
+								 Address
 							</th>
-							<th width="25%">
-								Address
+							<th>
+								Fake message
 							</th>
-							<th width="30%">Fake message</th>
-						</tr>
-						
-						<tr v-for="user in users | filterBy search" role="row" class="filter">
-							<td><input value="{{ user.id }}" v-model="checkedUsers" type="checkbox" class="group-checkable"></td>
-							<td>
-								<img style="width: 100%;" :src="user.user.avatar.url || '/img/default-photo.png'" />
-							</td>
-							<td>{{ user.user.username }}</td>
-							<td>{{ user.user.email }}</td>
-							<td>{{ user.user.address }}</td>
-							<td>
-								<div class="input-group">
-									<input v-model="user.fake_message" class="form-control" type="text" placeholder="Add fake message">
-									<span class="input-group-btn">
-										<button @click="updateManagedUser(user)" class="btn btn-success" type="button"><i class="fa fa-edit fa-fw"></i></button>
-									</span>
-								</div>
-							</td>
 						</tr>
 					</thead>
+					<tr v-for="user in users | filterBy search">
+						<td>
+							<input :value="user.id" v-model="checkedUsers" type="checkbox" class="liChild">
+						</td>
+						<td>
+							<img class="user-pic" :src="user.user.avatar.url || '/img/default-photo.png'">
+						</td>
+						<td>
+							{{ user.user.username }}
+						</td>
+						<td>
+							{{ user.user.email }}
+						</td>
+						<td>
+							{{ user.user.address }}
+						</td>
+						<td>
+							<div class="input-group">
+								<input v-model="user.fake_message" class="form-control" type="text" placeholder="Add fake message">
+								<span class="input-group-btn">
+									<button @click="updateManagedUser(user)" class="btn btn-success" type="button"><i class="fa fa-edit fa-fw"></i></button>
+								</span>
+							</div>
+						</td>
+					</tr>
 				</table>
 				<div v-if="!users.length" class="note note-info note-bordered">
 					<p>No users listed.</p>
@@ -71,10 +79,6 @@
 			</div>
 		</div>
 	</div>
-	<new-managed-account-modal title="Add new user to manage" target="newManagedAccount">
-		<managed-user-form slot="content" :website="website"></managed-user-form>
-		<div slot="modal-footer"></div>
-	</new-managed-account-modal>
 </template>
 
 <style lang="sass">
@@ -182,7 +186,7 @@
 					}, () => {
 						WebsiteUser.delete({ website: this.website, users: this.checkedUsers }).then(response => {
 							self.users = _.reject(self.users, user => {
-								return _.contains(self.checkedUsers, user.id.toString());
+								return _.contains(self.checkedUsers, user.id);
 							})
 							this.checkedUsers = [];
 							toastr.success(response.data);
