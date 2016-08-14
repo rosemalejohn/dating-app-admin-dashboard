@@ -78,6 +78,18 @@ class UserController extends Controller
         return response()->json('Account updated.', 201);
     }
 
+    public function clearEarnings(User $user)
+    {
+        $sent = $user->sent_messages()->has('replies')->get();
+        foreach ($sent as $message) {
+            $message->replies()->unpaid()->get()->each(function ($reply) {
+                $reply->paid = true;
+                $reply->save();
+            });
+        }
+        return response()->json('User earnings cleared.', 200);
+    }
+
     public function validator()
     {
         return [

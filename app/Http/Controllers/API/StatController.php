@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\TenantService;
 use App\Tenant\Message;
 use App\User;
+use App\UserSentMessageReply;
 use App\Website;
 use Carbon\Carbon;
 
@@ -44,11 +45,11 @@ class StatController extends Controller
                 'link' => '/chat',
             ],
             [
-                'name' => 'Earnings',
+                'name' => 'Current payouts',
                 'icon' => 'fa fa-usd',
-                'count' => $this->getTotalEarnings() . auth()->user()->currency,
+                'count' => $this->getCurrentPayouts() . auth()->user()->currency,
                 'color' => 'purple',
-                'link' => '/',
+                'link' => '/users',
             ],
         ]);
     }
@@ -99,7 +100,7 @@ class StatController extends Controller
     {
         $earnings = 0;
 
-        $replies = \App\UserSentMessageReply::with(['user_message.user' => function ($query) {
+        $replies = UserSentMessageReply::with(['user_message.user' => function ($query) {
             $query->select('id', 'pay_rate');
         }])->get();
 
@@ -109,5 +110,18 @@ class StatController extends Controller
 
         return $earnings;
 
+    }
+
+    protected function getCurrentPayouts()
+    {
+        $earnings = 0;
+
+        $replies = UserSentMessageReply::unpaid()->with('user_message.user')->get();
+
+        foreach ($replies as $reply) {
+            $earnings = $earnings + $reply->user_message->user->pay_rate;
+        }
+
+        return $earnings;
     }
 }

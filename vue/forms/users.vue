@@ -64,7 +64,7 @@
                     <span class="input-group-addon">
                         <i class="fa fa-usd"></i>
                     </span>
-                    <input v-model="form.pay_rate" type="number" class="form-control" placeholder="Pay rate">
+                    <input step="0.01" v-model="form.pay_rate" type="number" class="form-control" placeholder="Pay rate">
                 </div>
             </div>
 

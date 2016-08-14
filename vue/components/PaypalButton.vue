@@ -34,10 +34,6 @@
 		},
 
 		ready() {
-			Settings.getConfigs().then(response => {
-				this.account.currency = response.data.currency.value;
-			});
-
 			this.host = Config.host;
 		}
 	}

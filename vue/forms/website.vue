@@ -16,7 +16,7 @@
                     <span class="input-group-addon">
                         <i class="fa fa-user"></i>
                     </span>
-                    <input v-model="form.name" type="text" class="form-control" placeholder="Full name">
+                    <input v-model="form.name" type="text" class="form-control" placeholder="Site name">
                 </div>
                 <small v-if="errors.name" class="text-danger">{{ errors.name[0] }}</small>
             </div>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="form-group">
-                <label>Name</label>
+                <label>Database name</label>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <i class="fa fa-lock"></i>
@@ -150,15 +150,15 @@ export default {
 
         store() {
             if (!this.saving) {
-                this.saving = true;
+                this.saving = Spinner.spin();
                 Website.store(this.form).then(response => {
                     toastr.success('Website: ' + response.data.name + ' created!');
                     this.$dispatch('website:created', response.data);
                     this.form = {}
                     this.errors = [];
-                    this.saving = false;
+                    this.saving = Spinner.stop();
                 }).catch(response => {
-                    this.saving = false;
+                    this.saving = Spinner.stop();
                     if (response.status == 500) {
                         toastr.error(response.data);
                     }

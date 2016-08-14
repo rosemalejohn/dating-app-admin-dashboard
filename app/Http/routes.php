@@ -32,6 +32,8 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
             Route::put('{user}/account', 'UserController@updateAccount');
 
+            Route::post('{user}/clear-earnings', 'UserController@clearEarnings');
+
         });
 
         Route::delete('notes/{note}', 'NoteController@delete');

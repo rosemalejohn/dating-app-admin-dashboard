@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Services\ConfigService;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -29,7 +30,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['is_admin', 'is_super', 'is_mine', 'is_moderator', 'earnings'];
+    protected $appends = ['is_admin', 'is_super', 'is_mine', 'is_moderator', 'earnings', 'currency'];
 
     public function getIsAdminAttribute()
     {
@@ -71,8 +72,14 @@ class User extends Authenticatable
         $earnings = 0;
         $sent = $this->sent_messages()->has('replies')->get();
         foreach ($sent as $message) {
-            $earnings = $earnings + $message->replies->count() * $this->pay_rate;
+            $earnings = $earnings + $message->replies()->unpaid()->get()->count() * $this->pay_rate;
         }
         return $earnings;
+    }
+
+    public function getCurrencyAttribute()
+    {
+        $config = new ConfigService;
+        return $config->getConfigValue('currency');
     }
 }

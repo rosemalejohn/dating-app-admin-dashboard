@@ -18,6 +18,7 @@ class CreateUserSentMessageRepliesTable extends Migration
             $table->foreign('user_sent_message_id')->references('id')->on('user_sent_messages')->onDelete('cascade');
             $table->integer('message_id')->unsigned();
             $table->unique(['user_sent_message_id', 'message_id']);
+            $table->boolean('paid')->default(false);
             $table->timestamps();
         });
     }

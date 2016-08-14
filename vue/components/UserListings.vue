@@ -165,7 +165,10 @@
 					showCancelButton: true,
 					showLoaderOnConfirm: true
 				}, () => {
-					
+					this.$http.post('users/' + user.id + '/clear-earnings').then(response => {
+						user.earnings = 0;
+						toastr.success(response.data);
+					})
 				});
 			},
 

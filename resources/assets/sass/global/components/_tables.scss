@@ -300,6 +300,7 @@ Light Table
                     display: inline-block;
                     vertical-align: middle;
                     height: 30px;
+                    width: 30px;
                     @include border-radius(100%);
                 }
             }

@@ -66,7 +66,44 @@
 			                </select>
 		                </div>
 		            </div>
+		           
+		            <template v-if="user.is_super">
+		            	<hr />
+			            <div class="form-group">
+							<label>{{ configs.allow_site_limit.name }}</label>
+							<div class="input-group">
+								<div class="icheck-list">
+									<label>
+									<input v-model="configs.allow_site_limit.value" type="checkbox" class="icheck"> Yes </label>
+								</div>
+							</div>
+						</div>
 
+						<div v-if="configs.allow_site_limit.value" class="form-group">
+							<label>{{ configs.site_limit.name }}</label>
+							<div class="input-group col-md-6">
+								<input v-model="configs.site_limit.value" class="form-control" />
+							</div>
+						</div>
+
+						<!-- <hr />
+			            <div class="form-group">
+							<label>{{ configs.allow_site_limit.name }}</label>
+							<div class="input-group">
+								<div class="icheck-list">
+									<label>
+									<input v-model="configs.allow_site_limit.value" type="checkbox" class="icheck"> Yes </label>
+								</div>
+							</div>
+						</div>
+
+						<div v-if="configs.allow_site_limit.value" class="form-group">
+							<label>{{ configs.site_limit.name }}</label>
+							<div class="input-group col-md-6">
+								<input v-model="configs.site_limit.value" class="form-control" />
+							</div>
+						</div> -->
+					</template>
 				</div>
 
 				<div class="form-actions">
@@ -95,8 +132,13 @@
 					allow_intro_message_sent_to_male_members: {name: '', value: ''},
 					number_of_messages_per_cron_job: {name: '', value: ''},
 					currency: {name: '', value: ''},
+					site_limit: {name: '', value: ''},
+					allow_site_limit: {name: '', value: ''},
 				},
-				currencies: []
+				currencies: [],
+				user: {
+					is_super: false
+				}
 			}
 		},
 
@@ -107,6 +149,10 @@
 			});
 
 			this.currencies = Currency.getCurrencies();
+
+			this.$http.get('auth').then(response => {
+				this.user = response.data;
+			})
 
 		},
 

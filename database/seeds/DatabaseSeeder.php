@@ -69,5 +69,19 @@ class DatabaseSeeder extends Seeder
             'value' => 'USD',
             'description' => 'System currency',
         ]);
+
+        Config::create([
+            'key' => 'allow_site_limit',
+            'name' => 'Allow site limit',
+            'value' => true,
+            'description' => 'Enable site limit for every client (for super user only)',
+        ]);
+
+        Config::create([
+            'key' => 'site_limit',
+            'name' => 'Set site limit',
+            'value' => 5,
+            'description' => 'Site limit count for every client (for super user only)',
+        ]);
     }
 }

@@ -48,6 +48,7 @@ class WebsiteController extends Controller
 
     public function store(Request $request, TenantService $tenant)
     {
+
         $this->validate($request, $this->validator($request->all()));
 
         $website = new Website;
@@ -60,11 +61,14 @@ class WebsiteController extends Controller
         $website->url = rtrim($request->url, '/');
         $website->username = $request->username;
 
-        if ($tenant->testConnection($website)) {
-            $website->save();
-            return response()->json($website, 201);
+        if (auth()->user()->can('store', $website)) {
+            if ($tenant->testConnection($website)) {
+                $website->save();
+                return response()->json($website, 201);
+            }
+            return response()->json('We cannot connect to the database, please check the connection again.', 500);
         }
-        return response()->json('We cannot connect to the database, please check the connection again.', 500);
+        return response()->json('Not saved! You have exceeded the maximum allowed website.', 500);
     }
 
     public function update(Request $request, Website $website)
