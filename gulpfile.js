@@ -25,9 +25,7 @@ elixir(function(mix) {
 
 	    // .styles(['custom.css', 'default.css', 'layout.css'])
 
-	    .sass([
-    	 	'layout.scss', 'grey.scss'
-	    ], 'public/css/themes.css')
+	    .sass(['layout.scss', 'grey.scss'], 'public/css/themes.css')
 
 	    .sass('pages/error.scss', 'public/assets/pages/css')
 	    .sass('pages/profile.scss', 'public/assets/pages/css')
