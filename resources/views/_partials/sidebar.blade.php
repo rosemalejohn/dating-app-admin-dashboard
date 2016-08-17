@@ -4,14 +4,14 @@
             @if (auth()->user() && (auth()->user()->is_admin) or auth()->user()->is_super)
             <li class="start">
                 <a href="/">
-                    <i class="icon-home"></i>
+                    <i class="icon-chart"></i>
                     <span class="title">Dashboard</span>
                 </a>
             </li>
             @endif
             <li>
                 <a href="/chat">
-                    <i class="fa fa-comments-o"></i>
+                    <i class="icon-bubbles"></i>
                     <span class="title">Chat lobby</span>
                     <span class="arrow "></span>
                 </a>
@@ -19,14 +19,14 @@
             @if (auth()->user() && (auth()->user()->is_admin) or auth()->user()->is_super)
             <li>
                 <a href="/websites">
-                    <i class="fa fa-globe"></i>
+                    <i class="icon-globe"></i>
                     <span class="title">Manage Websites</span>
                     <span class="arrow "></span>
                 </a>
             </li>
             <li>
                 <a href="/users">
-                    <i class="icon-user"></i>
+                    <i class="icon-people"></i>
                     <span class="title">Users</span>
                     <span class="arrow "></span>
                 </a>

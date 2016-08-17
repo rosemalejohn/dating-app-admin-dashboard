@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\SendMessage::class,
         Commands\RemoveActiveConversation::class,
         Commands\ComputeEarnings::class,
+        Commands\LoginAccounts::class,
     ];
 
     /**
@@ -27,9 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('login:fake-profiles')
-            ->daily();
-        $schedule->command('message:send')
-            ->daily();
+        // $schedule->command('login:fake-profiles')
+        //     ->daily();
+        // $schedule->command('message:send')
+        //     ->daily();
     }
 }

@@ -42,7 +42,7 @@ class LoginFakeProfiles extends Command
 
                 $tenant->connect($website);
 
-                $managed_users = $website->managed_users->random()->take($count->value);
+                $managed_users = $website->managed_users->random()->take($count->value)->get();
 
                 foreach ($managed_users as $managed_user) {
                     $user = $managed_user->user;

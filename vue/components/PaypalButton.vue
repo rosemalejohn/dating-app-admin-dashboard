@@ -8,7 +8,7 @@
 		<input type="hidden" name="cmd" value="_xclick" />
 		<input type="hidden" name="amount" value="{{ account.earnings || 0.00 }}" />
 		<button class="btn btn-success btn-xs" type="submit">
-			<i class="fa fa-paypal"></i>&nbsp;Pay
+			<i class="icon-paypal"></i>&nbsp;Pay
 		</button>
 	</form>
 </template>

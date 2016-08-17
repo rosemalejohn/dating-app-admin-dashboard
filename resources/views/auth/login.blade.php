@@ -4,7 +4,7 @@
 <!-- BEGIN LOGIN FORM -->
 <form class="login-form" action="{{ url('/login') }}" method="post">
     {{ csrf_field() }}
-    <h3 class="form-title">Sign in account</h3>
+    <h3 class="form-title">Sign in</h3>
     <div class="alert alert-danger display-hide">
         <button class="close" data-close="alert"></button>
         <span>Enter email and password. </span>
