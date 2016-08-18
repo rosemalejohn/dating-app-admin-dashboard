@@ -57,9 +57,7 @@ class LoginAccounts extends Command
 
             if ($count) {
                 $users = User::all()
-                    ->random()
-                    ->take($count->value)
-                    ->get();
+                    ->random($count->value);
 
                 $users->each(function ($user) use ($profile) {
                     $profile->login($user);
