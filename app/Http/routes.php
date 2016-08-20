@@ -46,13 +46,15 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
             Route::get('{website}/{conversation}', 'ChatController@conversation');
 
+            Route::post('{website}/flag-conversation', 'ChatController@flagConversation');
+
+            Route::put('{website}/flag-conversation/{flag_conversation_id}', 'ChatController@updateFlagConversation');
+
             Route::post('{website}/{conversation}', 'ChatController@send');
 
             Route::get('{website}/{conversation}/messages', 'ChatController@getMessages');
 
             Route::post('{website}/{conversation}/notes', 'ChatController@storeNotes');
-
-            Route::post('{website}/{conversation}/flag', 'ChatController@flagConversation');
 
             Route::delete('{website}/{conversation}/unflag', 'ChatController@unflagConversation');
 

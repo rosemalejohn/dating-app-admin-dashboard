@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\RemoveActiveConversation::class,
         Commands\ComputeEarnings::class,
         Commands\LoginAccounts::class,
+        Commands\ViewRandomProfiles::class,
     ];
 
     /**

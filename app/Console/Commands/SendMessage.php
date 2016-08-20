@@ -6,8 +6,10 @@ use App\Config;
 use App\ProfileSentMessage;
 use App\Services\TenantService;
 use App\Tenant\Conversation;
+use App\Tenant\Guest;
 use App\Tenant\Message;
 use App\Tenant\User;
+use App\Tenant\Wink;
 use App\Website;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -47,11 +49,13 @@ class SendMessage extends Command
 
             foreach ($websites as $website) {
 
+                echo "Getting data in website: {$website->name}\n";
+
                 $tenant->connect($website);
 
                 $dateAgo = Carbon::now()->subYears(3);
 
-                $users = User::where('joinStamp', '>=', $dateAgo)->take($count)->get();
+                $users = User::where('joinStamp', '>=', $dateAgo)->take($count)->males();
 
                 $managed_users = $website->managed_users;
 
@@ -78,14 +82,33 @@ class SendMessage extends Command
 
                             $conversation->messages()->save($message);
 
+                            $guest = Guest::where('userId', $user->id)->where('guestId', $managed_user->id)->first();
+
+                            $wink = Wink::where('userId', $managed_user->id)->where('partnerId', $user->id)->first();
+
+                            if ($guest) {
+                                $guest->update(['visitTimestamp' => time()]);
+                            } else {
+                                $managed_user->guests()->create(['visitTimestamp' => time(), 'userId' => $user->id]);
+                            }
+
+                            if ($wink) {
+                                $wink->update(['timestamp' => time()]);
+                            } else {
+                                $managed_user->wink_users()->create(['partnerId' => $user->id, 'messageType' => 'mail', 'status' => 'wait']);
+                            }
+
                             ProfileSentMessage::create([
                                 'website_id' => $website->id,
                                 'profile_id' => $managed_user->id,
                                 'recipient_id' => $user->id,
                             ]);
+
+                            echo 'Message sent!';
                         }
                     }
                 }
+
             }
         }
 

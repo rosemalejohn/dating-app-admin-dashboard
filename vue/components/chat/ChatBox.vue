@@ -9,11 +9,9 @@
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
 					<button onclick="window.history.back();" class="btn btn-danger grey-salsa btn-circle btn-sm">Cancel</button>
 					<button v-if="conversation.is_flagged" @click="unflagConversation()" class="btn btn-danger grey-salsa btn-circle btn-sm">Unflag</button>
-					<button v-else @click="flagConversation()" class="btn btn-danger grey-salsa btn-circle btn-sm">Flag</button>
-					<button @click="sendAndNext()" class="btn btn-success grey-salsa btn-circle btn-sm">Send and next</button>
+					<button v-else data-toggle="modal" data-target="#showFlaggedConversationModal" class="btn btn-danger grey-salsa btn-circle btn-sm">Flag</button>
 				</div>
 			</div>
-
 		</div>
 		<div class="portlet-body">
 			<div class="chat-box-scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="1">
@@ -50,6 +48,11 @@
 			</div>
 		</div>
 	</div>
+	<button @click="sendAndNext()" class="btn btn-success grey-salsa btn-circle btn-sm pull-right">Send and next</button>
+	<flagged-conversation-modal title="Add notes" target="showFlaggedConversationModal">
+		<flagged-conversation-notes slot="content" :form.sync="flaggedConversationForm" :conversation.sync="conversation"></flagged-conversation-notes>
+		<div slot="modal-footer"></div>
+	</flagged-conversation-modal>
 </template>
 
 <script>
@@ -57,8 +60,14 @@
 	import Vue from 'vue'
 	import Spinner from './../../spin'
 	import Conversation from '../../stores/conversation'
+	import FlaggedConversationModal from './../Modal.vue'
+	import FlaggedConversationNotes from './../../forms/FlaggedConversationNotes.vue'
 
 	export default {
+
+		components: {
+			FlaggedConversationModal, FlaggedConversationNotes
+		},
 
 		data() {
 			return {
@@ -67,7 +76,12 @@
 				interlocutor: this.$parent.conversation.interlocutor,
 				conversation: this.$parent.conversation,
 				website: this.$parent.website,
-				messages: []
+				messages: [],
+				flaggedConversationForm: {
+					notes: '',
+					website_id: '',
+					conversation_id: ''
+				}
 			}
 		},
 
@@ -81,6 +95,11 @@
 					Spinner.stop();
 					toastr.error('Cannot fetch conversation messages.');
 				})
+
+			this.flaggedConversationForm = {
+				website_id: this.website.id,
+				conversation_id: this.conversation.id,
+			}
 		},
 
 		methods: {
@@ -122,13 +141,13 @@
 				})
 			},
 
-			flagConversation() {
-				Conversation.flag(this.website.id, this.conversation.id)
-					.then(response => {
-						this.conversation.is_flagged = true;
-						toastr.success('Conversation flagged.')
-					})
-			},
+			// flagConversation() {
+			// 	Conversation.flag(this.website.id, this.conversation.id)
+			// 		.then(response => {
+			// 			this.conversation.is_flagged = true;
+			// 			toastr.success('Conversation flagged.')
+			// 		})
+			// },
 
 			unflagConversation() {
 				Conversation.unflag(this.website.id, this.conversation.id).then(response => {

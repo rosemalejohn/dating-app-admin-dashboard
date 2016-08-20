@@ -24,6 +24,9 @@
 							<th>
 								Messages
 							</th>
+							<th>
+								Notes
+							</th>
 							<th width="10%">
 								
 							</th>
@@ -41,6 +44,9 @@
 						</td>
 						<td>
 							{{ conversation.messages_count }}
+						</td>
+						<td>
+							{{ conversation.flagged.notes }}
 						</td>
 						<td>
 							<a href="/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}" class="btn btn-xs green filter-cancel"><i class="fa fa-comments-o"></i>&nbsp;Take chat</a>

@@ -33,7 +33,7 @@ class MessageService
                             ->has('initiator')
                             ->has('interlocutor')
                             ->has('messages')
-                            ->with(['interlocutor.website',
+                            ->with(['flagged', 'interlocutor.website',
                                 'initiator' => function ($i) {
                                     $i->select('id', 'username');
                                 }])

@@ -66,6 +66,24 @@
 			                </select>
 		                </div>
 		            </div>
+
+		            <hr />
+		            <div class="form-group">
+						<label>{{ configs.allow_fake_profile_views.name }}</label>
+						<div class="input-group">
+							<div class="icheck-list">
+								<label>
+								<input v-model="configs.allow_fake_profile_views.value" type="checkbox" class="icheck"> Yes </label>
+							</div>
+						</div>
+					</div>
+
+					<div v-if="configs.allow_fake_profile_views.value" class="form-group">
+						<label>{{ configs.number_of_profile_view.name }}</label>
+						<div class="input-group col-md-6">
+							<input v-model="configs.number_of_profile_view.value" class="form-control" />
+						</div>
+					</div>
 		           
 		            <template v-if="user.is_super">
 		            	<hr />
@@ -85,24 +103,6 @@
 								<input v-model="configs.site_limit.value" class="form-control" />
 							</div>
 						</div>
-
-						<!-- <hr />
-			            <div class="form-group">
-							<label>{{ configs.allow_site_limit.name }}</label>
-							<div class="input-group">
-								<div class="icheck-list">
-									<label>
-									<input v-model="configs.allow_site_limit.value" type="checkbox" class="icheck"> Yes </label>
-								</div>
-							</div>
-						</div>
-
-						<div v-if="configs.allow_site_limit.value" class="form-group">
-							<label>{{ configs.site_limit.name }}</label>
-							<div class="input-group col-md-6">
-								<input v-model="configs.site_limit.value" class="form-control" />
-							</div>
-						</div> -->
 					</template>
 				</div>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\ActiveConversation;
 use App\Events\ConversationFlaggedEvent;
 use App\Events\ConversationUnflagged;
+use App\FlaggedConversation;
 use App\Http\Controllers\Controller;
 use App\Note;
 use App\Services\MessageService;
@@ -42,7 +43,8 @@ class ChatController extends Controller
             'initiator.profile',
             'interlocutor.profile',
             'notes',
-            'interlocutor.website')->first();
+            'interlocutor.website',
+            'flagged')->first();
 
         return response()->json(['conversation' => $conversation, 'website' => $website]);
     }
@@ -108,11 +110,13 @@ class ChatController extends Controller
         return response()->json($note);
     }
 
-    public function flagConversation(Request $request, Website $website, $conversation_id)
+    public function flagConversation(Request $request, Website $website)
     {
-        $conversation = Conversation::findOrFail($conversation_id);
+        $conversation = Conversation::findOrFail($request->conversation_id);
 
         $conversation->website = $website;
+
+        $conversation->notes = $request->notes;
 
         event(new ConversationFlaggedEvent($conversation));
 
@@ -126,6 +130,15 @@ class ChatController extends Controller
 
         event(new ConversationUnflagged($conversation));
         return response()->json('Conversation unflagged.');
+    }
+
+    public function updateFlagConversation(Request $request, Website $website, $flagged_conversation_id)
+    {
+        $conversation = FlaggedConversation::findOrFail($flagged_conversation_id);
+
+        $conversation->update($request->all());
+
+        return response()->json('Notes updated!', 200);
     }
 
     public function getMessages(Website $website, $conversation_id)

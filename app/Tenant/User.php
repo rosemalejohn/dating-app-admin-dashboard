@@ -19,7 +19,7 @@ class User extends Model
 
     protected $dates = ['joinStamp'];
 
-    protected $appends = ['real_name', 'about_me', 'address'];
+    protected $appends = ['real_name', 'about_me', 'address', 'sex'];
 
     public function avatar()
     {
@@ -51,6 +51,26 @@ class User extends Model
         return $this->hasMany(Conversation::class, 'interlocutorId');
     }
 
+    public function guest_users()
+    {
+        return $this->hasMany(Guest::class, 'userId');
+    }
+
+    public function guests()
+    {
+        return $this->hasMany(Guest::class, 'guestId');
+    }
+
+    public function wink_users()
+    {
+        return $this->hasMany(Wink::class, 'userId');
+    }
+
+    public function wink_partners()
+    {
+        return $this->hasMany(Wink::class, 'partnerId');
+    }
+
     public function getAddressAttribute()
     {
         $address = $this->profile()->where('userId', $this->id)->where('questionName', 'googlemap_location')->first();
@@ -68,5 +88,31 @@ class User extends Model
     {
         $about_me = $this->profile()->where('userId', $this->id)->where('questionName', 'aboutme')->first();
         return $about_me ? $about_me->textValue : null;
+    }
+
+    public function getSexAttribute()
+    {
+        $sex = $this->profile()->where('userId', $this->id)->where('questionName', 'sex')->first();
+        if ($sex) {
+            switch ($sex->intValue) {
+                case 2:
+                    return 'female';
+                    break;
+                case 4:
+                    return 'male';
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+        }
+        return null;
+    }
+
+    public function scopeMales($query)
+    {
+        return $query->get()->filter(function ($user) {
+            return $user->sex == 'male';
+        });
     }
 }

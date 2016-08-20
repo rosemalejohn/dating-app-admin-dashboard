@@ -29,6 +29,7 @@ class ConversationFlaggedEventListener
         $conversation->flagged()->create([
             'website_id' => $conversation->website->id,
             'user_id' => auth()->user()->id,
+            'notes' => $conversation->notes,
         ]);
     }
 }

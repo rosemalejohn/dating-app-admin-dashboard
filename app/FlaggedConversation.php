@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FlaggedConversation extends Model
 {
 
-    protected $fillable = ['conversation_id', 'user_id', 'website_id'];
+    protected $fillable = ['conversation_id', 'user_id', 'website_id', 'notes'];
 
     public function conversation()
     {

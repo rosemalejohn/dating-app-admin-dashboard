@@ -19,9 +19,7 @@
 							<span class="from">{{ conversation.user.name }}</span>
 							<!-- <span class="time">{{ conversation.created_at | date 'relative' }}</span> -->
 						</span>
-						<span class="message">
-							New conversation flagged.
-						</span>
+						<span v-text="conversation.notes" class="message | str_limit 2"></span>
 						</a>
 					</li>
 				</ul>

@@ -51,8 +51,18 @@
 			FlaggedConversation
 		},
 
+		data() {
+			return {
+				auth: {}
+			}
+		},
+
 		ready() {
 			let self = this;
+
+			this.$http.get('auth').then(response => {
+				this.auth = response.data;
+			})
 
 			socket.on('take-chat:App\\Events\\UserTakeChatEvent', function(data) {
 				self.$broadcast('conversation:remove', data.conversation);
@@ -108,5 +118,10 @@
 	    return moment(value).format(format || "MM/DD/YYYY");
 
 	});
+
+	Vue.filter('str_limit', function(value, limit) {
+		console.log(value);
+		return value.toUpperCase();
+	})
 
 </script>

@@ -1,4 +1,8 @@
 <template>
+	<div class="alert alert-danger" v-if="conversation.is_flagged">
+		This conversation is flagged due to: <strong>{{ conversation.flagged.notes }}</strong>
+		<button v-if="conversation.flagged.user_id == $root.auth.id" data-toggle="modal" data-target="#showUpdateConversationFlaggedModal" class="btn btn-xs btn-default"><i class="fa fa-edit"></i></button>
+	</div>
 	<div class="row">
 		<div class="col-md-6 col-md-push-3">
 			<chat-box></chat-box>
@@ -12,6 +16,14 @@
 			<notes :notes.sync="conversation.notes" filter="initiator"></notes>
 		</div>
 	</div>
+	<update-conversation-flagged-modal title="Update notes" target="showUpdateConversationFlaggedModal">
+		<conversation-flagged-form 
+			slot="content" 
+			:form.sync="conversation.flagged" 
+			:conversation.sync="conversation"
+			method="PUT"></conversation-flagged-form>
+		<div slot="modal-footer"></div>
+	</update-conversation-flagged-modal>
 </template>
 
 <script>
@@ -19,10 +31,13 @@
 	import ChatBox from './ChatBox.vue'
 	import Notes from './Notes.vue'
 
+	import ConversationFlaggedForm from './../../forms/FlaggedConversationNotes.vue'
+	import UpdateConversationFlaggedModal from './../Modal.vue'
+
 	export default {
 
 		components: {
-			ProfileBox, ChatBox, Notes
+			ProfileBox, ChatBox, Notes, ConversationFlaggedForm, UpdateConversationFlaggedModal
 		},
 
 		props: {

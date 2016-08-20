@@ -83,5 +83,19 @@ class DatabaseSeeder extends Seeder
             'value' => 5,
             'description' => 'Site limit count for every client (for super user only)',
         ]);
+
+        Config::create([
+            'key' => 'number_of_profile_view',
+            'name' => 'Number of profiles to be viewed',
+            'value' => 5,
+            'description' => 'How many profiles to be viewed in every fake profiles?',
+        ]);
+
+        Config::create([
+            'key' => 'allow_fake_profile_views',
+            'name' => 'Allow fake profiles to view random profiles',
+            'value' => true,
+            'description' => 'Enable fake profile to view random profiles',
+        ]);
     }
 }
