@@ -51,17 +51,16 @@ export default {
     methods: {
         submit() {
             if (this.method == 'POST') {
-                Spinner.spin();
                 Conversation.flag(this.form)
                     .then(response => {
                         this.conversation.is_flagged = true;
-                        this.conversation.flagged.notes = this.form.notes;
+                        this.conversation.flagged = response.data;
                         this.form.notes = '';
                         toastr.success('Conversation flagged.');
-                        Spinner.stop();
+                        // Spinner.stop();
                     }).catch(err => {
-                        toastr.error('Cannot update notes.');
-                        Spinner.stop();
+                        toastr.error('Cannot add notes.');
+                        // Spinner.stop();
                     });
             } else {
                 Spinner.spin();

@@ -65,7 +65,9 @@ class StatController extends Controller
                 return Carbon::createFromTimestamp($message->timeStamp)->format('M-d-Y');
             });
 
-        return response()->json($messages);
+        return response()->json($messages->map(function ($message, $key) {
+            return ['date' => $key, 'value' => $message->count()];
+        })->all());
     }
 
     public function getTotalMessages()

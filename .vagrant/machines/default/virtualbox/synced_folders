@@ -1,1 +1,0 @@
-{"virtualbox":{"/home/vagrant/admin-dashboard-project":{"type":null,"mount_options":[],"guestpath":"/home/vagrant/admin-dashboard-project","hostpath":"E:/www/admin-dashboard-project","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"E:/www/admin-dashboard-project","disabled":false,"__vagrantfile":true}}}

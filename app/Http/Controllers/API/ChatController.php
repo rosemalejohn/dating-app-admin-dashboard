@@ -107,7 +107,7 @@ class ChatController extends Controller
         ];
         $note = Note::create($data);
 
-        return response()->json($note);
+        return response()->json($conversation->flagged);
     }
 
     public function flagConversation(Request $request, Website $website)
@@ -145,7 +145,7 @@ class ChatController extends Controller
     {
         $conversation = Conversation::findOrFail($conversation_id);
 
-        $messages = $conversation->messages()->with('sender.avatar', 'recipient.avatar')->get();
+        $messages = $conversation->messages()->with('sender.avatar', 'recipient.avatar', 'attachments')->get();
 
         return response()->json($messages, 200);
     }

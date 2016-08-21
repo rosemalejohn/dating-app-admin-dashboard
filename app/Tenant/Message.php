@@ -32,6 +32,11 @@ class Message extends Model
         return $this->belongsTo(User::class, 'recipientId');
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(MessageAttachment::class, 'messageId');
+    }
+
     public function scopeUnread($query)
     {
         return $query->where('recipientRead', 0);

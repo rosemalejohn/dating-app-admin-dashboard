@@ -19,7 +19,7 @@
 					<li v-for="message in messages | filterBy searchMessage" class="{{ message.is_sender ? 'out' : 'in' }}">
 						<img class="avatar" :src="message.is_sender ? initiator.avatar.url : interlocutor.avatar.url"/>
 						<div class="message">
-							<span class="arrow">
+							<span class="arrow"> 
 							</span>
 							<a target="_blank" href="{{ website.url + '/user/' + message.sender.username }}" class="name">
 								{{ message.sender ? message.sender.username : '' }}
@@ -27,6 +27,11 @@
 							<span class="datetime">
 							at {{ message.timeStamp | date 'unix' }}</span>
 							<span class="body">{{ message.text }}</span>
+						</div>
+						<div class="message" v-for="attachment in message.attachments" v-if="message.attachments">
+							<a class="attachment" href="#" data-featherlight="{{ attachment.link }}">
+								<img :class="{'pull-right': message.is_sender}" class="thumbnail" width="40%" :src="attachment.link" />
+							</a>
 						</div>
 					</li>
 				</ul>
@@ -54,6 +59,12 @@
 		<div slot="modal-footer"></div>
 	</flagged-conversation-modal>
 </template>
+
+<style lang="sass">
+	.attachment {
+		display: inline-block;
+	}
+</style>
 
 <script>
 	import moment from 'moment'

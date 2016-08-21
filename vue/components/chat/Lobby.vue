@@ -32,7 +32,7 @@
 							</th>
 						</tr>
 					</thead>
-					<tr :class="{'danger': conversation.is_flagged}" v-if="!conversation.is_flagged || (conversation.is_flagged && (auth.is_super || auth.is_admin))" v-for="conversation in conversations">
+					<tr :class="{'danger': conversation.is_flagged}" v-if="!conversation.is_flagged || (conversation.is_flagged && ($root.auth.is_super || $root.auth.is_admin))" v-for="conversation in conversations">
 						<td>
 							<img class="user-pic" :src="conversation.interlocutor.website[0].logo || '/img/default-photo.png'">
 						</td>
@@ -46,17 +46,17 @@
 							{{ conversation.messages_count }}
 						</td>
 						<td>
-							{{ conversation.flagged.notes }}
+							{{ conversation.flagged ? conversation.flagged.notes : '' }}
 						</td>
 						<td>
 							<a href="/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}" class="btn btn-xs green filter-cancel"><i class="fa fa-comments-o"></i>&nbsp;Take chat</a>
 						</td>
 					</tr>
 				</table>
-				<div v-if="!users.length" class="alert alert-block alert-danger fade in">
+				<div v-if="!conversations.length" class="alert alert-block alert-danger fade in">
 					<button type="button" class="close" data-dismiss="alert"></button>
 					<h4 class="alert-heading"><strong>Important!</strong></h4>
-					<p>No users listed.</p>
+					<p>No conversations listed.</p>
 				</div>
 			</div>
 		</div>
@@ -81,14 +81,7 @@
 		data() {
 			return {
 				search: '',
-				auth: {}
 			}
-		},
-
-		ready() {
-			this.$http.get('auth').then(response => {
-				this.auth = response.data;
-			})
 		},
 
 		methods: {

@@ -1,7 +1,6 @@
 @extends('_layouts.auth')
 
 @section('page_title', '404')
-@section('page_description', 'Page not found')
 
 @section('stylesheets')
 <link href="/assets/pages/css/error.css" rel="stylesheet" type="text/css" />

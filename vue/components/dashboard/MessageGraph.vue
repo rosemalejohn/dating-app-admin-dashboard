@@ -85,14 +85,13 @@
 						for (var i = 30; i > 1; i--) {
 							dates.push(moment().subtract(i, 'days'));
 						}
-						console.log(response.data);
 						this.data = _.map(dates, (date) => {
 							date = moment(date);
+							var count = _.find(response.data, {date: date.format('MMM-DD-YYYY')});
+
 							return {
 								date: date.format('MMM D'), 
-								value: _.filter(response.data, (group, key) => {
-									return key == date.format('MMM-DD-YYYY')
-								}).length
+								value: count ? count.value : 0
 							}
 						});
 
