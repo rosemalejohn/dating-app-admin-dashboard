@@ -121,7 +121,9 @@ class StatController extends Controller
         $replies = UserSentMessageReply::unpaid()->with('user_message.user')->get();
 
         foreach ($replies as $reply) {
-            $earnings = $earnings + $reply->user_message->user->pay_rate;
+            if ($reply->user_message->user) {
+                $earnings = $earnings + $reply->user_message->user->pay_rate;
+            }
         }
 
         return $earnings;

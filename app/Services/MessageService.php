@@ -1,6 +1,8 @@
 <?php namespace App\Services;
 
+use App\ReturningConversation;
 use App\Services\TenantService;
+use App\Tenant\Conversation;
 use App\Website;
 
 class MessageService
@@ -52,6 +54,29 @@ class MessageService
 
         $conversations = $conversations->flatten()->sortBy('createStamp')->values();
         return $conversations;
+    }
+
+    public function getReturningConversations()
+    {
+        $websites = ReturningConversation::all()->groupBy('website_id');
+
+        $collection = collect();
+
+        foreach ($websites as $id) {
+
+            $website = Website::find($id);
+
+            $tenant->connect($website);
+
+            $conversations = Conversation::has('returning_conversation')
+                ->with('returning_conversation')
+                ->get();
+
+            $collection->push($conversations);
+
+        }
+
+        return $collection->flatten();
     }
 
 }

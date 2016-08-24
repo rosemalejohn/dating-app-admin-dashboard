@@ -32,7 +32,7 @@
 							</th>
 						</tr>
 					</thead>
-					<tr :class="{'danger': conversation.is_flagged}" v-if="!conversation.is_flagged || (conversation.is_flagged && ($root.auth.is_super || $root.auth.is_admin))" v-for="conversation in conversations">
+					<tr :class="{'danger': conversation.is_flagged}" v-if="!conversation.is_flagged || (conversation.is_flagged && ($root.auth.is_super || $root.auth.is_admin))" v-for="conversation in conversations" track-by="id">
 						<td>
 							<img class="user-pic" :src="conversation.interlocutor.website[0].logo || '/img/default-photo.png'">
 						</td>
@@ -70,7 +70,7 @@
 	export default {
 
 		props: {
-			conversations: {
+			conversations: { 
 				type: Array,
 				default() {
 					return []
@@ -84,11 +84,26 @@
 			}
 		},
 
+		ready() {
+
+			setInterval(() => {
+				console.log('Fetching conversations...');
+				this.getConversations();
+			}, 10000);
+
+		},	
+
 		methods: {
 			getInitiatorMessagesCount(conversation) {
 				return _.filter(conversation.messages, (message) => {
 					return message.senderId == conversation.initiator.id;
 				}).length;
+			},
+
+			getConversations() {
+				this.$http.get('chat').then(response => {
+					this.conversations = response.data;
+				})
 			}
 		},
 

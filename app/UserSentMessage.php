@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Tenant\Message;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class UserSentMessage extends Model
@@ -32,6 +33,21 @@ class UserSentMessage extends Model
     public function replies()
     {
         return $this->hasMany(UserSentMessageReply::class);
+    }
+
+    public function scopeLastTwentyFourHours($query)
+    {
+        return $query->where('created_at', '>=', Carbon::subDay());
+    }
+
+    public function scopeLastThreeDays($query)
+    {
+        return $query->where('created_at', '>=', Carbon::subDays(3));
+    }
+
+    public function scopeLastTwoWeeks($query)
+    {
+        return $query->where('created_at', '>=', Carbon::subWeeks(2));
     }
 
 }

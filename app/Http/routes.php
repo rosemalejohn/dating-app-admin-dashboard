@@ -6,6 +6,13 @@ Route::get('/', 'DashboardController@index');
 
 Route::group(['middleware' => ['auth', 'tenant']], function () {
 
+    Route::get('testing', function (\App\Services\MessageService $messageService) {
+
+        $conversations = $messageService->getReturningConversations();
+
+        dd($conversations);
+    });
+
     Route::get('profile', 'UserController@profile');
 
     Route::group(['prefix' => 'users'], function () {

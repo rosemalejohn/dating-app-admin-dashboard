@@ -165,6 +165,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+        Anchu\Ftp\FtpServiceProvider::class,
 
     ],
 

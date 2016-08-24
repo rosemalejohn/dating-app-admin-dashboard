@@ -5,6 +5,7 @@ namespace App\Tenant;
 use App\ActiveConversation;
 use App\FlaggedConversation;
 use App\Note;
+use App\ReturningConversation;
 use App\Tenant\Model;
 
 class Conversation extends Model
@@ -57,6 +58,11 @@ class Conversation extends Model
     public function last_message()
     {
         return $this->hasOne(LastMessage::class, 'conversationId');
+    }
+
+    public function returning_conversation()
+    {
+        return $this->hasOne(ReturningConversation::class, 'conversationId');
     }
 
     public function notes()
