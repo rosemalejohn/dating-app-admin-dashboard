@@ -55,7 +55,9 @@ class ChatController extends Controller
             'text' => 'required|min:1',
         ]);
 
-        $conversation = Conversation::findOrFail($conversation_id);
+        $conversation = Conversation::with('returning_conversation')
+            ->whereId($conversation_id)
+            ->first();
 
         $message = new Message;
         $message->timeStamp = time();
@@ -64,6 +66,11 @@ class ChatController extends Controller
         $message->text = $request->text;
 
         $conversation->messages()->save($message);
+
+        if ($conversation->returning_conversation) {
+            $conversation->returning_conversation->already_sent = true;
+            $conversation->returning_conversation->save();
+        }
 
         $initiatorMessages = $conversation->messages()->where('senderId', $conversation->initiatorId)->get();
 
@@ -81,11 +88,6 @@ class ChatController extends Controller
         if ($user) {
             $this->profile->login($user);
         }
-
-        // $request->user()->create([
-        //     'website_id' => $website->id,
-        //     'message_id' => $message->id,
-        // ]);
 
         UserSentMessage::create([
             'user_id' => auth()->user()->id,

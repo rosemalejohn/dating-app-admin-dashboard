@@ -32,7 +32,14 @@
 							</th>
 						</tr>
 					</thead>
-					<tr :class="{'danger': conversation.is_flagged}" v-if="!conversation.is_flagged || (conversation.is_flagged && ($root.auth.is_super || $root.auth.is_admin))" v-for="conversation in conversations" track-by="id">
+					<tr :class="{
+						'danger': conversation.is_flagged, 
+						'success': conversation.returning_conversation.status == 1,
+						'info': conversation.returning_conversation.status == 2,
+						'warning': conversation.returning_conversation.status == 3}" 
+						v-if="!conversation.is_flagged || (conversation.is_flagged && ($root.auth.is_super || $root.auth.is_admin))" 
+						v-for="conversation in conversations" 
+						track-by="id">
 						<td>
 							<img class="user-pic" :src="conversation.interlocutor.website[0].logo || '/img/default-photo.png'">
 						</td>

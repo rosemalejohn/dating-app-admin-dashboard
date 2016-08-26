@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReturningConversation extends Model
 {
-    protected $fillable = ['website_id', 'conversation_id', 'status'];
+    protected $fillable = ['website_id', 'conversation_id', 'status', 'already_sent'];
 
     public function website()
     {

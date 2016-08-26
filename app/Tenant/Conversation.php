@@ -62,7 +62,7 @@ class Conversation extends Model
 
     public function returning_conversation()
     {
-        return $this->hasOne(ReturningConversation::class, 'conversationId');
+        return $this->hasOne(ReturningConversation::class, 'conversation_id');
     }
 
     public function notes()

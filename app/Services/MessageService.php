@@ -58,25 +58,26 @@ class MessageService
 
     public function getReturningConversations()
     {
-        $websites = ReturningConversation::all()->groupBy('website_id');
+        $returning_conversations = ReturningConversation::where('already_sent', false)->get();
 
         $collection = collect();
 
-        foreach ($websites as $id) {
+        foreach ($returning_conversations as $returning_conversation) {
 
-            $website = Website::find($id);
+            $website = Website::find($returning_conversation->website_id);
 
-            $tenant->connect($website);
+            if ($website) {
+                $this->tenant->connect($website);
 
-            $conversations = Conversation::has('returning_conversation')
-                ->with('returning_conversation')
-                ->get();
+                $conversation = Conversation::whereId($returning_conversation->conversation_id)
+                    ->with('returning_conversation', 'interlocutor.website', 'initiator')
+                    ->first();
 
-            $collection->push($conversations);
+                $collection->push($conversation);
+            }
 
         }
-
-        return $collection->flatten();
+        return $collection;
     }
 
 }

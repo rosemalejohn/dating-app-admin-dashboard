@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\ReturningConversation as ReturningConversationModel;
+use App\Services\TenantService;
 use App\UserSentMessage;
+use App\Website;
 use Illuminate\Console\Command;
-use App\ReturningConversation;
-use Carbon\Carbon;
 
 class ReturningConversation extends Command
 {
@@ -28,9 +29,13 @@ class ReturningConversation extends Command
      *
      * @return void
      */
-    public function __construct()
+    public $tenant;
+
+    public function __construct(TenantService $tenant)
     {
         parent::__construct();
+
+        $this->tenant = $tenant;
     }
 
     /**
@@ -45,26 +50,34 @@ class ReturningConversation extends Command
         $last_two_weeks = UserSentMessage::lastTwoWeeks()->get();
 
         foreach ($last_twenty_four as $sent_message) {
-            ReturningConversation::create([
-                'website_id' => $sent_message->website_id,
-                'conversation' => $sent_message->message->conversationId,
-            ]);
+            $website = Website::find($sent_message->website_id);
+            $this->tenant->connect($website);
+            try {
+                ReturningConversationModel::create([
+                    'website_id' => $sent_message->website_id,
+                    'conversation_id' => $sent_message->message->conversationId,
+                ]);
+            } catch (\Illuminate\Database\QueryException $ex) {}
+
         }
 
         foreach ($last_three_days as $sent_message) {
-            $returning_conversation = $sent_message->conversation->returning_conversation;
-            if (returning_conversation) {
-                $returning_conversation->update(['status' => 2]); 
-            }
+            $this->updateReturningConversation($sent_message, ['status' => 2, 'already_sent' => false]);
         }
 
         foreach ($last_two_weeks as $sent_message) {
-            $returning_conversation = $sent_message->conversation->returning_conversation;
-            if ($returning_conversation) {
-                $returning_conversation->update(['status' => 3]);
-            }
+            $this->updateReturningConversation($sent_message, ['status' => 3, 'already_sent' => false]);
         }
+    }
 
-        $returning_conversations = ReturningConversation::all();
+    protected function updateReturningConversation($sent_message, $data)
+    {
+        $website = Website::find($sent_message->website_id);
+        $this->tenant->connect($website);
+        $returning_conversation = $sent_message->message->conversation->returning_conversation;
+
+        if ($returning_conversation && ($returning_conversation->status != $data['status'])) {
+            $returning_conversation->update($data);
+        }
     }
 }

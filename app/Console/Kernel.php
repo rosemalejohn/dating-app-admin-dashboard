@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\ComputeEarnings::class,
         Commands\LoginAccounts::class,
         Commands\ViewRandomProfiles::class,
+        Commands\ReturningConversation::class,
     ];
 
     /**
@@ -29,9 +30,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('login:fake-profiles')
-        //     ->daily();
-        // $schedule->command('message:send')
-        //     ->daily();
+
     }
 }

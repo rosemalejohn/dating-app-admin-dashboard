@@ -17,7 +17,11 @@ class CreateReturningConversationsTable extends Migration
             $table->integer('website_id')->unsigned();
             $table->foreign('website_id')->references('id')->on('websites')->onDelete('cascade');
             $table->integer('conversation_id')->unsigned();
+
+            $table->unique(['website_id', 'conversation_id']);
+
             $table->tinyInteger('status')->default(1); // (1) 24 Hours, (2) 3 days, (3) 2 weeks
+            $table->boolean('already_sent')->default(false);
             $table->timestamps();
         });
     }

@@ -37,17 +37,26 @@ class UserSentMessage extends Model
 
     public function scopeLastTwentyFourHours($query)
     {
-        return $query->where('created_at', '>=', Carbon::subDay());
+        return $query->whereBetween('created_at', [
+            Carbon::now()->subDay()->startOfDay(),
+            Carbon::now()->subDay()->endOfDay(),
+        ])->whereDoesntHave('replies')->orderBy('created_at', 'desc');
     }
 
     public function scopeLastThreeDays($query)
     {
-        return $query->where('created_at', '>=', Carbon::subDays(3));
+        return $query
+            ->whereBetween('created_at', [Carbon::now()->subDays(3)->startOfDay(), Carbon::now()->subDays(3)->endOfDay()])
+            ->whereDoesntHave('replies')
+            ->orderBy('created_at', 'desc');
     }
 
     public function scopeLastTwoWeeks($query)
     {
-        return $query->where('created_at', '>=', Carbon::subWeeks(2));
+        return $query
+            ->whereBetween('created_at', [Carbon::now()->subWeeks(2)->startOfDay(), Carbon::now()->subWeeks(2)->endOfDay()])
+            ->whereDoesntHave('replies')
+            ->orderBy('created_at', 'desc');
     }
 
 }
