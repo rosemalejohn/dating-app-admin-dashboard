@@ -4,6 +4,7 @@ use App\ReturningConversation;
 use App\Services\TenantService;
 use App\Tenant\Conversation;
 use App\Website;
+use Image;
 
 class MessageService
 {
@@ -70,7 +71,8 @@ class MessageService
                 $this->tenant->connect($website);
 
                 $conversation = Conversation::whereId($returning_conversation->conversation_id)
-                    ->with('returning_conversation', 'interlocutor.website', 'initiator')
+                    ->with('returning_conversation', 'interlocutor.website', 'initiator', 'flagged')
+                    ->withCount('messages')
                     ->first();
 
                 $collection->push($conversation);
@@ -78,6 +80,29 @@ class MessageService
 
         }
         return $collection;
+    }
+
+    public function sendAttachment($photo, $message)
+    {
+        $filename = str_random(13) . '.jpg';
+
+        $image = Image::make($photo);
+        $image->save('uploads/' . $filename);
+
+        $attachment = $message->attachments()->create([
+            'hash' => str_random(13),
+            'fileName' => $filename,
+            'fileSize' => $image->filesize(),
+        ]);
+
+        $this->tenant->ftp()->changeDir('ow_userfiles/plugins/mailbox/attachments');
+
+        $this->tenant->ftp()->uploadFile(
+            public_path('uploads/' . $filename),
+            "attachment_{$attachment->id}_{$attachment->hash}_{$attachment->fileName}",
+            FTP_BINARY);
+
+        return $attachment;
     }
 
 }

@@ -13,7 +13,7 @@ class WebsiteController extends Controller
 {
     public function index()
     {
-        $websites = Website::all();
+        $websites = Website::with('ftp')->get();
 
         return response()->json($websites);
     }
@@ -63,6 +63,7 @@ class WebsiteController extends Controller
         if (auth()->user()->can('store', $website)) {
             if ($tenant->testConnection($website)) {
                 $website->save();
+                $website->ftp()->create($request->ftp);
                 return response()->json($website, 201);
             }
             return response()->json('We cannot connect to the database, please check the connection again.', 500);
@@ -73,8 +74,13 @@ class WebsiteController extends Controller
     public function update(Request $request, Website $website)
     {
         $request->url = rtrim($request->url, '/');
-        // dd($request->url);
+        if ($website->ftp) {
+            $website->ftp->update($request->ftp);
+        } else {
+            $website->ftp()->create($request->ftp);
+        }
         $website->update($this->getWebsite($request));
+
         return response()->json(true);
     }
 

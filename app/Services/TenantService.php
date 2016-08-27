@@ -3,6 +3,7 @@
 use App\Website;
 use Config;
 use DB;
+use FTP;
 
 class TenantService
 {
@@ -35,8 +36,14 @@ class TenantService
             'database.connections.tenant.password' => $website->password,
             'database.connections.tenant.prefix' => $website->prefix,
         ]);
+        Config::set('ftp.connections.connection', $website->ftp);
 
         return $this;
+    }
+
+    public function ftp()
+    {
+        return FTP::connection('connection');
     }
 
     public function toDB()

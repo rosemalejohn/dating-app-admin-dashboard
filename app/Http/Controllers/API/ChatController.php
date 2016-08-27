@@ -22,14 +22,19 @@ class ChatController extends Controller
 
     public $profile;
 
-    public function __construct(ProfileService $profile)
+    public $msgService;
+
+    public function __construct(ProfileService $profile, MessageService $msgService)
     {
         $this->profile = $profile;
+
+        $this->msgService = $msgService;
     }
 
     public function lobby(MessageService $msgService)
     {
-        $conversations = $msgService->getConversations();
+        $conversations = $msgService->getReturningConversations()
+            ->merge($msgService->getConversations());
         return response()->json($conversations);
     }
 
@@ -67,6 +72,10 @@ class ChatController extends Controller
 
         $conversation->messages()->save($message);
 
+        if ($website->ftp && $request->file) {
+            $this->msgService->sendAttachment($request->file, $message);
+        }
+
         if ($conversation->returning_conversation) {
             $conversation->returning_conversation->already_sent = true;
             $conversation->returning_conversation->save();
@@ -94,6 +103,8 @@ class ChatController extends Controller
             'website_id' => $website->id,
             'message_id' => $message->id,
         ]);
+
+        $message = Message::whereId($message->id)->with('attachments')->first();
 
         return response()->json($message);
     }

@@ -26,4 +26,8 @@ class Website extends Model
         return $this->belongsToMany(User::class, 'user_managed_websites')->withTimestamps();
     }
 
+    public function ftp()
+    {
+        return $this->hasOne(WebsiteFTP::class);
+    }
 }

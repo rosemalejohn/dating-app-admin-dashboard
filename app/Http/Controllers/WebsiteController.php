@@ -9,7 +9,7 @@ class WebsiteController extends Controller
 {
     public function index()
     {
-        $websites = Website::all();
+        $websites = Website::with('ftp')->get();
         return view('websites.index', compact('websites'));
     }
 

@@ -9,7 +9,7 @@
 		</div>
 		<div class="portlet-body">
 			<div class="table-scrollable table-scrollable-borderless">
-				<table class="table table-hover table-light">
+				<table class="table table-light">
 					<thead>
 						<tr class="uppercase">
 							<th>
@@ -34,9 +34,9 @@
 					</thead>
 					<tr :class="{
 						'danger': conversation.is_flagged, 
-						'success': conversation.returning_conversation.status == 1,
-						'info': conversation.returning_conversation.status == 2,
-						'warning': conversation.returning_conversation.status == 3}" 
+						'info': conversation.returning_conversation && conversation.returning_conversation.status == 1,
+						'success': conversation.returning_conversation && conversation.returning_conversation.status == 2,
+						'warning': conversation.returning_conversation && conversation.returning_conversation.status == 3}" 
 						v-if="!conversation.is_flagged || (conversation.is_flagged && ($root.auth.is_super || $root.auth.is_admin))" 
 						v-for="conversation in conversations" 
 						track-by="id">
@@ -69,6 +69,38 @@
 		</div>
 	</div>
 </template>
+
+<style lang="sass">
+	tr {
+		&.info,
+		&.danger,
+		&.warning,
+		&.success,
+		&.day, 
+		&.three-days,
+		&.two-weeks {
+			td {
+				color: white !important;
+				font-weight: bolder !important;
+			}
+		}
+		&.day {
+			td {
+				background-color: yellow;
+			}
+		}
+		&.three-days {
+			td {
+				background-color: yellow;
+			}
+		}
+		&.two-weeks {
+			td {
+				background-color: yellow;
+			}
+		}
+	}
+</style>
 
 <script>
 	import _ from 'underscore'

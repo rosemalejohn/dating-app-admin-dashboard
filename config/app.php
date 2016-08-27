@@ -165,6 +165,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         Anchu\Ftp\FtpServiceProvider::class,
 
     ],
@@ -214,6 +215,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

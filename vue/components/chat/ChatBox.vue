@@ -34,6 +34,15 @@
 							</a>
 						</div>
 					</li>
+					<!-- <li v-if="file" class="in" style="position: relative;">
+						<img class="avatar" :src="interlocutor.avatar.url"/>
+						<div class="message">
+							<i @click="file == ''" class="fa fa-close close"></i>
+							<a class="attachment" href="#">
+								<img :class="" class="thumbnail" width="40%" :src="file" />
+							</a>
+						</div>
+					</li> -->
 				</ul>
 				<p v-else>No messages to show.</p>
 			</div>
@@ -48,6 +57,11 @@
 						<button type="submit" class="btn blue icn-only">
 							<i class="fa fa-arrow-right icon-white"></i>
 						</button>
+						<photo-upload :photo.sync="file">
+							<button slot="holder" onclick="document.getElementById('photo').click();" type="button" class="btn blue icn-only">
+								<i class="fa fa-photo icon-white"></i>
+							</button>
+						</photo-upload>
 					</div>
 				</form>
 			</div>
@@ -64,6 +78,31 @@
 	.attachment {
 		display: inline-block;
 	}
+
+	.chat-form {
+		.input-cont {
+			margin-right: 100px;
+		}
+		.btn-cont {
+			width: unset;
+
+			.arrow {
+				right: 100px;
+			}
+		}
+	}
+	.avatar {
+		&:hover {
+			.close {
+				display: block;
+			}
+		}
+	}
+	.close {
+		position: absolute;
+		top: 0;
+		left: 70px;
+	}
 </style>
 
 <script>
@@ -72,17 +111,19 @@
 	import Spinner from './../../spin'
 	import Conversation from '../../stores/conversation'
 	import FlaggedConversationModal from './../Modal.vue'
+	import PhotoUpload from './../PhotoUpload.vue'
 	import FlaggedConversationNotes from './../../forms/FlaggedConversationNotes.vue'
 
 	export default {
 
 		components: {
-			FlaggedConversationModal, FlaggedConversationNotes
+			FlaggedConversationModal, FlaggedConversationNotes, PhotoUpload
 		},
 
 		data() {
 			return {
 				textContent: '',
+				file: '',
 				initiator: this.$parent.conversation.initiator,
 				interlocutor: this.$parent.conversation.interlocutor,
 				conversation: this.$parent.conversation,
@@ -120,11 +161,13 @@
 					text: this.textContent,
 					sender: this.$parent.conversation.interlocutor,
 					recipient: this.$parent.conversation.initiator,
-					timeStamp: moment().unix()
+					timeStamp: moment().unix(),
+					file: this.file
 				}
 				this.messages.push(message);
 				this.textContent = ''
 				this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(response => {
+					message.attachments = response.data.attachments;
 					toastr.success('Message sent!');
 				}).catch(response => {
 					this.textContent = message.text;
@@ -150,15 +193,7 @@
 					this.messages.$remove(message);
 					toastr.error('Message not sent!');
 				})
-			},
-
-			// flagConversation() {
-			// 	Conversation.flag(this.website.id, this.conversation.id)
-			// 		.then(response => {
-			// 			this.conversation.is_flagged = true;
-			// 			toastr.success('Conversation flagged.')
-			// 		})
-			// },
+			},	
 
 			unflagConversation() {
 				Conversation.unflag(this.website.id, this.conversation.id).then(response => {

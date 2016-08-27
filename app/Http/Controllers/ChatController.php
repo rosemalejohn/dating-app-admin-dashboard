@@ -17,8 +17,8 @@ class ChatController extends Controller
 
     public function lobby()
     {
-        $conversations = $this->msgService->getConversations()
-            ->merge($this->msgService->getReturningConversations());
+        $conversations = $this->msgService->getReturningConversations()
+            ->merge($this->msgService->getConversations());
 
         return view('chat.lobby')->with(compact('conversations'));
     }

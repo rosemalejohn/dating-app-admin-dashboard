@@ -6,17 +6,6 @@ Route::get('/', 'DashboardController@index');
 
 Route::group(['middleware' => ['auth', 'tenant']], function () {
 
-    Route::get('testing', function () {
-
-        $sent_messages = \App\UserSentMessage::whereBetween('created_at', [
-            \Carbon\Carbon::now()->subDay()->startOfDay(),
-            \Carbon\Carbon::now()->subDay()->endOfDay(),
-        ])->whereDoesntHave('replies')->orderBy('created_at', 'desc')->get();
-
-        dd($sent_messages);
-
-    });
-
     Route::get('profile', 'UserController@profile');
 
     Route::group(['prefix' => 'users'], function () {

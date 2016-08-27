@@ -1,5 +1,7 @@
 <template>
-	<img onclick="document.getElementById('photo').click()" class="thumbnail img-holder" :src="photo || '/img/default-photo.png'" />
+	<slot name="holder">
+		<img onclick="document.getElementById('photo').click()" class="thumbnail img-holder" :src="photo || '/img/default-photo.png'" />
+	</slot>
     <input @change="selectPhoto" class="hide" id="photo" type="file" />
 </template>
 

@@ -13,6 +13,8 @@ class MessageAttachment extends Model
 
     protected $appends = ['link'];
 
+    public $timestamps = false;
+
     public function message()
     {
         return $this->belongsTo(Message::class, 'messageId');
@@ -20,7 +22,7 @@ class MessageAttachment extends Model
 
     public function getLinkAttribute()
     {
-        return config('database.connections.tenant.url') . '/ow_userfiles/plugins/mailbox/attachments/attachment_' . $this->id . '_' . $this->hash . '_' . $this->fileName;
+        return config('database.connections.tenant.url') . "/ow_userfiles/plugins/mailbox/attachments/attachment_{$this->id}_{$this->hash}_{$this->fileName}";
     }
 
 }
