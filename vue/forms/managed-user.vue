@@ -1,12 +1,14 @@
 <template>
-	<div class="form-group">
-		<div class="input-group">
-			<input v-model="search" class="form-control" type="text" name="password" placeholder="Search user...">
-			<span class="input-group-btn">
-				<button @click="searchUser()" class="btn btn-success" type="button"><i class="fa fa-search fa-fw"></i></button>
-			</span>
+	<form @submit.prevent="searchUser()">
+		<div class="form-group">
+			<div class="input-group">
+				<input v-model="search" class="form-control" type="text" placeholder="Search user...">
+				<span class="input-group-btn">
+					<button class="btn btn-success" type="submit"><i class="fa fa-search fa-fw"></i></button>
+				</span>
+			</div>
 		</div>
-	</div>
+	</form>
 	<div v-show="users.length" class="scroller" style="max-height: 350px; height: 100%; margin-top: 10px 0;" data-always-visible="1" data-rail-visible1="1">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
