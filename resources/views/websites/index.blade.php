@@ -12,5 +12,7 @@
 @section('content')
 	{!! Breadcrumbs::render('websites') !!}
 
+	@include('flash::message')
+
 	<website-listings :websites="{{ $websites }}"></website-listings>
 @stop

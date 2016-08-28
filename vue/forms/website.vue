@@ -161,7 +161,9 @@ export default {
             type: Object,
             twoWay: true,
             default() {
-                return {}
+                return {
+                    ftp: {}
+                }
             },
             required: false
         }

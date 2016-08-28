@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Tenant\User;
 use App\Website;
+use Illuminate\Database\QueryException;
 
 class WebsiteController extends Controller
 {
@@ -22,8 +23,9 @@ class WebsiteController extends Controller
     {
         try {
             $users = User::with('avatar', 'profile')->paginate(10)->toJson();
-        } catch (\QueryException $ex) {
-            abort(404);
+        } catch (QueryException $ex) {
+            flash()->error("We can't fetch users for {$website->name}.");
+            return redirect()->to('websites');
         }
 
         return view('websites.users')->with(compact('website', 'users'));

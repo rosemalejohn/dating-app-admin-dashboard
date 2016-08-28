@@ -167,6 +167,7 @@ return [
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Anchu\Ftp\FtpServiceProvider::class,
+        Laracasts\Flash\FlashServiceProvider::class,
 
     ],
 

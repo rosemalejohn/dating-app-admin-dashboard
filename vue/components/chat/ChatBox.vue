@@ -7,7 +7,7 @@
 			</div>
 			<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-					<button onclick="window.history.back();" class="btn btn-danger grey-salsa btn-circle btn-sm">Cancel</button>
+					<button onclick="window.location.replace('/chat');" class="btn btn-danger grey-salsa btn-circle btn-sm">Cancel</button>
 					<button v-if="conversation.is_flagged" @click="unflagConversation()" class="btn btn-danger grey-salsa btn-circle btn-sm">Unflag</button>
 					<button v-else data-toggle="modal" data-target="#showFlaggedConversationModal" class="btn btn-danger grey-salsa btn-circle btn-sm">Flag</button>
 				</div>
@@ -29,27 +29,18 @@
 							<span class="body">{{ message.text }}</span>
 						</div>
 						<div class="message" v-for="attachment in message.attachments" v-if="message.attachments">
-							<a class="attachment" href="#" data-featherlight="{{ attachment.link }}">
+							<a class="attachment" rel="attachment" href="{{ attachment.link }}">
 								<img :class="{'pull-right': message.is_sender}" class="thumbnail" width="40%" :src="attachment.link" />
 							</a>
 						</div>
 					</li>
-					<!-- <li v-if="file" class="in" style="position: relative;">
-						<img class="avatar" :src="interlocutor.avatar.url"/>
-						<div class="message">
-							<i @click="file == ''" class="fa fa-close close"></i>
-							<a class="attachment" href="#">
-								<img :class="" class="thumbnail" width="40%" :src="file" />
-							</a>
-						</div>
-					</li> -->
 				</ul>
 				<p v-else>No messages to show.</p>
 			</div>
 			<div v-if="messages" class="chat-form">
 				<form @submit.prevent="send()">
 					<div class="input-cont">
-						<input class="form-control" v-model="textContent" type="text" placeholder="Press enter to send..."/>
+						<input class="form-control" :disabled="file.length > 0" v-model="textContent" type="text" placeholder="Press enter to send..."/>
 					</div>
 					<div class="btn-cont">
 						<span class="arrow">
@@ -57,11 +48,14 @@
 						<button type="submit" class="btn blue icn-only">
 							<i class="fa fa-arrow-right icon-white"></i>
 						</button>
-						<photo-upload :photo.sync="file">
+						<photo-upload v-if="file.length == 0" :photo.sync="file">
 							<button slot="holder" onclick="document.getElementById('photo').click();" type="button" class="btn blue icn-only">
 								<i class="fa fa-photo icon-white"></i>
 							</button>
 						</photo-upload>
+						<button v-if="file.length > 0" @click="removeFile()" type="button" class="btn red icn-only">
+							<i class="fa fa-remove icon-white"></i>
+						</button>
 					</div>
 				</form>
 			</div>
@@ -72,7 +66,7 @@
 		<flagged-conversation-notes slot="content" :form.sync="flaggedConversationForm" :conversation.sync="conversation"></flagged-conversation-notes>
 		<div slot="modal-footer"></div>
 	</flagged-conversation-modal>
-</template>
+</template> 
 
 <style lang="sass">
 	.attachment {
@@ -157,19 +151,15 @@
 		methods: {
 
 			send() {
-				let message = {
-					text: this.textContent,
-					sender: this.$parent.conversation.interlocutor,
-					recipient: this.$parent.conversation.initiator,
-					timeStamp: moment().unix(),
-					file: this.file
-				}
-				this.messages.push(message);
+				Spinner.spin();
+				let message = this.pushMessage();
 				this.textContent = ''
 				this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(response => {
-					message.attachments = response.data.attachments;
+					Spinner.stop();
+					this.file = '';
 					toastr.success('Message sent!');
 				}).catch(response => {
+					Spinner.stop();
 					this.textContent = message.text;
 					this.messages.$remove(message);
 					toastr.error('Message not sent!');
@@ -177,13 +167,7 @@
 			},
 
 			sendAndNext() {
-				let message = {
-					text: this.textContent,
-					sender: this.$parent.conversation.interlocutor,
-					recipient: this.$parent.conversation.initiator,
-					timeStamp: moment().unix()
-				}
-				this.messages.push(message);
+				let message = this.pushMessage();
 				this.textContent = ''
 				this.$http.post('chat/' + this.$parent.website.id + '/' + this.$parent.conversation.id, message).then(response => {
 					toastr.success('Message sent!');
@@ -200,6 +184,30 @@
 					this.conversation.is_flagged = false;
 						toastr.success(response.data);
 					})
+			},
+
+			removeFile() {
+				this.file = '';
+				this.textContent = '';
+			},
+
+			pushMessage() {
+				let message = {
+					text: this.textContent,
+					sender: this.$parent.conversation.interlocutor,
+					recipient: this.$parent.conversation.initiator,
+					timeStamp: moment().unix(),
+					file: this.file,
+					attachments: null
+				}
+
+				if (this.file.length > 0) {
+					message.attachments = [{
+						link: this.file
+					}]
+				}
+				this.messages.push(message);
+				return message;
 			}
 
 		},
@@ -216,6 +224,14 @@
 					$('.chat-box-scroller').slimScroll({
 					    start: 'bottom',
 					});
+				})
+			},
+
+			file(val) {
+				this.$nextTick(() => {
+					if (val != '') {
+						this.textContent = 'Attachment';
+					}
 				})
 			}
 		}

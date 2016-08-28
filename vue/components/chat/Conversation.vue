@@ -58,10 +58,6 @@
 
 		ready() {
 			let self = this;
-			// setTimeout(function() {
-			// 	window.location.replace('/chat');
-			// }, 300000)
-
 			window.onbeforeunload = function(e) {
 				self.$http.delete('chat/' + self.website.id + '/' + self.conversation.id + '/active-conversation')
 					.then(response => {

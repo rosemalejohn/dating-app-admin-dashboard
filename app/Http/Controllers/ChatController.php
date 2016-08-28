@@ -44,12 +44,15 @@ class ChatController extends Controller
     {
         $conversation = $this->msgService->getConversations()->first();
 
-        $website = $conversation->interlocutor->website;
+        if ($conversation) {
+            $website = $conversation->interlocutor->website;
 
-        if ($website) {
-            $website = $website->first();
+            if ($website) {
+                $website = $website->first();
 
-            return redirect()->to('/chat/' . $website->id . '/' . $conversation->id);
+                return redirect()->to('/chat/' . $website->id . '/' . $conversation->id);
+            }
         }
+        return redirect()->to('chat');
     }
 }

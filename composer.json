@@ -10,7 +10,8 @@
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "predis/predis": "^1.1",
         "anchu/ftp": "~2.0",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "laracasts/flash": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
