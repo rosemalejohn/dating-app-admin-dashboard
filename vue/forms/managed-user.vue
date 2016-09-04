@@ -2,7 +2,7 @@
 	<form @submit.prevent="searchUser()">
 		<div class="form-group">
 			<div class="input-group">
-				<input v-model="search" class="form-control" type="text" placeholder="Search user...">
+				<input @keyup="searchUser | debounce 500" v-model="search" class="form-control" type="text" placeholder="Search user...">
 				<span class="input-group-btn">
 					<button class="btn btn-success" type="submit"><i class="fa fa-search fa-fw"></i></button>
 				</span>
@@ -96,15 +96,17 @@
 		methods: {
 
 			searchUser() {
-				Spinner.spin();
-				this.$http.get('websites/' + this.website.id + '/users/' + this.search).then(response => {
-					console.log(response.data);
-					this.paginator = response.data;
-					this.users = this.paginator.data;
-					Spinner.stop();
-				}).catch(response => {
-					toastr.error('Error searching...');
-				})
+				if (this.search) {
+					Spinner.spin();
+					this.$http.get('websites/' + this.website.id + '/users/' + this.search).then(response => {
+						console.log(response.data);
+						this.paginator = response.data;
+						this.users = this.paginator.data;
+						Spinner.stop();
+					}).catch(response => {
+						toastr.error('Error searching...');
+					})
+				}
 			},
 
 			manageUser(user) {

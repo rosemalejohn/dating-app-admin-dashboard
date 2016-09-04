@@ -43,7 +43,10 @@ class UserController extends Controller
 
     public function getAccount(User $user)
     {
-        return view('users.account')->with(compact('user'));
+        if (auth()->user()->is_super or auth()->user()->is_admin or ($user->id == auth()->user()->id)) {
+            return view('users.account')->with(compact('user'));
+        }
+        abort(403);
     }
 
 }

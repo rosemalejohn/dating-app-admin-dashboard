@@ -47,16 +47,14 @@ class UserSentMessage extends Model
     {
         return $query
             ->whereBetween('created_at', [Carbon::now()->subDays(3)->startOfDay(), Carbon::now()->subDays(3)->endOfDay()])
-            ->whereDoesntHave('replies')
-            ->orderBy('created_at', 'desc');
+            ->whereDoesntHave('replies');
     }
 
     public function scopeLastTwoWeeks($query)
     {
         return $query
             ->whereBetween('created_at', [Carbon::now()->subWeeks(2)->startOfDay(), Carbon::now()->subWeeks(2)->endOfDay()])
-            ->whereDoesntHave('replies')
-            ->orderBy('created_at', 'desc');
+            ->whereDoesntHave('replies');
     }
 
 }

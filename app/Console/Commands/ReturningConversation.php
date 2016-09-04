@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\ReturningConversation as ReturningConversationModel;
 use App\Services\TenantService;
+use App\Tenant\Conversation;
 use App\UserSentMessage;
 use App\Website;
 use Illuminate\Console\Command;
@@ -53,11 +54,17 @@ class ReturningConversation extends Command
             $website = Website::find($sent_message->website_id);
             $this->tenant->connect($website);
             try {
-                ReturningConversationModel::create([
-                    'website_id' => $sent_message->website_id,
-                    'conversation_id' => $sent_message->message->conversationId,
-                ]);
-            } catch (\Illuminate\Database\QueryException $ex) {}
+                $conversation = Conversation::findOrFail($sent_message->message->conversationId);
+
+                if ($conversation->messages->last()->id == $sent_message->message_id) {
+                    ReturningConversationModel::create([
+                        'website_id' => $sent_message->website_id,
+                        'conversation_id' => $sent_message->message->conversationId,
+                    ]);
+                }
+            } catch (\Illuminate\Database\QueryException $ex) {
+
+            }
 
         }
 
@@ -76,8 +83,13 @@ class ReturningConversation extends Command
         $this->tenant->connect($website);
         $returning_conversation = $sent_message->message->conversation->returning_conversation;
 
-        if ($returning_conversation && ($returning_conversation->status != $data['status'])) {
-            $returning_conversation->update($data);
+        $conversation = $sent_message->conversation;
+
+        if ($conversation->messages->last()->id == $sent_message->message_id) {
+            if ($returning_conversation && ($returning_conversation->status != $data['status'])) {
+                $returning_conversation->update($data);
+            }
         }
+
     }
 }
