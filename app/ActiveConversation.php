@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ActiveConversation extends Model
 {
-
     protected $fillable = ['website_id', 'conversation_id'];
 
     public function user()
@@ -19,5 +18,4 @@ class ActiveConversation extends Model
     {
         return $this->belongsTo(Conversation::class);
     }
-
 }

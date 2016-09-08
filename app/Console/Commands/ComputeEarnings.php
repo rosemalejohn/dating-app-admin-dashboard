@@ -64,7 +64,9 @@ class ComputeEarnings extends Command
         if ($next && ($next->senderId != $message->senderId)) {
             try {
                 $user_sent_message->replies()->create(['message_id' => $next->id]);
-            } catch (\Illuminate\Database\QueryException $ex) {}
+            } catch (\Illuminate\Database\QueryException $ex) {
+
+            }
 
             return $this->nextMessage($user_sent_message, $messages, $message, $index);
         }

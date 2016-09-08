@@ -39,7 +39,6 @@ class LoginFakeProfiles extends Command
             $count = Config::whereKey('auto_login_fake_accounts_per_cron_job')->first();
 
             foreach ($websites as $website) {
-
                 $tenant->connect($website);
 
                 $managed_users = $website->managed_users->random($count->value);
@@ -52,6 +51,5 @@ class LoginFakeProfiles extends Command
                 }
             }
         }
-
     }
 }
