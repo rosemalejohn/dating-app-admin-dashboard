@@ -42,26 +42,23 @@ class LoginAccounts extends Command
      */
     public function handle(ProfileService $profile, TenantService $tenant)
     {
-        $config = Config::whereKey('auto_login_entire_site')->first();
-
-        if (!$config->value) {
-            return false;
-        }
-
         $websites = Website::all();
 
-        foreach ($websites as $website) {
-            $tenant->connect($website);
+        $auto_login_fake_accounts = Config::whereKey('auto_login_entire_site')->first();
 
+        if ($auto_login_fake_accounts->value == 1) {
             $count = Config::whereKey('auto_login_accounts_per_cron_jobs')->first();
 
-            if ($count) {
-                $users = User::all()
-                    ->random($count->value);
+            foreach ($websites as $website) {
+                $tenant->connect($website);
 
-                $users->each(function ($user) use ($profile) {
-                    $profile->login($user);
-                });
+                $users = User::limit($count->value)->inRandomOrder()->get();
+
+                foreach ($users as $user) {
+                    if ($user) {
+                        $profile->login($user);
+                    }
+                }
             }
         }
     }

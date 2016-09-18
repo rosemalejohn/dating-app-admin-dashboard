@@ -27,3 +27,10 @@ User moderator dashboard for various dating app managed by n8core.
 
 - `sudo iptables -I INPUT -p tcp -m tcp --dport 3000 -j ACCEPT`
 - `sudo service iptables save`
+
+# Installing in the live server
+
+- Install node and git
+- Install npm, gulp
+- Allow ports as stated above
+- Install forever.js and run the required script

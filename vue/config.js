@@ -1,6 +1,6 @@
 export default {
 
-	host: 'http://mach1.online',
+	host: 'http://modapp.datehero.com',
 
 	port: 3000,
 	

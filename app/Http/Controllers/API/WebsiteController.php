@@ -22,7 +22,7 @@ class WebsiteController extends Controller
     {
         $users = $website->managed_users()->with(['user' => function ($query) {
             $query->with('avatar', 'profile');
-        }])->paginate(5);
+        }])->paginate(15);
 
         return response()->json($users, 200);
     }
