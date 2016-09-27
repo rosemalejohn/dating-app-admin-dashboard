@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Affiliates;
 
+use App\Affiliate\User;
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Http\Request;
 use Validator;
 
 class AuthController extends Controller
@@ -30,15 +31,7 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-    }
+    protected $guard = 'affiliate';
 
     /**
      * Get a validator for an incoming registration request.
@@ -50,8 +43,8 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'email' => 'required|email|max:255|unique:affiliates',
+            'password' => 'required|min:5|confirmed',
         ]);
     }
 
@@ -65,8 +58,35 @@ class AuthController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'birthday' => $data['birthday'],
+            'address' => $data['address'],
+            'country' => $data['country'],
+            'phone' => $data['phone'],
+            'skype' => $data['skype'],
+            'payment' => $data['payment'],
+            'currency' => $data['currency'],
+            'qr_code' => $data['qr_code'],
+            'photo' => $data['photo'],
+            'company' => $data['company'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $user = $this->create($request->all());
+
+        $user->contract()->create($request->contract);
+
+        return response()->json($user, 200);
     }
 }

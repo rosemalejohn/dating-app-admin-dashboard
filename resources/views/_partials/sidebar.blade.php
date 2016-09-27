@@ -27,7 +27,7 @@
             <li>
                 <a href="/users">
                     <i class="icon-people"></i>
-                    <span class="title">Users</span>
+                    <span class="title">Moderators</span>
                     <span class="arrow "></span>
                 </a>
             </li>
@@ -35,6 +35,21 @@
                 <a href="/settings/system">
                     <i class="icon-settings"></i>
                     <span class="title">System Settings</span>
+                </a>
+            </li>
+            @endif
+
+            @if (config('site.enable_affiliate') && auth()->user()->is_super)
+            <li>
+                <a href="/affiliates/teams">
+                    <i class="icon-organization"></i>
+                    <span class="title">Affiliates</span>
+                </a>
+            </li>
+            <li>
+                <a href="/affiliates/marketing">
+                    <i class="icon-credit-card"></i>
+                    <span class="title">Marketing</span>
                 </a>
             </li>
             @endif

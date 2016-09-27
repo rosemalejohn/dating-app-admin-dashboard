@@ -67,6 +67,11 @@ class User extends Authenticatable
         return $this->hasOne(ActiveConversation::class);
     }
 
+    public function affiliates()
+    {
+        return $this->hasMany(Affiliate\User::class);
+    }
+
     public function getEarningsAttribute()
     {
         $earnings = 0;

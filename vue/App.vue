@@ -6,6 +6,7 @@
 	import UserProfileEdit from './components/UserProfileEdit.vue'
 	import SystemSettings from './components/SystemSettings.vue'
 	import ManageWebsite from './components/ManageWebsite.vue'
+	import AffiliateTeamListings from './components/affiliates/TeamListings.vue'
 	
 	// Chat
 	import ChatLobby from './components/chat/Lobby.vue'
@@ -14,11 +15,13 @@
 	// Modals
 	import WebsiteFormModal from './components/Modal.vue'
 	import UserFormModal from './components/Modal.vue'
+	import AffiliateFormModal from './components/Modal.vue'
 	// Forms
 	import WebsiteForm from './forms/website.vue'
 	import UserForm from './forms/users.vue'
+	import AffiliateForm from './forms/affiliate.vue'
 
-	import Vue from 'vue'
+	import Vue from 'vue' 
 	import moment from 'moment'
 
 	// Dashboard 
@@ -37,14 +40,17 @@
 			SystemSettings,
 			ManageWebsite,
 			Conversation,
+			AffiliateTeamListings,
 
 			ChatLobby,
 
 			WebsiteFormModal,
 			UserFormModal,
+			AffiliateFormModal,
 
 			WebsiteForm,
 			UserForm,
+			AffiliateForm,
 
 			MessageGraph,
 			Account,

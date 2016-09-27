@@ -4,6 +4,32 @@ Route::auth();
 
 Route::get('/', 'DashboardController@index');
 
+if (config('site.enable_affiliate')) {
+
+    Route::group(['middleware' => 'auth', 'prefix' => 'affiliates', 'namespace' => 'Affiliates'], function () {
+
+        Route::get('/', 'UserController@index');
+
+        Route::post('/', 'AuthController@register');
+
+        Route::get('new', 'UserController@create');
+
+        Route::get('marketing', 'MarketingController@index');
+
+        Route::get('teams', 'TeamController@index');
+
+    });
+
+    Route::group(['prefix' => 'api', 'namespace' => 'Affiliates'], function () {
+
+        Route::post('/affiliates', 'AuthController@register');
+
+        Route::get('/affiliates', 'AffiliateController@index');
+
+    });
+
+}
+
 Route::group(['middleware' => ['auth', 'tenant']], function () {
 
     Route::get('profile', 'UserController@profile');

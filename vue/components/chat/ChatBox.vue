@@ -136,7 +136,8 @@
 			this.$http.get('chat/' + this.website.id + '/' + this.conversation.id + '/messages')
 				.then(response => {
 					Spinner.stop();
-					this.messages = response.data;
+					let { data } = response;
+					this.messages = data;
 				}).catch(err => {
 					Spinner.stop();
 					toastr.error('Cannot fetch conversation messages.');

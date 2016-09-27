@@ -168,6 +168,9 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Anchu\Ftp\FtpServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+        PrettyRoutes\ServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
 
     ],
 
@@ -217,6 +220,8 @@ return [
 
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
     ],
 

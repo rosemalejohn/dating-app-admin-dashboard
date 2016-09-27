@@ -60,3 +60,12 @@ Breadcrumbs::register('chat:conversation', function ($breadcrumbs, $website, $co
     $breadcrumbs->parent('chat:lobby');
     // $breadcrumbs->push($conversation->interlocutor->username, "/chat/{$website->id}/{$conversation->id}");
 });
+
+Breadcrumbs::register('affiliate:users', function ($breadcrumbs) {
+    $breadcrumbs->push('Affiliate system', '/affiliates/teams');
+});
+
+Breadcrumbs::register('affiliate:new', function ($breadcrumbs) {
+    $breadcrumbs->parent('affiliate:users');
+    $breadcrumbs->push('New affiliate', '/affiliates/new');
+});
