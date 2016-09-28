@@ -2,6 +2,13 @@
 
 Route::auth();
 
+Route::group(['prefix' => 'affiliate-user'], function () {
+    Route::get('login', 'AffiliatesAuth\AuthController@showLoginForm');
+    Route::post('login', 'AffiliatesAuth\AuthController@login');
+    Route::get('logout', 'AffiliatesAuth\AuthController@logout');
+    Route::get('home', 'AffiliateController@index');
+});
+
 Route::get('/', 'DashboardController@index');
 
 Route::group(['middleware' => ['auth', 'tenant']], function () {
