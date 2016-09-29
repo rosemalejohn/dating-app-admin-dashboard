@@ -21,6 +21,8 @@ class Authenticate
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
+                if($guard == 'affiliate') 
+                    return redirect()->guest('affiliate-user/login');
                 return redirect()->guest('login');
             }
         }

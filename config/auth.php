@@ -45,6 +45,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'affiliate' => [
+            'driver' => 'session',
+            'provider' => 'affiliate_users',
+        ]
     ],
 
     /*
@@ -68,6 +73,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'affiliate_users' => [
+            'driver' => 'eloquent',
+            'model' => App\AffiliateUser::class,
         ],
 
         // 'users' => [
