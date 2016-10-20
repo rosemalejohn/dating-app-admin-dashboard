@@ -4,6 +4,11 @@
 		<div slot="modal-footer"></div>
 	</new-managed-account-modal>
 
+	<bulk-add-user-modal title="Bulk add users" target="bulkAddAccount">
+		<bulk-add-user-form slot="content" :website="website"></bulk-add-user-form>
+		<div slot="modal-footer"></div>
+	</bulk-add-user-modal>
+
 	<div class="portlet light bordered">
 		<div class="portlet-title">
 			<div class="caption caption-md font-red-sunglo">
@@ -20,6 +25,7 @@
 					</div>
 					<div class="btn-group btn-group-devided">
 						<button data-toggle="modal" data-target="#newManagedAccount" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Add moderated profile</button>
+						<button data-toggle="modal" data-target="#bulkAddAccount" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Bulk add</button>
 						<button v-if="checkedUsers.length" @click="unmanageUsers()" class="btn btn-transparent grey-salsa btn-circle btn-sm active">Unmanage</button>
 					</div>
 				</div>
@@ -104,12 +110,14 @@
 	import Spinner from './../spin'
 
 	import NewManagedAccountModal from './Modal.vue'
+	import BulkAddUserModal from './Modal.vue'
 	import ManagedUserForm from './../forms/managed-user.vue'
+	import BulkAddUserForm from './../forms/BulkManagedUser.vue'
 
 	export default {
 
 		components: {
-			NewManagedAccountModal, ManagedUserForm
+			NewManagedAccountModal, ManagedUserForm, BulkAddUserForm, BulkAddUserModal
 		},
 
 		data() {

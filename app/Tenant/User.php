@@ -17,7 +17,7 @@ class User extends Model
 
     public $timestamps = false;
 
-    protected $dates = ['joinStamp'];
+    // protected $dates = ['joinStamp'];
 
     protected $appends = ['real_name', 'about_me', 'address', 'sex'];
 
@@ -107,6 +107,10 @@ class User extends Model
             }
         }
         return null;
+    }
+
+    public function scopeOfGender($query, $gender)
+    {
     }
 
     public function scopeMales($query)

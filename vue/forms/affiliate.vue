@@ -12,6 +12,7 @@
 					<div class="row">
 						<div class="col-md-8">
 							<h3>Personal Information</h3>
+							<hr />
 							<div class="row">
 								<div class="col-md-4">
 									<label for="">Google Authenticator</label>
@@ -26,41 +27,68 @@
 									<div class="form-group form-md-line-input">
 										<input v-model="form.company" type="text" class="form-control" id="">
 										<label for="">Company</label>
+										<span class="help-block error-block" v-if="errors.company">
+											<ul><li v-for="error in errors.company">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input">
 										<input v-model="form.name" type="text" class="form-control" id="">
 										<label for="">Name</label>
+										<span class="help-block error-block" v-if="errors.name">
+											<ul><li v-for="error in errors.name">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input">
 										<input v-model="form.birthday" type="date" class="form-control" id="">
 										<label for="">Birthday</label>
+										<span class="help-block error-block" v-if="errors.birthday">
+											<ul><li v-for="error in errors.birthday">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input">
 										<textarea v-model="form.address" class="form-control" rows="3"></textarea>
 										<label for="">Address</label>
+										<span class="help-block error-block" v-if="errors.address">
+											<ul><li v-for="error in errors.address">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input has-info">
 										<select v-model="form.country" class="form-control">
 											<option v-for="country in countries" :value="country.code">{{ country.name }}</option>
 										</select>
 										<label for="">Country</label>
+										<span class="help-block error-block" v-if="errors.country">
+											<ul><li v-for="error in errors.country">{{ error }}</li></ul>
+										</span>
 									</div>
 
 									<div class="form-group form-md-line-input">
 										<input v-model="form.phone" type="text" class="form-control" id="">
 										<label for="">Phone</label>
+										<span class="help-block error-block" v-if="errors.phone">
+											<ul><li v-for="error in errors.phone">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input">
 										<input v-model="form.email" type="email" class="form-control" id="">
 										<label for="">Email</label>
+										<span class="help-block error-block" v-if="errors.email">
+											<ul><li v-for="error in errors.email">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input">
 										<input v-model="form.skype" type="text" class="form-control" id="">
 										<label for="">Skype</label>
+										<span class="help-block error-block" v-if="errors.skype">
+											<ul><li v-for="error in errors.skype">{{ error }}</li></ul>
+										</span>
 									</div>
 									<div class="form-group form-md-line-input">
 										<input v-model="form.payment" type="text" class="form-control" id="">
 										<label for="">Payment</label>
+										<span class="help-block error-block" v-if="errors.payment">
+											<ul><li v-for="error in errors.payment">{{ error }}</li></ul>
+										</span>
 									</div>
 
 									<div class="form-group form-md-line-input has-info">
@@ -68,17 +96,24 @@
 											<option v-for="currency in currencies" :value="currency.code">{{ currency.currency }}</option>
 										</select>
 										<label for="">Currency</label>
+										<span class="help-block error-block" v-if="errors.currency">
+											<ul><li v-for="error in errors.currency">{{ error }}</li></ul>
+										</span>
 									</div>
 
 									<div class="form-group form-md-line-input">
 										<input v-model="form.salary" type="number" class="form-control" id="">
 										<label for="">Salary</label>
+										<span class="help-block error-block" v-if="errors.salary">
+											<ul><li v-for="error in errors.salary">{{ error }}</li></ul>
+										</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-4">
 							<h3>Contract terms</h3>
+							<hr />
 							<div class="form-group form-md-line-input">
 								<input v-model="form.contract.chargeback_rate" type="number" class="form-control" id="">
 								<label for="">Chargeback rate</label>
@@ -114,6 +149,18 @@
 		</div>
 	</form>
 </template>
+
+<style lang="sass">
+	.error-block {
+	    color: red !important;
+    	opacity: 1 !important;
+
+    	ul {
+		    list-style-type: none;
+    		padding-left: 0px;
+    	}
+	}
+</style>
 
 <script>
 	import Photo from './../components/PhotoUpload.vue'
@@ -171,6 +218,7 @@
 					.then(response => {
 						toastr.success('Affiliate added!');
 					}).catch(err => {
+						toastr.error('Affiliate not added!');
 						this.errors = err.data;
 					});
 			}

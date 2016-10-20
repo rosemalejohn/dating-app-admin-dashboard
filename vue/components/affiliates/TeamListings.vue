@@ -61,7 +61,7 @@
 
 						</td>
 						<td>
-							{{ affiliate.domains.length }}
+							{{ affiliate.domains_count }}
 						</td>
 						<td>
 							

@@ -1,4 +1,220 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":3}],2:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _defineProperty = require("../core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+},{"../core-js/object/define-property":1}],3:[function(require,module,exports){
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+},{"../../modules/_core":6,"../../modules/es6.object.define-property":19}],4:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+},{}],5:[function(require,module,exports){
+var isObject = require('./_is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./_is-object":15}],6:[function(require,module,exports){
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],7:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./_a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./_a-function":4}],8:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./_fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_fails":11}],9:[function(require,module,exports){
+var isObject = require('./_is-object')
+  , document = require('./_global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./_global":12,"./_is-object":15}],10:[function(require,module,exports){
+var global    = require('./_global')
+  , core      = require('./_core')
+  , ctx       = require('./_ctx')
+  , hide      = require('./_hide')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+},{"./_core":6,"./_ctx":7,"./_global":12,"./_hide":13}],11:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],12:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],13:[function(require,module,exports){
+var dP         = require('./_object-dp')
+  , createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./_descriptors":8,"./_object-dp":16,"./_property-desc":17}],14:[function(require,module,exports){
+module.exports = !require('./_descriptors') && !require('./_fails')(function(){
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_descriptors":8,"./_dom-create":9,"./_fails":11}],15:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],16:[function(require,module,exports){
+var anObject       = require('./_an-object')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , toPrimitive    = require('./_to-primitive')
+  , dP             = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+},{"./_an-object":5,"./_descriptors":8,"./_ie8-dom-define":14,"./_to-primitive":18}],17:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],18:[function(require,module,exports){
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require('./_is-object');
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+},{"./_is-object":15}],19:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
+},{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
 //! moment.js
 //! version : 2.15.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -4233,7 +4449,7 @@
     return _moment;
 
 }));
-},{}],2:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4354,7 +4570,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],3:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4387,7 +4603,7 @@ var defaultParams = {
 
 exports['default'] = defaultParams;
 module.exports = exports['default'];
-},{}],4:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4523,7 +4739,7 @@ exports['default'] = {
   handleCancel: handleCancel
 };
 module.exports = exports['default'];
-},{"./handle-dom":5,"./handle-swal-dom":7,"./utils":10}],5:[function(require,module,exports){
+},{"./handle-dom":24,"./handle-swal-dom":26,"./utils":29}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4715,7 +4931,7 @@ exports.fadeIn = fadeIn;
 exports.fadeOut = fadeOut;
 exports.fireClick = fireClick;
 exports.stopEventPropagation = stopEventPropagation;
-},{}],6:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4795,7 +5011,7 @@ var handleKeyDown = function handleKeyDown(event, params, modal) {
 
 exports['default'] = handleKeyDown;
 module.exports = exports['default'];
-},{"./handle-dom":5,"./handle-swal-dom":7}],7:[function(require,module,exports){
+},{"./handle-dom":24,"./handle-swal-dom":26}],26:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -4963,7 +5179,7 @@ exports.openModal = openModal;
 exports.resetInput = resetInput;
 exports.resetInputError = resetInputError;
 exports.fixVerticalPosition = fixVerticalPosition;
-},{"./default-params":3,"./handle-dom":5,"./injected-html":8,"./utils":10}],8:[function(require,module,exports){
+},{"./default-params":22,"./handle-dom":24,"./injected-html":27,"./utils":29}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5006,7 +5222,7 @@ var injectedHTML =
 
 exports["default"] = injectedHTML;
 module.exports = exports["default"];
-},{}],9:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5232,7 +5448,7 @@ var setParameters = function setParameters(params) {
 
 exports['default'] = setParameters;
 module.exports = exports['default'];
-},{"./handle-dom":5,"./handle-swal-dom":7,"./utils":10}],10:[function(require,module,exports){
+},{"./handle-dom":24,"./handle-swal-dom":26,"./utils":29}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5306,7 +5522,7 @@ exports.hexToRgb = hexToRgb;
 exports.isIE8 = isIE8;
 exports.logStr = logStr;
 exports.colorLuminance = colorLuminance;
-},{}],11:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -5610,7 +5826,7 @@ if (typeof window !== 'undefined') {
   _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('SweetAlert is a frontend module!');
 }
 module.exports = exports['default'];
-},{"./modules/default-params":3,"./modules/handle-click":4,"./modules/handle-dom":5,"./modules/handle-key":6,"./modules/handle-swal-dom":7,"./modules/set-params":9,"./modules/utils":10}],12:[function(require,module,exports){
+},{"./modules/default-params":22,"./modules/handle-click":23,"./modules/handle-dom":24,"./modules/handle-key":25,"./modules/handle-swal-dom":26,"./modules/set-params":28,"./modules/utils":29}],31:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -7160,7 +7376,7 @@ module.exports = exports['default'];
   }
 }.call(this));
 
-},{}],13:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -7461,7 +7677,7 @@ function format (id) {
   return match ? match[0] : id
 }
 
-},{}],14:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /**
  * Service for sending network requests.
  */
@@ -7623,7 +7839,7 @@ module.exports = function (_) {
     return _.http = Http;
 };
 
-},{"./lib/jsonp":16,"./lib/promise":17,"./lib/xhr":19}],15:[function(require,module,exports){
+},{"./lib/jsonp":35,"./lib/promise":36,"./lib/xhr":38}],34:[function(require,module,exports){
 /**
  * Install plugin.
  */
@@ -7664,7 +7880,7 @@ if (window.Vue) {
 }
 
 module.exports = install;
-},{"./http":14,"./lib/util":18,"./resource":20,"./url":21}],16:[function(require,module,exports){
+},{"./http":33,"./lib/util":37,"./resource":39,"./url":40}],35:[function(require,module,exports){
 /**
  * JSONP request.
  */
@@ -7716,7 +7932,7 @@ module.exports = function (_, options) {
 
 };
 
-},{"./promise":17}],17:[function(require,module,exports){
+},{"./promise":36}],36:[function(require,module,exports){
 /**
  * Promises/A+ polyfill v1.1.0 (https://github.com/bramstein/promis)
  */
@@ -7928,7 +8144,7 @@ if (window.MutationObserver) {
 
 module.exports = window.Promise || Promise;
 
-},{}],18:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /**
  * Utility functions.
  */
@@ -8010,7 +8226,7 @@ module.exports = function (Vue) {
     return _;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /**
  * XMLHttp request.
  */
@@ -8063,7 +8279,7 @@ module.exports = function (_, options) {
     return promise;
 };
 
-},{"./promise":17}],20:[function(require,module,exports){
+},{"./promise":36}],39:[function(require,module,exports){
 /**
  * Service for interacting with RESTful services.
  */
@@ -8176,7 +8392,7 @@ module.exports = function (_) {
     return _.resource = Resource;
 };
 
-},{}],21:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /**
  * Service for URL templating.
  */
@@ -8335,7 +8551,7 @@ module.exports = function (_) {
     return _.url = Url;
 };
 
-},{}],22:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.27
@@ -18568,7 +18784,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":2}],23:[function(require,module,exports){
+},{"_process":21}],42:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -18588,7 +18804,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],24:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18670,7 +18886,6 @@ var _FlaggedConversation2 = _interopRequireDefault(_FlaggedConversation);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Forms
-
 
 // Pages
 exports.default = {
@@ -18793,7 +19008,26 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c8f078d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./components/FlaggedConversation.vue":26,"./components/ManageWebsite.vue":27,"./components/ManagedUserListings.vue":28,"./components/Modal.vue":29,"./components/SystemSettings.vue":32,"./components/UserListings.vue":33,"./components/UserProfileEdit.vue":34,"./components/WebsiteListings.vue":35,"./components/affiliates/TeamListings.vue":36,"./components/chat/Conversation.vue":38,"./components/chat/Lobby.vue":39,"./components/dashboard/MessageGraph.vue":42,"./components/user/Account.vue":43,"./forms/affiliate.vue":46,"./forms/users.vue":48,"./forms/website.vue":49,"moment":1,"vue":22,"vue-hot-reload-api":13}],25:[function(require,module,exports){
+},{"./components/FlaggedConversation.vue":46,"./components/ManageWebsite.vue":47,"./components/ManagedUserListings.vue":48,"./components/Modal.vue":49,"./components/SystemSettings.vue":52,"./components/UserListings.vue":53,"./components/UserProfileEdit.vue":54,"./components/WebsiteListings.vue":55,"./components/affiliates/TeamListings.vue":56,"./components/chat/Conversation.vue":58,"./components/chat/Lobby.vue":59,"./components/dashboard/MessageGraph.vue":62,"./components/user/Account.vue":63,"./forms/affiliate.vue":67,"./forms/users.vue":69,"./forms/website.vue":70,"moment":20,"vue":41,"vue-hot-reload-api":32}],44:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	removeConversation: function removeConversation(website_id, conversation_id) {
+		return _vue2.default.http.post('/api/chat/' + website_id + '/' + conversation_id + '/remove');
+	}
+};
+
+},{"vue":41}],45:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -18823,7 +19057,7 @@ window.socket = io(_config2.default.host + ':' + _config2.default.port);
 
 new _vue2.default(_App2.default).$mount('body');
 
-},{"./App.vue":24,"./config":44,"vue":22,"vue-resource":15}],26:[function(require,module,exports){
+},{"./App.vue":43,"./config":64,"vue":41,"vue-resource":34}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18873,7 +19107,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-55aed4be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":22,"vue-hot-reload-api":13}],27:[function(require,module,exports){
+},{"vue":41,"vue-hot-reload-api":32}],47:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.profile-userpic {\n  padding: 10px; }\n  /* line 4, stdin */\n  .profile-userpic img {\n    cursor: pointer;\n    border-radius: 0px !important;\n    width: 100%; }\n")
 'use strict';
@@ -18948,7 +19182,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3b9a10cc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":31,"./../forms/website.vue":49,"./Modal.vue":29,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],28:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":51,"./../forms/website.vue":70,"./Modal.vue":49,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],48:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -18985,12 +19219,16 @@ var _managedUser = require('./../forms/managed-user.vue');
 
 var _managedUser2 = _interopRequireDefault(_managedUser);
 
+var _BulkManagedUser = require('./../forms/BulkManagedUser.vue');
+
+var _BulkManagedUser2 = _interopRequireDefault(_BulkManagedUser);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 
 	components: {
-		NewManagedAccountModal: _Modal2.default, ManagedUserForm: _managedUser2.default
+		NewManagedAccountModal: _Modal2.default, ManagedUserForm: _managedUser2.default, BulkAddUserForm: _BulkManagedUser2.default, BulkAddUserModal: _Modal2.default
 	},
 
 	data: function data() {
@@ -19112,7 +19350,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<new-managed-account-modal title=\"Add new user to manage\" target=\"newManagedAccount\">\n\t<managed-user-form slot=\"content\" :website=\"website\"></managed-user-form>\n\t<div slot=\"modal-footer\"></div>\n</new-managed-account-modal>\n\n<div class=\"portlet light bordered\">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption caption-md font-red-sunglo\">\n\t\t\t<i class=\"icon-bar-chart theme-font hide\"></i>\n\t\t\t<span class=\"caption-subject theme-font bold uppercase\">Moderated profiles</span>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"inputs\">\n\t\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t\t<input v-model=\"search\" type=\"text\" class=\"form-control input-circle\" placeholder=\"search...\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-group btn-group-devided\">\n\t\t\t\t\t<button data-toggle=\"modal\" data-target=\"#newManagedAccount\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Add moderated profile</button>\n\t\t\t\t\t<button v-if=\"checkedUsers.length\" @click=\"unmanageUsers()\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Unmanage</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-scrollable table-scrollable-borderless\">\n\t\t\t<table class=\"table table-hover table-light\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr class=\"uppercase\">\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th colspan=\"2\">\n\t\t\t\t\t\t\t Name\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t Email\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t Address\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tFake message\n\t\t\t\t\t\t</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody><tr v-for=\"user in users | filterBy search\">\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<input :value=\"user.id\" v-model=\"checkedUsers\" type=\"checkbox\" class=\"liChild\">\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<img class=\"user-pic\" :src=\"user.user.avatar.url || '/img/default-photo.png'\">\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ user.user.username }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ user.user.email }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ user.user.address }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t<input v-model=\"user.fake_message\" class=\"form-control\" type=\"text\" placeholder=\"Add fake message\">\n\t\t\t\t\t\t\t<span class=\"input-group-btn\">\n\t\t\t\t\t\t\t\t<button @click=\"updateManagedUser(user)\" class=\"btn btn-success\" type=\"button\"><i class=\"fa fa-edit fa-fw\"></i></button>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t\t<div v-if=\"!users.length\" class=\"note note-info note-bordered\">\n\t\t\t\t<p>No users listed.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<new-managed-account-modal title=\"Add new user to manage\" target=\"newManagedAccount\">\n\t<managed-user-form slot=\"content\" :website=\"website\"></managed-user-form>\n\t<div slot=\"modal-footer\"></div>\n</new-managed-account-modal>\n\n<bulk-add-user-modal title=\"Bulk add users\" target=\"bulkAddAccount\">\n\t<bulk-add-user-form slot=\"content\" :website=\"website\"></bulk-add-user-form>\n\t<div slot=\"modal-footer\"></div>\n</bulk-add-user-modal>\n\n<div class=\"portlet light bordered\">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption caption-md font-red-sunglo\">\n\t\t\t<i class=\"icon-bar-chart theme-font hide\"></i>\n\t\t\t<span class=\"caption-subject theme-font bold uppercase\">Moderated profiles</span>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"inputs\">\n\t\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t\t<input v-model=\"search\" type=\"text\" class=\"form-control input-circle\" placeholder=\"search...\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-group btn-group-devided\">\n\t\t\t\t\t<button data-toggle=\"modal\" data-target=\"#newManagedAccount\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Add moderated profile</button>\n\t\t\t\t\t<button data-toggle=\"modal\" data-target=\"#bulkAddAccount\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Bulk add</button>\n\t\t\t\t\t<button v-if=\"checkedUsers.length\" @click=\"unmanageUsers()\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Unmanage</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-scrollable table-scrollable-borderless\">\n\t\t\t<table class=\"table table-hover table-light\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr class=\"uppercase\">\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th colspan=\"2\">\n\t\t\t\t\t\t\t Name\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t Email\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t Address\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tFake message\n\t\t\t\t\t\t</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody><tr v-for=\"user in users | filterBy search\">\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<input :value=\"user.id\" v-model=\"checkedUsers\" type=\"checkbox\" class=\"liChild\">\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<img class=\"user-pic\" :src=\"user.user.avatar.url || '/img/default-photo.png'\">\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ user.user.username }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ user.user.email }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ user.user.address }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t<input v-model=\"user.fake_message\" class=\"form-control\" type=\"text\" placeholder=\"Add fake message\">\n\t\t\t\t\t\t\t<span class=\"input-group-btn\">\n\t\t\t\t\t\t\t\t<button @click=\"updateManagedUser(user)\" class=\"btn btn-success\" type=\"button\"><i class=\"fa fa-edit fa-fw\"></i></button>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t\t<div v-if=\"!users.length\" class=\"note note-info note-bordered\">\n\t\t\t\t<p>No users listed.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -19127,7 +19365,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6cb7fe3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/managed-user.vue":47,"./../services/paginator":51,"./../spin":52,"./../stores/website_user":60,"./Modal.vue":29,"sweetalert":11,"underscore":12,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],29:[function(require,module,exports){
+},{"./../forms/BulkManagedUser.vue":65,"./../forms/managed-user.vue":68,"./../services/paginator":72,"./../spin":73,"./../stores/website_user":81,"./Modal.vue":49,"sweetalert":30,"underscore":31,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19164,7 +19402,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c368495e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":22,"vue-hot-reload-api":13}],30:[function(require,module,exports){
+},{"vue":41,"vue-hot-reload-api":32}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19212,7 +19450,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-70751611", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../config":44,"./../stores/settings":57,"vue":22,"vue-hot-reload-api":13}],31:[function(require,module,exports){
+},{"./../config":64,"./../stores/settings":78,"vue":41,"vue-hot-reload-api":32}],51:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.img-holder {\n  width: 100%;\n  cursor: pointer; }\n")
 'use strict';
@@ -19271,7 +19509,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6f5c0f77", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],32:[function(require,module,exports){
+},{"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19365,7 +19603,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-814aa404", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/currency":55,"./../stores/settings":57,"vue":22,"vue-hot-reload-api":13}],33:[function(require,module,exports){
+},{"./../stores/currency":76,"./../stores/settings":78,"vue":41,"vue-hot-reload-api":32}],53:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.editable .table-edit {\n  display: none;\n  cursor: pointer; }\n\n/* line 10, stdin */\n.editable:hover .table-edit {\n  display: inline-block; }\n")
 'use strict';
@@ -19497,7 +19735,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6d851ee6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/settings":57,"./../stores/user":58,"./PaypalButton.vue":30,"sweetalert":11,"underscore":12,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],34:[function(require,module,exports){
+},{"./../stores/settings":78,"./../stores/user":79,"./PaypalButton.vue":50,"sweetalert":30,"underscore":31,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],54:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.image-picker {\n  cursor: pointer;\n  width: 50%; }\n")
 'use strict';
@@ -19629,7 +19867,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7f87aaac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../spin":52,"./../stores/user":58,"./../stores/website":59,"./PhotoUpload.vue":31,"underscore":12,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],35:[function(require,module,exports){
+},{"./../spin":73,"./../stores/user":79,"./../stores/website":80,"./PhotoUpload.vue":51,"underscore":31,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],55:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.website-list {\n  position: relative; }\n  /* line 5, stdin */\n  .website-list button {\n    top: 10px;\n    right: 10px; }\n\n/* line 11, stdin */\n.absolute {\n  position: absolute; }\n")
 'use strict';
@@ -19728,7 +19966,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7aa8a964", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../forms/website.vue":49,"./../stores/website":59,"./Modal.vue":29,"sweetalert":11,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],36:[function(require,module,exports){
+},{"./../forms/website.vue":70,"./../stores/website":80,"./Modal.vue":49,"sweetalert":30,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19755,7 +19993,7 @@ exports.default = {
 	ready: function ready() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light bordered\">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption caption-md font-red-sunglo\">\n\t\t\t<i class=\"icon-bar-chart theme-font hide\"></i>\n\t\t\t<span class=\"caption-subject theme-font bold uppercase\">Teams</span>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"inputs\">\n\t\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t\t<input v-model=\"search\" type=\"text\" class=\"form-control input-circle\" placeholder=\"search...\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-group btn-group-devided\">\n\t\t\t\t\t<a href=\"/affiliates/new\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Add new affiliate</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-scrollable table-scrollable-borderless\">\n\t\t\t<table class=\"table table-hover table-light\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr class=\"uppercase\">\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t \tName\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t \t\tContact\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t \tCompany\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tOnline\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>Domains</th>\n\t\t\t\t\t\t<th>Opt in</th>\n\t\t\t\t\t\t<th>Start date</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody><tr v-for=\"affiliate in affiliates | filterBy search\">\n\t\t\t\t\t<td>\n\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.name }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.email }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.company }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.domains.length }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.created_at | date 'MMMM Do YYYY' }}\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t\t<div v-if=\"!affiliates.length\" class=\"alert alert-block alert-danger fade in\">\n\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\"></button>\n\t\t\t\t<h4 class=\"alert-heading\"><strong>Important!</strong></h4>\n\t\t\t\t<p>No affiliates listed.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light bordered\">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption caption-md font-red-sunglo\">\n\t\t\t<i class=\"icon-bar-chart theme-font hide\"></i>\n\t\t\t<span class=\"caption-subject theme-font bold uppercase\">Teams</span>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"inputs\">\n\t\t\t\t<div class=\"portlet-input input-inline input-small\">\n\t\t\t\t\t<div class=\"input-icon right\">\n\t\t\t\t\t\t<i class=\"icon-magnifier\"></i>\n\t\t\t\t\t\t<input v-model=\"search\" type=\"text\" class=\"form-control input-circle\" placeholder=\"search...\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"btn-group btn-group-devided\">\n\t\t\t\t\t<a href=\"/affiliates/new\" class=\"btn btn-transparent grey-salsa btn-circle btn-sm active\">Add new affiliate</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-scrollable table-scrollable-borderless\">\n\t\t\t<table class=\"table table-hover table-light\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr class=\"uppercase\">\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t \tName\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t \t\tContact\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t \tCompany\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tOnline\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>Domains</th>\n\t\t\t\t\t\t<th>Opt in</th>\n\t\t\t\t\t\t<th>Start date</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody><tr v-for=\"affiliate in affiliates | filterBy search\">\n\t\t\t\t\t<td>\n\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.name }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.email }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.company }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.domains_count }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ affiliate.created_at | date 'MMMM Do YYYY' }}\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t\t<div v-if=\"!affiliates.length\" class=\"alert alert-block alert-danger fade in\">\n\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\"></button>\n\t\t\t\t<h4 class=\"alert-heading\"><strong>Important!</strong></h4>\n\t\t\t\t<p>No affiliates listed.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -19766,7 +20004,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02d18c79", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":22,"vue-hot-reload-api":13}],37:[function(require,module,exports){
+},{"vue":41,"vue-hot-reload-api":32}],57:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.attachment {\n  display: inline-block; }\n\n/* line 7, stdin */\n.chat-form .input-cont {\n  margin-right: 100px; }\n\n/* line 10, stdin */\n.chat-form .btn-cont {\n  width: unset; }\n  /* line 13, stdin */\n  .chat-form .btn-cont .arrow {\n    right: 100px; }\n\n/* line 20, stdin */\n.avatar:hover .close {\n  display: block; }\n\n/* line 25, stdin */\n.close {\n  position: absolute;\n  top: 0;\n  left: 70px; }\n")
 'use strict';
@@ -19953,7 +20191,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-305a31e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../stores/conversation":53,"./../../forms/FlaggedConversationNotes.vue":45,"./../../spin":52,"./../Modal.vue":29,"./../PhotoUpload.vue":31,"moment":1,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],38:[function(require,module,exports){
+},{"../../stores/conversation":74,"./../../forms/FlaggedConversationNotes.vue":66,"./../../spin":73,"./../Modal.vue":49,"./../PhotoUpload.vue":51,"moment":20,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],58:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20033,7 +20271,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-485cae3e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../forms/FlaggedConversationNotes.vue":45,"./../Modal.vue":29,"./ChatBox.vue":37,"./Notes.vue":40,"./ProfileBox.vue":41,"vue":22,"vue-hot-reload-api":13}],39:[function(require,module,exports){
+},{"./../../forms/FlaggedConversationNotes.vue":66,"./../Modal.vue":49,"./ChatBox.vue":57,"./Notes.vue":60,"./ProfileBox.vue":61,"vue":41,"vue-hot-reload-api":32}],59:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 10, stdin */\ntr.info td, tr.danger td, tr.warning td, tr.success td, tr.day td, tr.three-days td, tr.two-weeks td {\n  color: white !important;\n  font-weight: bolder !important; }\n\n/* line 16, stdin */\ntr.day td {\n  background-color: yellow; }\n\n/* line 21, stdin */\ntr.three-days td {\n  background-color: yellow; }\n\n/* line 26, stdin */\ntr.two-weeks td {\n  background-color: yellow; }\n")
 'use strict';
@@ -20050,6 +20288,14 @@ var _Conversation = require('./Conversation.vue');
 
 var _Conversation2 = _interopRequireDefault(_Conversation);
 
+var _conversation = require('./../../api/conversation');
+
+var _conversation2 = _interopRequireDefault(_conversation);
+
+var _sweetalert = require('sweetalert');
+
+var _sweetalert2 = _interopRequireDefault(_sweetalert);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -20065,11 +20311,16 @@ exports.default = {
 
 	data: function data() {
 		return {
-			search: ''
+			search: '',
+			authUser: false
 		};
 	},
 	ready: function ready() {
 		var _this = this;
+
+		this.$http.get('auth').then(function (response) {
+			_this.authUser = response.data;
+		});
 
 		setInterval(function () {
 			console.log('Fetching conversations...');
@@ -20089,6 +20340,23 @@ exports.default = {
 
 			this.$http.get('chat').then(function (response) {
 				_this2.conversations = response.data;
+			});
+		},
+		deleteConversation: function deleteConversation(conversation) {
+			var _this3 = this;
+
+			(0, _sweetalert2.default)({
+				title: "Are you sure?",
+				text: "This conversation will be removed in the chat lobby.",
+				type: "warning",
+				showCancelButton: true,
+				showLoaderOnConfirm: true
+			}, function () {
+				_conversation2.default.removeConversation(conversation.interlocutor.website[0].id, conversation.id).then(function (response) {
+					_this3.conversations.$remove(conversation);
+				}).catch(function (err) {
+					toastr.error('Cannot delete conversation!');
+				});
 			});
 		}
 	},
@@ -20113,7 +20381,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light bordered\">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption caption-md font-red-sunglo\">\n\t\t\t<i class=\"icon-bar-chart theme-font hide\"></i>\n\t\t\t<span class=\"caption-subject theme-font bold uppercase\">Member Activity</span>\n\t\t\t<span class=\"caption-helper\">user listings</span>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-scrollable table-scrollable-borderless\">\n\t\t\t<table class=\"table table-light\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr class=\"uppercase\">\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tSite\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"30%\">\n\t\t\t\t\t\t\t Member\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"30%\">\n\t\t\t\t\t\t\t Moderated Profile\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tMessages\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tNotes\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"10%\">\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody><tr :class=\"{\n\t\t\t\t\t'danger': conversation.is_flagged, \n\t\t\t\t\t'info': conversation.returning_conversation &amp;&amp; conversation.returning_conversation.status == 1,\n\t\t\t\t\t'success': conversation.returning_conversation &amp;&amp; conversation.returning_conversation.status == 2,\n\t\t\t\t\t'warning': conversation.returning_conversation &amp;&amp; conversation.returning_conversation.status == 3}\" v-if=\"!conversation.is_flagged || (conversation.is_flagged &amp;&amp; ($root.auth.is_super || $root.auth.is_admin))\" v-for=\"conversation in conversations\" track-by=\"id\">\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<img class=\"user-pic\" :src=\"conversation.interlocutor.website[0].logo || '/img/default-photo.png'\">\n\t\t\t\t\t</td>\n\t\t\t\t\t<td> \n\t\t\t\t\t\t{{ conversation.initiator.username}}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ conversation.interlocutor.username }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ conversation.messages_count }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ conversation.flagged ? conversation.flagged.notes : '' }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<a href=\"/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}\" class=\"btn btn-xs green filter-cancel\"><i class=\"fa fa-comments-o\"></i>&nbsp;Take chat</a>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t\t<div v-if=\"!conversations.length\" class=\"alert alert-block alert-danger fade in\">\n\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\"></button>\n\t\t\t\t<h4 class=\"alert-heading\"><strong>Important!</strong></h4>\n\t\t\t\t<p>No conversations listed.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"portlet light bordered\">\n\t<div class=\"portlet-title\">\n\t\t<div class=\"caption caption-md font-red-sunglo\">\n\t\t\t<i class=\"icon-bar-chart theme-font hide\"></i>\n\t\t\t<span class=\"caption-subject theme-font bold uppercase\">Member Activity</span>\n\t\t\t<span class=\"caption-helper\">user listings</span>\n\t\t</div>\n\t</div>\n\t<div class=\"portlet-body\">\n\t\t<div class=\"table-scrollable table-scrollable-borderless\">\n\t\t\t<table class=\"table table-light\">\n\t\t\t\t<thead>\n\t\t\t\t\t<tr class=\"uppercase\">\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tSite\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"30%\">\n\t\t\t\t\t\t\t Member\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"30%\">\n\t\t\t\t\t\t\t Moderated Profile\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tMessages\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th>\n\t\t\t\t\t\t\tNotes\n\t\t\t\t\t\t</th>\n\t\t\t\t\t\t<th width=\"10%\">\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody><tr :class=\"{\n\t\t\t\t\t'danger': conversation.is_flagged, \n\t\t\t\t\t'info': conversation.returning_conversation &amp;&amp; conversation.returning_conversation.status == 1,\n\t\t\t\t\t'success': conversation.returning_conversation &amp;&amp; conversation.returning_conversation.status == 2,\n\t\t\t\t\t'warning': conversation.returning_conversation &amp;&amp; conversation.returning_conversation.status == 3}\" v-if=\"!conversation.is_flagged || (conversation.is_flagged &amp;&amp; ($root.auth.is_super || $root.auth.is_admin))\" v-for=\"conversation in conversations\" track-by=\"id\">\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<img class=\"user-pic\" :src=\"conversation.interlocutor.website[0].logo || '/img/default-photo.png'\">\n\t\t\t\t\t</td>\n\t\t\t\t\t<td> \n\t\t\t\t\t\t{{ conversation.initiator.username}}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ conversation.interlocutor.username }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ conversation.messages_count }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t{{ conversation.flagged ? conversation.flagged.notes : '' }}\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<a href=\"/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}\" class=\"btn btn-xs green filter-cancel\"><i class=\"fa fa-comments-o\"></i>&nbsp;Take chat</a>\n\n\t\t\t\t\t\t<button v-if=\"authUser.is_admin || authUser.is_super\" @click=\"deleteConversation(conversation)\" class=\"btn btn-xs red\"><i class=\"fa fa-remove\"></i>&nbsp;Delete</button>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody></table>\n\t\t\t<div v-if=\"!conversations.length\" class=\"alert alert-block alert-danger fade in\">\n\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\"></button>\n\t\t\t\t<h4 class=\"alert-heading\"><strong>Important!</strong></h4>\n\t\t\t\t<p>No conversations listed.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -20128,7 +20396,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1963bc2b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./Conversation.vue":38,"underscore":12,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],40:[function(require,module,exports){
+},{"./../../api/conversation":44,"./Conversation.vue":58,"sweetalert":30,"underscore":31,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],60:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.hand-cursor {\n  cursor: pointer; }\n")
 'use strict';
@@ -20224,7 +20492,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02327cd4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../stores/note":56,"sweetalert":11,"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],41:[function(require,module,exports){
+},{"./../../stores/note":77,"sweetalert":30,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],61:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.chat-box-profile {\n  padding: 0px !important; }\n  /* line 4, stdin */\n  .chat-box-profile .details {\n    padding: 20px; }\n\n/* line 9, stdin */\n.info {\n  font-weight: bold;\n  color: #3590c1; }\n")
 'use strict';
@@ -20274,7 +20542,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-89127346", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":22,"vue-hot-reload-api":13,"vueify/lib/insert-css":23}],42:[function(require,module,exports){
+},{"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20397,7 +20665,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ac0a8a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../spin.js":52,"moment":1,"underscore":12,"vue":22,"vue-hot-reload-api":13}],43:[function(require,module,exports){
+},{"./../../spin.js":73,"moment":20,"underscore":31,"vue":41,"vue-hot-reload-api":32}],63:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20452,7 +20720,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d556fb5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":22,"vue-hot-reload-api":13}],44:[function(require,module,exports){
+},{"vue":41,"vue-hot-reload-api":32}],64:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20466,7 +20734,117 @@ exports.default = {
 
 };
 
-},{}],45:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _data$props$data$meth;
+
+var _spin = require('./../spin');
+
+var _spin2 = _interopRequireDefault(_spin);
+
+var _paginator = require('./../services/paginator');
+
+var _paginator2 = _interopRequireDefault(_paginator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (_data$props$data$meth = {
+	data: function data() {
+		return {
+			users: [],
+			paginator: {},
+			isFetching: false,
+			hasMore: true
+		};
+	},
+
+
+	props: {
+		website: {
+			type: Object,
+			default: function _default() {
+				return {};
+			}
+		}
+	}
+
+}, (0, _defineProperty3.default)(_data$props$data$meth, 'data', function data() {
+	return {
+		gender: '',
+		date_from: '',
+		date_to: ''
+	};
+}), (0, _defineProperty3.default)(_data$props$data$meth, 'methods', {
+	bulkAdd: function bulkAdd() {
+		_spin2.default.spin();
+		this.$http.get('websites/' + this.website.id + '/users/bulk-add', {
+			date_from: this.date_from,
+			date_to: this.date_to,
+			gender: this.gender
+		}).then(function (response) {
+			_spin2.default.stop();
+			toastr.success('Users added!');
+			window.location.reload();
+		}).catch(function (response) {
+			_spin2.default.stop();
+			toastr.error('Error adding some profiles...');
+		});
+	},
+	submit: function submit() {},
+	showMore: function showMore() {
+		var _this = this;
+
+		var self = this;
+
+		var url = this.paginator.next_page_url;
+
+		if (url) {
+			this.isFetching = true;
+			_paginator2.default.next(url).then(function (response) {
+				self.paginator = response.data;
+				self.paginator.data.forEach(function (data) {
+					self.users.push(data);
+				});
+				_this.isFetching = false;
+			});
+		} else {
+			this.hasMore = false;
+			toastr.info('All users are loaded.');
+		}
+	}
+}), (0, _defineProperty3.default)(_data$props$data$meth, 'events', {
+	'managed-user:created': function managedUserCreated() {
+		this.$dispatch('managed-user:created');
+	}
+}), (0, _defineProperty3.default)(_data$props$data$meth, 'watch', {
+	isFetching: function isFetching(val) {
+		this.$nextTick(function () {
+			if (val) _spin2.default.spin();else _spin2.default.stop();
+		});
+	}
+}), _data$props$data$meth);
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form @submit.prevent=\"bulkAdd()\" class=\"form-inline\" role=\"form\" style=\"padding-bottom: 20px;\">\n\t<div class=\"form-group\">\n\t\t<label class=\"sr-only\" for=\"\">Gender</label>\n\t\t<select class=\"layout-style-option form-control input-small\">\n\t\t\t<option value=\"1\" selected=\"selected\">Male</option>\n\t\t\t<option value=\"0\">Female</option>\n\t\t</select>\n\t</div>\n\t<div class=\"form-group\">\n\t\t<label class=\"sr-only\" for=\"\">Date from (Join date)</label>\n\t\t<input type=\"date\" v-model=\"date_from\" class=\"form-control\">\n\t</div>\n\t<div class=\"form-group\">\n\t\t<label class=\"sr-only\" for=\"\">Date to (Join date)</label>\n\t\t<input type=\"date\" v-model=\"date_to\" class=\"form-control\">\n\t</div>\n\t<hr>\n\t<button type=\"submit\" class=\"btn btn-default\">Bulk add</button>\n</form>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-c982122a", module.exports)
+  } else {
+    hotAPI.update("_v-c982122a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./../services/paginator":72,"./../spin":73,"babel-runtime/helpers/defineProperty":2,"vue":41,"vue-hot-reload-api":32}],66:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20551,7 +20929,9 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6c1295fe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../spin":52,"./../stores/conversation":53,"vue":22,"vue-hot-reload-api":13}],46:[function(require,module,exports){
+},{"./../spin":73,"./../stores/conversation":74,"vue":41,"vue-hot-reload-api":32}],67:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.error-block {\n  color: red !important;\n  opacity: 1 !important; }\n  /* line 6, stdin */\n  .error-block ul {\n    list-style-type: none;\n    padding-left: 0px; }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20624,6 +21004,7 @@ exports.default = {
 			this.$http.post('affiliates', this.form).then(function (response) {
 				toastr.success('Affiliate added!');
 			}).catch(function (err) {
+				toastr.error('Affiliate not added!');
 				_this.errors = err.data;
 			});
 		}
@@ -20631,18 +21012,22 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form @submit.prevent=\"submit()\">\n\t<div class=\"portlet light\">\n\t\t<div class=\"portlet-title\">\n\t\t\t<div class=\"caption font-green\">\n\t\t\t\t<i class=\"icon-people font-green\"></i>\n\t\t\t\t<span class=\"caption-subject bold uppercase\"> Add new affiliate</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"portlet-body form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-md-8\">\n\t\t\t\t\t\t<h3>Personal Information</h3>\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-md-4\">\n\t\t\t\t\t\t\t\t<label for=\"\">Google Authenticator</label>\n\t\t\t\t\t\t\t\t<qr-code :photo.sync=\"form.qr_code\"></qr-code>\n\n\t\t\t\t\t\t\t\t<br>\n\n\t\t\t\t\t\t\t\t<label for=\"\">Photo</label>\n\t\t\t\t\t\t\t\t<photo :photo.sync=\"form.photo\"></photo>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-md-8\">\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.company\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Company</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.name\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Name</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.birthday\" type=\"date\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Birthday</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<textarea v-model=\"form.address\" class=\"form-control\" rows=\"3\"></textarea>\n\t\t\t\t\t\t\t\t\t<label for=\"\">Address</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input has-info\">\n\t\t\t\t\t\t\t\t\t<select v-model=\"form.country\" class=\"form-control\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"country in countries\" :value=\"country.code\">{{ country.name }}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t<label for=\"\">Country</label>\n\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.phone\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Phone</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.email\" type=\"email\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Email</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.skype\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Skype</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.payment\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Payment</label>\n\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input has-info\">\n\t\t\t\t\t\t\t\t\t<select v-model=\"form.currency\" class=\"form-control\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"currency in currencies\" :value=\"currency.code\">{{ currency.currency }}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t<label for=\"\">Currency</label>\n\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.salary\" type=\"number\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Salary</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-md-4\">\n\t\t\t\t\t\t<h3>Contract terms</h3>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.chargeback_rate\" type=\"number\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Chargeback rate</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.minimum_payout\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Minimum payout</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.chargeback_fee\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Chargeback fee</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.billing_period\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Billing period</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.rolling_reserve\" type=\"number\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Rolling reserve %</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.rolling_reserve_period\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Rolling reserve period</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-actions noborder\">\n\t\t\t\t<button type=\"submit\" class=\"btn blue\">Add affiliate</button>\n\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</form>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form @submit.prevent=\"submit()\">\n\t<div class=\"portlet light\">\n\t\t<div class=\"portlet-title\">\n\t\t\t<div class=\"caption font-green\">\n\t\t\t\t<i class=\"icon-people font-green\"></i>\n\t\t\t\t<span class=\"caption-subject bold uppercase\"> Add new affiliate</span>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"portlet-body form\">\n\t\t\t<div class=\"form-body\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-md-8\">\n\t\t\t\t\t\t<h3>Personal Information</h3>\n\t\t\t\t\t\t<hr>\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-md-4\">\n\t\t\t\t\t\t\t\t<label for=\"\">Google Authenticator</label>\n\t\t\t\t\t\t\t\t<qr-code :photo.sync=\"form.qr_code\"></qr-code>\n\n\t\t\t\t\t\t\t\t<br>\n\n\t\t\t\t\t\t\t\t<label for=\"\">Photo</label>\n\t\t\t\t\t\t\t\t<photo :photo.sync=\"form.photo\"></photo>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-md-8\">\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.company\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Company</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.company\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.company\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.name\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Name</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.name\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.name\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.birthday\" type=\"date\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Birthday</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.birthday\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.birthday\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<textarea v-model=\"form.address\" class=\"form-control\" rows=\"3\"></textarea>\n\t\t\t\t\t\t\t\t\t<label for=\"\">Address</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.address\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.address\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input has-info\">\n\t\t\t\t\t\t\t\t\t<select v-model=\"form.country\" class=\"form-control\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"country in countries\" :value=\"country.code\">{{ country.name }}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t<label for=\"\">Country</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.country\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.country\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.phone\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Phone</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.phone\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.phone\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.email\" type=\"email\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Email</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.email\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.email\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.skype\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Skype</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.skype\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.skype\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.payment\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Payment</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.payment\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.payment\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input has-info\">\n\t\t\t\t\t\t\t\t\t<select v-model=\"form.currency\" class=\"form-control\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"currency in currencies\" :value=\"currency.code\">{{ currency.currency }}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t<label for=\"\">Currency</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.currency\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.currency\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t\t\t<input v-model=\"form.salary\" type=\"number\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t\t\t<label for=\"\">Salary</label>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block error-block\" v-if=\"errors.salary\">\n\t\t\t\t\t\t\t\t\t\t<ul><li v-for=\"error in errors.salary\">{{ error }}</li></ul>\n\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-md-4\">\n\t\t\t\t\t\t<h3>Contract terms</h3>\n\t\t\t\t\t\t<hr>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.chargeback_rate\" type=\"number\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Chargeback rate</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.minimum_payout\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Minimum payout</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.chargeback_fee\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Chargeback fee</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.billing_period\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Billing period</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.rolling_reserve\" type=\"number\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Rolling reserve %</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group form-md-line-input\">\n\t\t\t\t\t\t\t<input v-model=\"form.contract.rolling_reserve_period\" type=\"text\" class=\"form-control\" id=\"\">\n\t\t\t\t\t\t\t<label for=\"\">Rolling reserve period</label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-actions noborder\">\n\t\t\t\t<button type=\"submit\" class=\"btn blue\">Add affiliate</button>\n\t\t\t\t<button onclick=\"window.history.back();\" type=\"button\" class=\"btn default\">Cancel</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</form>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["/* line 2, stdin */\n.error-block {\n  color: red !important;\n  opacity: 1 !important; }\n  /* line 6, stdin */\n  .error-block ul {\n    list-style-type: none;\n    padding-left: 0px; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
     hotAPI.createRecord("_v-5ed47280", module.exports)
   } else {
     hotAPI.update("_v-5ed47280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":31,"./../stores/countries":54,"./../stores/currency":55,"underscore":12,"vue":22,"vue-hot-reload-api":13}],47:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":51,"./../stores/countries":75,"./../stores/currency":76,"underscore":31,"vue":41,"vue-hot-reload-api":32,"vueify/lib/insert-css":42}],68:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20770,7 +21155,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-70615754", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../services/paginator":51,"./../spin":52,"vue":22,"vue-hot-reload-api":13}],48:[function(require,module,exports){
+},{"./../services/paginator":72,"./../spin":73,"vue":41,"vue-hot-reload-api":32}],69:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20882,7 +21267,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-36a1298a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":31,"./../models/user":50,"./../spin":52,"./../stores/user":58,"./../stores/website":59,"vue":22,"vue-hot-reload-api":13}],49:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":51,"./../models/user":71,"./../spin":73,"./../stores/user":79,"./../stores/website":80,"vue":41,"vue-hot-reload-api":32}],70:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20999,7 +21384,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-54c0018e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../components/PhotoUpload.vue":31,"./../spin":52,"./../stores/website":59,"vue":22,"vue-hot-reload-api":13}],50:[function(require,module,exports){
+},{"./../components/PhotoUpload.vue":51,"./../spin":73,"./../stores/website":80,"vue":41,"vue-hot-reload-api":32}],71:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21013,7 +21398,7 @@ exports.default = {
 	type: 'user'
 };
 
-},{}],51:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21032,7 +21417,7 @@ exports.default = {
 	}
 };
 
-},{"vue":22}],52:[function(require,module,exports){
+},{"vue":41}],73:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21063,7 +21448,7 @@ exports.default = {
 	}
 };
 
-},{}],53:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21088,7 +21473,7 @@ exports.default = {
 	}
 };
 
-},{"vue":22}],54:[function(require,module,exports){
+},{"vue":41}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21115,7 +21500,7 @@ exports.default = {
     }
 };
 
-},{"underscore":12}],55:[function(require,module,exports){
+},{"underscore":31}],76:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21138,7 +21523,7 @@ exports.default = {
 	getCurrencyByCode: function getCurrencyByCode(code) {}
 };
 
-},{"underscore":12}],56:[function(require,module,exports){
+},{"underscore":31}],77:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21163,7 +21548,7 @@ exports.default = {
 	}
 };
 
-},{"vue":22}],57:[function(require,module,exports){
+},{"vue":41}],78:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21185,7 +21570,7 @@ exports.default = {
 	}
 };
 
-},{"vue":22}],58:[function(require,module,exports){
+},{"vue":41}],79:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21213,7 +21598,7 @@ exports.default = {
 	}
 };
 
-},{"vue":22}],59:[function(require,module,exports){
+},{"vue":41}],80:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21241,7 +21626,7 @@ exports.default = {
 	}
 };
 
-},{"vue":22}],60:[function(require,module,exports){
+},{"vue":41}],81:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21260,4 +21645,4 @@ exports.default = {
 	}
 };
 
-},{"vue":22}]},{},[25]);
+},{"vue":41}]},{},[45]);

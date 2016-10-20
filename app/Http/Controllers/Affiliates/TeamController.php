@@ -9,7 +9,7 @@ class TeamController extends Controller
 {
     public function index()
     {
-        $affiliates = User::with('domains')->get();
+        $affiliates = User::withCount('domains')->get();
         return view('affiliates.teams')->with(compact('affiliates'));
     }
 }

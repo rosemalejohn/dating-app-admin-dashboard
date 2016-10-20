@@ -28,6 +28,7 @@ class CreateAffiliatesTable extends Migration
             $table->string('password');
             $table->string('qr_code')->nullable();
             $table->longtext('photo')->nullable();
+            $table->integer('upline_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();
         });

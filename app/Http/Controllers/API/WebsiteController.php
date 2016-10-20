@@ -7,6 +7,7 @@ use App\Services\TenantService;
 use App\Tenant\User;
 use App\Website;
 use App\WebsiteUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
@@ -111,6 +112,28 @@ class WebsiteController extends Controller
         ]);
 
         return response()->json('User updated!', 200);
+    }
+
+    public function bulkAddUsers(Request $request, Website $website)
+    {
+        $date_from = new Carbon($request->date_from);
+        $date_to = new Carbon($request->date_to);
+
+        $users = User::whereBetween('joinStamp', [$date_from->timestamp, $date_to->timestamp])
+            ->with('avatar', 'profile')
+            ->get();
+
+        foreach ($users as $user) {
+            try {
+                $website->managed_users()->create([
+                    'userId' => $user->id,
+                ]);
+            } catch (\Illuminate\Database\QueryException $ex) {
+
+            }
+        }
+
+        return response()->json($users, 200);
     }
 
     protected function getWebsite($request)

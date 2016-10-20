@@ -57,6 +57,8 @@
 						</td>
 						<td>
 							<a href="/chat/{{ conversation.interlocutor.website[0].id }}/{{ conversation.id }}" class="btn btn-xs green filter-cancel"><i class="fa fa-comments-o"></i>&nbsp;Take chat</a>
+
+							<button v-if="authUser.is_admin || authUser.is_super" @click="deleteConversation(conversation)" class="btn btn-xs red"><i class="fa fa-remove"></i>&nbsp;Delete</button>
 						</td>
 					</tr>
 				</table>
@@ -105,6 +107,8 @@
 <script>
 	import _ from 'underscore'
 	import Conversation from './Conversation.vue'
+	import ConversationService from './../../api/conversation'
+	import swal from 'sweetalert'
 
 	export default {
 
@@ -120,10 +124,15 @@
 		data() {
 			return {
 				search: '',
+				authUser: false
 			}
 		},
 
 		ready() {
+
+			this.$http.get('auth').then(response => {
+				this.authUser = response.data;
+			})
 
 			setInterval(() => {
 				console.log('Fetching conversations...');
@@ -143,13 +152,29 @@
 				this.$http.get('chat').then(response => {
 					this.conversations = response.data;
 				})
+			},
+
+			deleteConversation(conversation) {
+				swal({
+					title: "Are you sure?",
+					text: "This conversation will be removed in the chat lobby.",
+					type: "warning",
+					showCancelButton: true,
+					showLoaderOnConfirm: true
+				}, () => {
+					ConversationService.removeConversation(conversation.interlocutor.website[0].id, conversation.id).then(response => {
+						this.conversations.$remove(conversation);
+					}).catch(err => {
+						toastr.error('Cannot delete conversation!');
+					});
+				});
 			}
 		},
 
 		events: {
 			'conversation:remove'(conversation) {
 				this.conversations = _.reject(this.conversations, (item) => {
-					return item.id == conversation.id
+					return item.id == conversation.id;
 				});
 			},
 

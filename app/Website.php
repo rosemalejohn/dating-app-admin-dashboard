@@ -16,8 +16,9 @@ class Website extends Model
         'name', 'logo', 'url', 'host', 'database', 'username', 'password', 'prefix', 'port',
     ];
 
-    public function users() {
-    	return $this->hasMany(\App\Tenant\User::class);
+    public function users()
+    {
+        return $this->hasMany(\App\Tenant\User::class);
     }
 
     public function managed_users()

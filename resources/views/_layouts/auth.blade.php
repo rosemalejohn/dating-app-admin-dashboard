@@ -32,10 +32,12 @@
     <link href="/css/global.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="/css/themes.css" rel="stylesheet" type="text/css" />
 
+    <link rel="stylesheet" type="text/css" href="/css/sweetalert.css" />
+
     <link rel="icon" href="http://n8core.com/wp-content/uploads/2015/10/favicon.png" type="image/png">
 </head>
 
-<body id="body" class="page-md page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo ">
+<body id="body" class="page-md page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo page-sidebar-fixed">
 
     @include('_partials.header')
 

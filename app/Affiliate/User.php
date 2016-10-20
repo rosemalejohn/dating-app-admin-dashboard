@@ -26,6 +26,8 @@ class User extends Authenticatable
         'qr_code',
         'photo',
         'company',
+        'upline_id',
+        'upline_type',
     ];
 
     protected $table = 'affiliates';
@@ -47,6 +49,16 @@ class User extends Authenticatable
     public function domains()
     {
         return $this->hasMany(Domain::class, 'affiliate_id');
+    }
+
+    public function uplineable()
+    {
+        return $this->morphTo();
+    }
+
+    public function upline()
+    {
+        return $this->morph(User::class, 'uplineable');
     }
 
 }

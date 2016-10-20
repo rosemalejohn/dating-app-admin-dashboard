@@ -5,6 +5,7 @@ namespace App\Tenant;
 use App\ActiveConversation;
 use App\FlaggedConversation;
 use App\Note;
+use App\RemovedConversation;
 use App\ReturningConversation;
 use App\Tenant\Model;
 
@@ -63,6 +64,11 @@ class Conversation extends Model
     public function returning_conversation()
     {
         return $this->hasOne(ReturningConversation::class, 'conversation_id');
+    }
+
+    public function removed_conversation()
+    {
+        return $this->hasOne(RemovedConversation::class, 'conversation_id');
     }
 
     public function notes()

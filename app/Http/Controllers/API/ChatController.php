@@ -188,4 +188,15 @@ class ChatController extends Controller
         event(new \App\Events\UserLeaveChat($conversation));
         return response()->json('One conversation is inactive');
     }
+
+    public function removeConversation(Website $website, $conversation_id)
+    {
+        $conversation = Conversation::find($conversation_id);
+
+        $conversation->read = 4;
+
+        $conversation->save();
+
+        return response()->json('Read by all!', 200);
+    }
 }

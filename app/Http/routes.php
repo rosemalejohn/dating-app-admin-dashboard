@@ -68,7 +68,7 @@ Route::group(['middleware' => ['auth', 'tenant']], function () {
 
 });
 
-Route::group(['middleware' => ['api', 'auth', 'tenant'], 'prefix' => 'api', 'namespace' => 'API'], function () {
+Route::group(['middleware' => ['api', 'tenant'], 'prefix' => 'api', 'namespace' => 'API'], function () {
 
     Route::get('auth', function () {
 
@@ -116,6 +116,8 @@ Route::group(['middleware' => ['api', 'auth', 'tenant'], 'prefix' => 'api', 'nam
 
         Route::post('{website}/{conversation}/notes', 'ChatController@storeNotes');
 
+        Route::post('{website}/{conversation}/remove', 'ChatController@removeConversation');
+
         Route::delete('{website}/{conversation}/unflag', 'ChatController@unflagConversation');
 
         Route::delete('{website}/{conversation}/active-conversation', 'ChatController@removeActiveConversation');
@@ -137,6 +139,8 @@ Route::group(['middleware' => ['api', 'auth', 'tenant'], 'prefix' => 'api', 'nam
         Route::get('{website}/users', 'WebsiteController@users');
 
         Route::get('{website}/managed-users', 'WebsiteController@managedUsers');
+
+        Route::get('{website}/users/bulk-add', 'WebsiteController@bulkAddUsers');
 
         Route::get('{website}/users/{search}', 'WebsiteController@searchUsers');
 
